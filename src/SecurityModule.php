@@ -12,8 +12,12 @@ class SecurityModule
             session_start();
         }
         
+        if (isset($_SESSION['csrf_token'])) {
+            return $_SESSION['csrf_token'];
+        }
+        
         $token = bin2hex(random_bytes(self::TOKEN_LENGTH));
-        $_SESSION['_csrf_token'] = $token;
+        $_SESSION['csrf_token'] = $token;
         
         return $token;
     }
@@ -24,7 +28,7 @@ class SecurityModule
             session_start();
         }
         
-        return isset($_SESSION['_csrf_token']) && hash_equals($_SESSION['_csrf_token'], $token);
+        return isset($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
     }
 
     public function sanitizeInput(array $data, array $allowedColumns, array $schema = []): array

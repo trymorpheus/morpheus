@@ -113,5 +113,21 @@ class ValidationEngine
         if ($type === 'url' && !filter_var($value, FILTER_VALIDATE_URL)) {
             $this->errors[$name][] = "El campo {$name} debe ser una URL válida";
         }
+        
+        // Validar min/max para números
+        if (is_numeric($value)) {
+            if (isset($column['metadata']['min']) && $value < $column['metadata']['min']) {
+                $this->errors[$name][] = "El campo {$name} debe ser mayor o igual a {$column['metadata']['min']}";
+            }
+            
+            if (isset($column['metadata']['max']) && $value > $column['metadata']['max']) {
+                $this->errors[$name][] = "El campo {$name} debe ser menor o igual a {$column['metadata']['max']}";
+            }
+        }
+        
+        // Validar minlength
+        if (isset($column['metadata']['minlength']) && strlen($value) < $column['metadata']['minlength']) {
+            $this->errors[$name][] = "El campo {$name} debe tener al menos {$column['metadata']['minlength']} caracteres";
+        }
     }
 }

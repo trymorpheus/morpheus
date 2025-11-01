@@ -11,14 +11,21 @@ class CRUDHandler
     private string $table;
     private SchemaAnalyzer $analyzer;
     private SecurityModule $security;
+    private FileUploadHandler $fileHandler;
     private array $schema;
 
-    public function __construct(PDO $pdo, string $table, ?CacheStrategy $cache = null)
+    public function __construct(PDO $pdo, string $table, ?CacheStrategy $cache = null, ?string $uploadDir = null)
     {
         $this->pdo = $pdo;
         $this->table = $table;
         $this->analyzer = new SchemaAnalyzer($pdo, $cache);
         $this->security = new SecurityModule();
+        
+        if ($uploadDir === null) {
+            $uploadDir = __DIR__ . '/../examples/uploads';
+        }
+        
+        $this->fileHandler = new FileUploadHandler($uploadDir);
         $this->schema = $this->analyzer->getTableSchema($table);
     }
 
@@ -38,7 +45,7 @@ class CRUDHandler
 
     public function handleSubmission(): array
     {
-        $csrfToken = $_POST['_csrf_token'] ?? '';
+        $csrfToken = $_POST['csrf_token'] ?? '';
         
         if (!$this->security->validateCsrfToken($csrfToken)) {
             return ['success' => false, 'error' => 'Token CSRF inválido'];
@@ -50,6 +57,26 @@ class CRUDHandler
         );
         
         $data = $this->security->sanitizeInput($_POST, $allowedColumns, $this->schema);
+        
+        // Manejar archivos subidos
+        foreach ($this->schema['columns'] as $column) {
+            if (($column['metadata']['type'] ?? null) === 'file') {
+                try {
+                    $filePath = $this->fileHandler->handleUpload($column['name'], $column['metadata']);
+                    if ($filePath) {
+                        $data[$column['name']] = $filePath;
+                    } elseif (!$column['is_nullable'] && empty($data[$column['name']])) {
+                        // Si es requerido y no hay archivo, quitar del array para que falle validación
+                        unset($data[$column['name']]);
+                    } else {
+                        // Si es opcional y no se subió archivo, quitar del array para no actualizar
+                        unset($data[$column['name']]);
+                    }
+                } catch (\Exception $e) {
+                    return ['success' => false, 'error' => $e->getMessage()];
+                }
+            }
+        }
         
         $validator = new ValidationEngine($this->schema);
         
