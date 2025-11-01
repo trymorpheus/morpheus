@@ -6,7 +6,7 @@ Thank you for your interest in contributing to DynamicCRUD! 🎉
 
 ### Reporting Bugs
 
-1. Check if the bug has already been reported in [Issues](https://github.com/marioraulcarbonell/dynamiccrud/issues)
+1. Check if the bug has already been reported in [Issues](https://github.com/mcarbonell/DynamicCRUD/issues)
 2. Use the bug report template
 3. Include:
    - PHP version
@@ -17,7 +17,7 @@ Thank you for your interest in contributing to DynamicCRUD! 🎉
 
 ### Suggesting Features
 
-1. Check [existing feature requests](https://github.com/marioraulcarbonell/dynamiccrud/issues?q=is%3Aissue+label%3Aenhancement)
+1. Check [existing feature requests](https://github.com/mcarbonell/DynamicCRUD/issues?q=is%3Aissue+label%3Aenhancement)
 2. Open a new issue with the "enhancement" label
 3. Describe the use case and benefits
 
@@ -60,7 +60,7 @@ Thank you for your interest in contributing to DynamicCRUD! 🎉
 
 ## Questions?
 
-Open a [Discussion](https://github.com/marioraulcarbonell/dynamiccrud/discussions) or contact the maintainer.
+Open a [Discussion](https://github.com/mcarbonell/DynamicCRUD/discussions) or contact the maintainer.
 
 ---
 

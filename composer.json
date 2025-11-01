@@ -3,7 +3,7 @@
     "description": "PHP library for generating dynamic CRUD forms with automatic validation based on database structure",
     "type": "library",
     "keywords": ["crud", "forms", "mysql", "validation", "pdo", "dynamic", "generator"],
-    "homepage": "https://github.com/marioraulcarbonell/dynamiccrud",
+    "homepage": "https://github.com/mcarbonell/DynamicCRUD",
     "license": "MIT",
     "authors": [
         {
