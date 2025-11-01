@@ -101,4 +101,25 @@ class DynamicCRUD
         $this->handler->afterDelete($callback);
         return $this;
     }
+    
+    // Métodos para Relaciones Muchos a Muchos
+    
+    public function addManyToMany(string $fieldName, string $pivotTable, string $localKey, string $foreignKey, string $relatedTable): self
+    {
+        $this->handler->addManyToMany($fieldName, $pivotTable, $localKey, $foreignKey, $relatedTable);
+        return $this;
+    }
+    
+    // Métodos para Auditoría
+    
+    public function enableAudit(?int $userId = null): self
+    {
+        $this->handler->enableAudit($userId);
+        return $this;
+    }
+    
+    public function getAuditHistory(int $recordId): array
+    {
+        return $this->handler->getAuditHistory($recordId);
+    }
 }

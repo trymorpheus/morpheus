@@ -14,6 +14,8 @@ class CRUDHandler
     private FileUploadHandler $fileHandler;
     private array $schema;
     private array $hooks = [];
+    private array $manyToManyRelations = [];
+    private ?AuditLogger $auditLogger = null;
 
     public function __construct(PDO $pdo, string $table, ?CacheStrategy $cache = null, ?string $uploadDir = null)
     {
@@ -39,7 +41,7 @@ class CRUDHandler
         }
         
         $csrfToken = $this->security->generateCsrfToken();
-        $generator = new FormGenerator($this->schema, $data, $csrfToken, $this->pdo);
+        $generator = new FormGenerator($this->schema, $data, $csrfToken, $this->pdo, $this);
         
         return $generator->render();
     }
@@ -104,19 +106,38 @@ class CRUDHandler
         if ($isUpdate) {
             // Hook: beforeUpdate
             $data = $this->executeHook('beforeUpdate', $data, $id);
+            
+            // Auditoría: guardar valores antiguos
+            $oldValues = $this->auditLogger ? $this->findById($id) : [];
+            
             $id = $this->update($id, $data);
+            
+            // Auditoría: registrar UPDATE
+            if ($this->auditLogger) {
+                $this->auditLogger->logUpdate($this->table, $id, $oldValues, $data);
+            }
+            
             // Hook: afterUpdate
             $this->executeHook('afterUpdate', $id, $data);
         } else {
             // Hook: beforeCreate
             $data = $this->executeHook('beforeCreate', $data);
             $id = $this->save($data);
+            
+            // Auditoría: registrar CREATE
+            if ($this->auditLogger) {
+                $this->auditLogger->logCreate($this->table, $id, $data);
+            }
+            
             // Hook: afterCreate
             $this->executeHook('afterCreate', $id, $data);
         }
         
         // Hook: afterSave
         $this->executeHook('afterSave', $id, $data);
+        
+        // Sincronizar relaciones M:N
+        $this->syncManyToManyRelations($id);
         
         $this->pdo->commit();
         return ['success' => true, 'id' => $id];
@@ -200,10 +221,18 @@ class CRUDHandler
             // Hook: beforeDelete
             $this->executeHook('beforeDelete', $id);
             
+            // Auditoría: guardar valores antes de eliminar
+            $oldValues = $this->auditLogger ? $this->findById($id) : [];
+            
             $pk = $this->schema['primary_key'];
             $sql = sprintf("DELETE FROM %s WHERE %s = :id", $this->table, $pk);
             $stmt = $this->pdo->prepare($sql);
             $result = $stmt->execute(['id' => $id]);
+            
+            // Auditoría: registrar DELETE
+            if ($this->auditLogger && $result) {
+                $this->auditLogger->logDelete($this->table, $id, $oldValues);
+            }
             
             // Hook: afterDelete
             $this->executeHook('afterDelete', $id);
@@ -292,5 +321,107 @@ class CRUDHandler
         }
         
         return $result;
+    }
+    
+    // Métodos para Relaciones Muchos a Muchos
+    
+    public function addManyToMany(string $fieldName, string $pivotTable, string $localKey, string $foreignKey, string $relatedTable): self
+    {
+        $this->manyToManyRelations[$fieldName] = [
+            'pivot_table' => $pivotTable,
+            'local_key' => $localKey,
+            'foreign_key' => $foreignKey,
+            'related_table' => $relatedTable
+        ];
+        
+        return $this;
+    }
+    
+    public function getManyToManyRelations(): array
+    {
+        return $this->manyToManyRelations;
+    }
+    
+    public function getManyToManyValues(int $id, string $fieldName): array
+    {
+        if (!isset($this->manyToManyRelations[$fieldName])) {
+            return [];
+        }
+        
+        $relation = $this->manyToManyRelations[$fieldName];
+        
+        $sql = sprintf(
+            "SELECT %s FROM %s WHERE %s = :id",
+            $relation['foreign_key'],
+            $relation['pivot_table'],
+            $relation['local_key']
+        );
+        
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['id' => $id]);
+        
+        return $stmt->fetchAll(PDO::FETCH_COLUMN);
+    }
+    
+    private function syncManyToManyRelations(int $id): void
+    {
+        foreach ($this->manyToManyRelations as $fieldName => $relation) {
+            if (!isset($_POST[$fieldName])) {
+                continue;
+            }
+            
+            $selectedIds = is_array($_POST[$fieldName]) ? $_POST[$fieldName] : [];
+            
+            // Eliminar relaciones existentes
+            $deleteSql = sprintf(
+                "DELETE FROM %s WHERE %s = :id",
+                $relation['pivot_table'],
+                $relation['local_key']
+            );
+            
+            $stmt = $this->pdo->prepare($deleteSql);
+            $stmt->execute(['id' => $id]);
+            
+            // Insertar nuevas relaciones
+            if (!empty($selectedIds)) {
+                $insertSql = sprintf(
+                    "INSERT INTO %s (%s, %s) VALUES (:local_id, :foreign_id)",
+                    $relation['pivot_table'],
+                    $relation['local_key'],
+                    $relation['foreign_key']
+                );
+                
+                $stmt = $this->pdo->prepare($insertSql);
+                
+                foreach ($selectedIds as $foreignId) {
+                    $stmt->execute([
+                        'local_id' => $id,
+                        'foreign_id' => $foreignId
+                    ]);
+                }
+            }
+        }
+    }
+    
+    // Métodos para Auditoría
+    
+    public function enableAudit(?int $userId = null): self
+    {
+        $this->auditLogger = new AuditLogger($this->pdo);
+        
+        if ($userId !== null) {
+            $this->auditLogger->setUserId($userId);
+        }
+        
+        return $this;
+    }
+    
+    public function getAuditHistory(int $recordId): array
+    {
+        if (!$this->auditLogger) {
+            return [];
+        }
+        
+        return $this->auditLogger->getHistory($this->table, $recordId);
     }
 }

@@ -65,13 +65,18 @@ MODIFY COLUMN email VARCHAR(255) COMMENT '{"type": "email", "label": "Tu correo"
 - ✅ Mensajes mejorados con animaciones
 - ✅ Indicadores de carga
 
-### Fase 4 (Características Avanzadas) - En Progreso
+### Fase 4 (Características Avanzadas)
 - ✅ Sistema de Hooks/Eventos (10 hooks disponibles)
 - ✅ Transacciones automáticas con rollback
 - ✅ Soporte para campos ENUM
-- [ ] Relaciones muchos-a-muchos
-- [ ] Sistema de auditoría
+- ✅ Relaciones muchos-a-muchos con select multiple
+- ✅ Sistema de auditoría opcional
+
+### Fase 5 (Futuro)
 - [ ] Soporte PostgreSQL
+- [ ] UI avanzada para M:N (checkboxes, búsqueda)
+- [ ] Campos virtuales
+- [ ] Internacionalización
 
 ## Requisitos
 

@@ -10,13 +10,15 @@ class FormGenerator
     private array $data;
     private string $csrfToken;
     private ?PDO $pdo;
+    private ?CRUDHandler $handler;
 
-    public function __construct(array $schema, array $data = [], string $csrfToken = '', ?PDO $pdo = null)
+    public function __construct(array $schema, array $data = [], string $csrfToken = '', ?PDO $pdo = null, ?CRUDHandler $handler = null)
     {
         $this->schema = $schema;
         $this->data = $data;
         $this->csrfToken = $csrfToken;
         $this->pdo = $pdo;
+        $this->handler = $handler;
     }
 
     public function render(): string
@@ -35,6 +37,11 @@ class FormGenerator
             if ($column['is_primary']) continue;
             if ($column['metadata']['hidden'] ?? false) continue;
             $html .= $this->renderField($column) . "\n";
+        }
+        
+        // Renderizar campos M:N
+        if ($this->handler) {
+            $html .= $this->renderManyToManyFields() . "\n";
         }
         
         $html .= '<button type="submit">Guardar</button>' . "\n";
@@ -327,5 +334,72 @@ class FormGenerator
     {
         $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
         return in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp']);
+    }
+    
+    private function renderManyToManyFields(): string
+    {
+        $html = '';
+        $relations = $this->handler->getManyToManyRelations();
+        
+        foreach ($relations as $fieldName => $relation) {
+            $pk = $this->schema['primary_key'];
+            $recordId = $this->data[$pk] ?? null;
+            
+            // Obtener valores seleccionados
+            $selectedValues = [];
+            if ($recordId) {
+                $selectedValues = $this->handler->getManyToManyValues($recordId, $fieldName);
+            }
+            
+            // Obtener opciones disponibles
+            $options = $this->getManyToManyOptions($relation['related_table']);
+            
+            $label = ucfirst(str_replace('_', ' ', $fieldName));
+            
+            $html .= '<div class="form-group">' . "\n";
+            $html .= sprintf('  <label for="%s">%s</label>', $fieldName, htmlspecialchars($label)) . "\n";
+            $html .= sprintf('  <select name="%s[]" id="%s" multiple size="5" style="height: auto;">', $fieldName, $fieldName) . "\n";
+            
+            foreach ($options as $option) {
+                $selected = in_array($option['value'], $selectedValues) ? ' selected' : '';
+                $html .= sprintf(
+                    '    <option value="%s"%s>%s</option>',
+                    htmlspecialchars($option['value']),
+                    $selected,
+                    htmlspecialchars($option['label'])
+                ) . "\n";
+            }
+            
+            $html .= '  </select>' . "\n";
+            $html .= '  <small style="color: #666; display: block; margin-top: 4px;">Mantén presionado Ctrl (Cmd en Mac) para seleccionar múltiples</small>' . "\n";
+            $html .= '</div>';
+        }
+        
+        return $html;
+    }
+    
+    private function getManyToManyOptions(string $table): array
+    {
+        if (!$this->pdo) {
+            return [];
+        }
+        
+        // Intentar detectar columna de nombre
+        $nameColumn = 'name';
+        $sql = sprintf("SELECT id as value, %s as label FROM %s ORDER BY %s", $nameColumn, $table, $nameColumn);
+        
+        try {
+            $stmt = $this->pdo->query($sql);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            // Si falla, intentar con 'title'
+            try {
+                $sql = sprintf("SELECT id as value, title as label FROM %s ORDER BY title", $table);
+                $stmt = $this->pdo->query($sql);
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } catch (\PDOException $e) {
+                return [];
+            }
+        }
     }
 }
