@@ -1,29 +1,29 @@
-# Guía de Personalización - DynamicCRUD
+# Customization Guide - DynamicCRUD
 
-Esta guía explica cómo personalizar y extender DynamicCRUD para adaptarlo a tus necesidades específicas.
+This guide explains how to customize and extend DynamicCRUD to fit your specific needs.
 
-## Tabla de Contenidos
+## Table of Contents
 
-1. [Metadatos JSON](#metadatos-json)
-2. [Personalización de Validación](#personalización-de-validación)
-3. [Personalización de Estilos](#personalización-de-estilos)
-4. [Personalización de JavaScript](#personalización-de-javascript)
-5. [Subida de Archivos](#subida-de-archivos)
-6. [Ejemplos Avanzados](#ejemplos-avanzados)
+1. [JSON Metadata](#json-metadata)
+2. [Validation Customization](#validation-customization)
+3. [Style Customization](#style-customization)
+4. [JavaScript Customization](#javascript-customization)
+5. [File Uploads](#file-uploads)
+6. [Advanced Examples](#advanced-examples)
 
 ---
 
-## Metadatos JSON
+## JSON Metadata
 
-Los metadatos se definen en los comentarios de las columnas de la base de datos usando formato JSON.
+Metadata is defined in database column comments using JSON format.
 
-### Propiedades Disponibles
+### Available Properties
 
 ```json
 {
   "type": "email|url|file|number|text",
-  "label": "Etiqueta visible del campo",
-  "tooltip": "Texto de ayuda que aparece al pasar el cursor",
+  "label": "Visible field label",
+  "tooltip": "Help text that appears on hover",
   "min": 0,
   "max": 100,
   "minlength": 3,
@@ -35,84 +35,84 @@ Los metadatos se definen en los comentarios de las columnas de la base de datos 
 }
 ```
 
-### Ejemplos por Tipo de Campo
+### Examples by Field Type
 
-#### Campo de Email
+#### Email Field
 ```sql
 ALTER TABLE users 
 MODIFY COLUMN email VARCHAR(255) 
-COMMENT '{"type": "email", "label": "Correo Electrónico", "tooltip": "Usaremos este email para contactarte"}';
+COMMENT '{"type": "email", "label": "Email Address", "tooltip": "We will use this email to contact you"}';
 ```
 
-#### Campo de URL
+#### URL Field
 ```sql
 ALTER TABLE websites 
 MODIFY COLUMN url VARCHAR(255) 
-COMMENT '{"type": "url", "label": "Sitio Web", "tooltip": "Debe comenzar con http:// o https://"}';
+COMMENT '{"type": "url", "label": "Website", "tooltip": "Must start with http:// or https://"}';
 ```
 
-#### Campo Numérico con Rango
+#### Numeric Field with Range
 ```sql
 ALTER TABLE products 
 MODIFY COLUMN price DECIMAL(10,2) 
-COMMENT '{"type": "number", "min": 0.01, "max": 9999.99, "label": "Precio"}';
+COMMENT '{"type": "number", "min": 0.01, "max": 9999.99, "label": "Price"}';
 ```
 
-#### Campo de Texto con Longitud Mínima
+#### Text Field with Minimum Length
 ```sql
 ALTER TABLE posts 
 MODIFY COLUMN title VARCHAR(200) 
-COMMENT '{"label": "Título", "minlength": 5, "tooltip": "Mínimo 5 caracteres"}';
+COMMENT '{"label": "Title", "minlength": 5, "tooltip": "Minimum 5 characters"}';
 ```
 
-#### Campo Oculto
+#### Hidden Field
 ```sql
 ALTER TABLE users 
 MODIFY COLUMN created_at TIMESTAMP 
 COMMENT '{"hidden": true}';
 ```
 
-#### Campo de Archivo/Imagen
+#### File/Image Field
 ```sql
 ALTER TABLE products 
 MODIFY COLUMN image VARCHAR(255) 
 COMMENT '{
   "type": "file",
-  "label": "Imagen del Producto",
+  "label": "Product Image",
   "accept": "image/*",
   "allowed_mimes": ["image/jpeg", "image/png", "image/gif", "image/webp"],
   "max_size": 5242880,
-  "tooltip": "Sube una imagen (máx. 5MB)"
+  "tooltip": "Upload an image (max. 5MB)"
 }';
 ```
 
-#### Clave Foránea con Columna de Visualización
+#### Foreign Key with Display Column
 ```sql
 ALTER TABLE posts 
 MODIFY COLUMN category_id INT 
-COMMENT '{"display_column": "name", "label": "Categoría"}';
+COMMENT '{"display_column": "name", "label": "Category"}';
 ```
 
 ---
 
-## Personalización de Validación
+## Validation Customization
 
-### Validación en el Cliente (JavaScript)
+### Client-Side Validation (JavaScript)
 
-El archivo `dynamiccrud.js` proporciona validación automática. Puedes extenderlo:
+The `dynamiccrud.js` file provides automatic validation. You can extend it:
 
 ```javascript
-// Añadir validación personalizada
+// Add custom validation
 class MyCustomValidator extends DynamicCRUDValidator {
     validateField(field) {
-        // Llamar a la validación base
+        // Call base validation
         const isValid = super.validateField(field);
         
-        // Añadir validación personalizada
+        // Add custom validation
         if (field.name === 'username') {
             const value = field.value.trim();
             if (value && !/^[a-zA-Z0-9_]+$/.test(value)) {
-                this.showError(field, 'Solo letras, números y guiones bajos');
+                this.showError(field, 'Only letters, numbers and underscores');
                 return false;
             }
         }
@@ -121,13 +121,13 @@ class MyCustomValidator extends DynamicCRUDValidator {
     }
 }
 
-// Usar el validador personalizado
+// Use custom validator
 new MyCustomValidator();
 ```
 
-### Validación en el Servidor (PHP)
+### Server-Side Validation (PHP)
 
-Para validaciones complejas, extiende `ValidationEngine`:
+For complex validations, extend `ValidationEngine`:
 
 ```php
 class CustomValidationEngine extends \DynamicCRUD\ValidationEngine
@@ -136,11 +136,11 @@ class CustomValidationEngine extends \DynamicCRUD\ValidationEngine
     {
         parent::validateMetadata($column, $value);
         
-        // Validación personalizada
+        // Custom validation
         if ($column['name'] === 'username') {
             if (!preg_match('/^[a-zA-Z0-9_]+$/', $value)) {
                 $this->errors[$column['name']][] = 
-                    'El username solo puede contener letras, números y guiones bajos';
+                    'Username can only contain letters, numbers and underscores';
             }
         }
     }
@@ -149,11 +149,11 @@ class CustomValidationEngine extends \DynamicCRUD\ValidationEngine
 
 ---
 
-## Personalización de Estilos
+## Style Customization
 
-### Sobrescribir Estilos CSS
+### Override CSS Styles
 
-Crea tu propio archivo CSS después de cargar `dynamiccrud.css`:
+Create your own CSS file after loading `dynamiccrud.css`:
 
 ```html
 <link rel="stylesheet" href="assets/dynamiccrud.css">
@@ -163,7 +163,7 @@ Crea tu propio archivo CSS después de cargar `dynamiccrud.css`:
 ```css
 /* my-custom-styles.css */
 
-/* Cambiar color del botón */
+/* Change button color */
 .form-group button[type="submit"] {
     background: #28a745;
 }
@@ -172,13 +172,13 @@ Crea tu propio archivo CSS después de cargar `dynamiccrud.css`:
     background: #218838;
 }
 
-/* Personalizar mensajes de error */
+/* Customize error messages */
 .field-error {
     color: #e74c3c;
     font-weight: bold;
 }
 
-/* Cambiar estilo de inputs con error */
+/* Change style of inputs with errors */
 .form-group input.error {
     border-color: #e74c3c;
     box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
@@ -187,25 +187,25 @@ Crea tu propio archivo CSS después de cargar `dynamiccrud.css`:
 
 ---
 
-## Personalización de JavaScript
+## JavaScript Customization
 
-### Eventos Personalizados
+### Custom Events
 
-Puedes escuchar eventos del formulario:
+You can listen to form events:
 
 ```javascript
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.querySelector('.dynamic-crud-form');
     
-    // Antes de enviar
+    // Before submit
     form.addEventListener('submit', (e) => {
-        console.log('Formulario enviándose...');
+        console.log('Form submitting...');
     });
     
-    // Cuando un campo cambia
+    // When a field changes
     form.querySelectorAll('input, select, textarea').forEach(field => {
         field.addEventListener('change', (e) => {
-            console.log(`Campo ${e.target.name} cambió a: ${e.target.value}`);
+            console.log(`Field ${e.target.name} changed to: ${e.target.value}`);
         });
     });
 });
@@ -213,9 +213,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 ---
 
-## Subida de Archivos
+## File Uploads
 
-### Configuración Básica
+### Basic Configuration
 
 ```php
 use DynamicCRUD\DynamicCRUD;
@@ -224,11 +224,11 @@ use DynamicCRUD\Cache\FileCacheStrategy;
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 $cache = new FileCacheStrategy();
 
-// Especificar directorio de uploads personalizado
+// Specify custom uploads directory
 $crud = new DynamicCRUD($pdo, 'products', $cache, __DIR__ . '/my-uploads');
 ```
 
-### Metadatos para Archivos
+### File Metadata
 
 ```sql
 ALTER TABLE products 
@@ -243,16 +243,16 @@ COMMENT '{
 
 ---
 
-## Ejemplos Avanzados
+## Advanced Examples
 
-### Manejo de Errores Personalizado
+### Custom Error Handling
 
 ```php
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $result = $crud->handleSubmission();
     
     if (!$result['success']) {
-        error_log('Error en formulario: ' . json_encode($result));
+        error_log('Form error: ' . json_encode($result));
         $_SESSION['flash_error'] = $result['error'];
         header('Location: form.php?errors=' . urlencode(json_encode($result['errors'])));
         exit;
@@ -262,17 +262,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 ---
 
-## Mejores Prácticas
+## Best Practices
 
-1. **Siempre usa caché** en producción para evitar consultas repetidas a `INFORMATION_SCHEMA`
-2. **Limpia la caché** después de cambios en el esquema de la base de datos
-3. **Valida en cliente Y servidor** - nunca confíes solo en JavaScript
-4. **Usa HTTPS** cuando manejes archivos subidos
-5. **Limita el tamaño de archivos** tanto en PHP (`upload_max_filesize`) como en metadatos
-6. **Sanitiza nombres de archivos** - el sistema lo hace automáticamente con `uniqid()`
-7. **Implementa CSRF** - el sistema lo incluye por defecto, no lo desactives
+1. **Always use cache** in production to avoid repeated queries to `INFORMATION_SCHEMA`
+2. **Clear cache** after schema changes
+3. **Validate on client AND server** - never trust JavaScript alone
+4. **Use HTTPS** when handling file uploads
+5. **Limit file sizes** both in PHP (`upload_max_filesize`) and metadata
+6. **Sanitize filenames** - the system does this automatically with `uniqid()`
+7. **Implement CSRF** - the system includes it by default, don't disable it
 
 ---
 
-**Última actualización**: 2025-01-31  
-**Versión**: Fase 3
+**Last updated**: 2025-01-31  
+**Version**: Phase 3

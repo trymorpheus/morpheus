@@ -1,37 +1,37 @@
-# Sistema de Hooks/Eventos - DynamicCRUD
+# Hooks/Events System - DynamicCRUD
 
-El sistema de hooks permite ejecutar código personalizado en puntos clave del ciclo de vida CRUD.
+The hooks system allows you to execute custom code at key points in the CRUD lifecycle.
 
-## Hooks Disponibles
+## Available Hooks
 
-### Hooks de Validación
-- **beforeValidate**: Antes de validar los datos
-- **afterValidate**: Después de validar los datos
+### Validation Hooks
+- **beforeValidate**: Before validating data
+- **afterValidate**: After validating data
 
-### Hooks de Guardado
-- **beforeSave**: Antes de guardar (CREATE o UPDATE)
-- **afterSave**: Después de guardar (CREATE o UPDATE)
+### Save Hooks
+- **beforeSave**: Before saving (CREATE or UPDATE)
+- **afterSave**: After saving (CREATE or UPDATE)
 
-### Hooks de Creación
-- **beforeCreate**: Antes de crear un nuevo registro
-- **afterCreate**: Después de crear un nuevo registro
+### Creation Hooks
+- **beforeCreate**: Before creating a new record
+- **afterCreate**: After creating a new record
 
-### Hooks de Actualización
-- **beforeUpdate**: Antes de actualizar un registro existente
-- **afterUpdate**: Después de actualizar un registro existente
+### Update Hooks
+- **beforeUpdate**: Before updating an existing record
+- **afterUpdate**: After updating an existing record
 
-### Hooks de Eliminación
-- **beforeDelete**: Antes de eliminar un registro
-- **afterDelete**: Después de eliminar un registro
+### Deletion Hooks
+- **beforeDelete**: Before deleting a record
+- **afterDelete**: After deleting a record
 
-## Uso Básico
+## Basic Usage
 
 ```php
 $crud = new DynamicCRUD($pdo, 'posts');
 
-// Registrar un hook
+// Register a hook
 $crud->beforeSave(function($data) {
-    // Modificar datos antes de guardar
+    // Modify data before saving
     $data['slug'] = slugify($data['title']);
     return $data;
 });
@@ -39,9 +39,9 @@ $crud->beforeSave(function($data) {
 $crud->handleSubmission();
 ```
 
-## Ejemplos Prácticos
+## Practical Examples
 
-### 1. Generar Slug Automáticamente
+### 1. Auto-Generate Slug
 
 ```php
 $crud->beforeSave(function($data) {
@@ -52,7 +52,7 @@ $crud->beforeSave(function($data) {
 });
 ```
 
-### 2. Añadir Timestamps Automáticos
+### 2. Add Automatic Timestamps
 
 ```php
 $crud->beforeCreate(function($data) {
@@ -68,19 +68,19 @@ $crud->beforeUpdate(function($data, $id) {
 });
 ```
 
-### 3. Validación Cruzada
+### 3. Cross-Field Validation
 
 ```php
 $crud->afterValidate(function($data) {
-    // Si status es 'published', añadir fecha de publicación
+    // If status is 'published', add publication date
     if ($data['status'] === 'published' && empty($data['published_at'])) {
         $data['published_at'] = date('Y-m-d H:i:s');
     }
     
-    // Validar que fecha_fin > fecha_inicio
-    if (isset($data['fecha_inicio']) && isset($data['fecha_fin'])) {
-        if (strtotime($data['fecha_fin']) < strtotime($data['fecha_inicio'])) {
-            throw new \Exception('La fecha de fin debe ser posterior a la fecha de inicio');
+    // Validate that end_date > start_date
+    if (isset($data['start_date']) && isset($data['end_date'])) {
+        if (strtotime($data['end_date']) < strtotime($data['start_date'])) {
+            throw new \Exception('End date must be after start date');
         }
     }
     
@@ -88,42 +88,42 @@ $crud->afterValidate(function($data) {
 });
 ```
 
-### 4. Enviar Email de Notificación
+### 4. Send Email Notification
 
 ```php
 $crud->afterCreate(function($id, $data) {
-    // Enviar email de bienvenida
+    // Send welcome email
     mail(
         $data['email'],
-        'Bienvenido',
-        "Tu cuenta ha sido creada con ID: $id"
+        'Welcome',
+        "Your account has been created with ID: $id"
     );
 });
 ```
 
-### 5. Logging y Auditoría
+### 5. Logging and Auditing
 
 ```php
 $crud->afterCreate(function($id, $data) {
-    error_log("✓ Registro creado - ID: $id - Usuario: {$_SESSION['user_id']}");
+    error_log("✓ Record created - ID: $id - User: {$_SESSION['user_id']}");
 });
 
 $crud->afterUpdate(function($id, $data) {
-    error_log("✓ Registro actualizado - ID: $id - Usuario: {$_SESSION['user_id']}");
+    error_log("✓ Record updated - ID: $id - User: {$_SESSION['user_id']}");
 });
 
 $crud->beforeDelete(function($id) use ($pdo) {
-    // Guardar en tabla de auditoría antes de eliminar
+    // Save to audit table before deleting
     $stmt = $pdo->prepare("INSERT INTO audit_log (action, table_name, record_id, user_id, timestamp) VALUES (?, ?, ?, ?, NOW())");
     $stmt->execute(['DELETE', 'posts', $id, $_SESSION['user_id'] ?? null]);
 });
 ```
 
-### 6. Sincronizar con Servicio Externo
+### 6. Sync with External Service
 
 ```php
 $crud->afterSave(function($id, $data) {
-    // Sincronizar con API externa
+    // Sync with external API
     $client = new GuzzleHttp\Client();
     $client->post('https://api.example.com/sync', [
         'json' => [
@@ -134,23 +134,23 @@ $crud->afterSave(function($id, $data) {
 });
 ```
 
-### 7. Limpiar Caché
+### 7. Clear Cache
 
 ```php
 $crud->afterSave(function($id, $data) {
-    // Invalidar caché después de guardar
+    // Invalidate cache after saving
     $cache = new FileCacheStrategy();
     $cache->invalidate("post_$id");
     $cache->invalidate("posts_list");
 });
 ```
 
-### 8. Procesar Imagen
+### 8. Process Image
 
 ```php
 $crud->afterCreate(function($id, $data) {
     if (isset($data['image'])) {
-        // Crear thumbnail
+        // Create thumbnail
         $image = imagecreatefromjpeg($data['image']);
         $thumbnail = imagescale($image, 200);
         imagejpeg($thumbnail, "uploads/thumbnails/{$id}.jpg");
@@ -158,9 +158,9 @@ $crud->afterCreate(function($id, $data) {
 });
 ```
 
-## Múltiples Callbacks
+## Multiple Callbacks
 
-Puedes registrar múltiples callbacks para el mismo hook:
+You can register multiple callbacks for the same hook:
 
 ```php
 $crud->beforeSave(function($data) {
@@ -173,12 +173,12 @@ $crud->beforeSave(function($data) {
     return $data;
 });
 
-// Ambos se ejecutarán en orden
+// Both will execute in order
 ```
 
-## API Fluida
+## Fluent API
 
-Los métodos son encadenables:
+Methods are chainable:
 
 ```php
 $crud
@@ -188,70 +188,70 @@ $crud
     ->handleSubmission();
 ```
 
-## Parámetros de los Hooks
+## Hook Parameters
 
 ### beforeValidate, afterValidate, beforeSave, beforeCreate
 ```php
 function($data): array
 ```
-- **$data**: Array con los datos del formulario
-- **Return**: Array con los datos (posiblemente modificados)
+- **$data**: Array with form data
+- **Return**: Array with data (possibly modified)
 
 ### afterSave, afterCreate, afterUpdate
 ```php
 function($id, $data): void
 ```
-- **$id**: ID del registro guardado
-- **$data**: Array con los datos guardados
-- **Return**: No es necesario retornar nada
+- **$id**: ID of saved record
+- **$data**: Array with saved data
+- **Return**: No return needed
 
 ### beforeUpdate
 ```php
 function($data, $id): array
 ```
-- **$data**: Array con los datos a actualizar
-- **$id**: ID del registro a actualizar
-- **Return**: Array con los datos (posiblemente modificados)
+- **$data**: Array with data to update
+- **$id**: ID of record to update
+- **Return**: Array with data (possibly modified)
 
 ### beforeDelete, afterDelete
 ```php
 function($id): void
 ```
-- **$id**: ID del registro a eliminar
-- **Return**: No es necesario retornar nada
+- **$id**: ID of record to delete
+- **Return**: No return needed
 
-## Manejo de Errores
+## Error Handling
 
-Los hooks se ejecutan dentro de transacciones. Si un hook lanza una excepción, se hace rollback automático:
+Hooks execute within transactions. If a hook throws an exception, automatic rollback occurs:
 
 ```php
 $crud->beforeSave(function($data) {
     if ($data['price'] < 0) {
-        throw new \Exception('El precio no puede ser negativo');
+        throw new \Exception('Price cannot be negative');
     }
     return $data;
 });
 
-// Si se lanza la excepción, no se guarda nada en la BD
+// If exception is thrown, nothing is saved to DB
 ```
 
-## Mejores Prácticas
+## Best Practices
 
-1. **Mantén los hooks simples**: Cada hook debe hacer una sola cosa
-2. **Retorna siempre los datos**: En hooks "before", siempre retorna `$data`
-3. **No modifiques la BD directamente**: Usa los datos retornados
-4. **Maneja errores apropiadamente**: Lanza excepciones para cancelar operaciones
-5. **Documenta tus hooks**: Comenta qué hace cada hook
-6. **Evita hooks pesados**: Operaciones lentas pueden afectar el rendimiento
+1. **Keep hooks simple**: Each hook should do one thing
+2. **Always return data**: In "before" hooks, always return `$data`
+3. **Don't modify DB directly**: Use returned data
+4. **Handle errors appropriately**: Throw exceptions to cancel operations
+5. **Document your hooks**: Comment what each hook does
+6. **Avoid heavy hooks**: Slow operations can affect performance
 
-## Limitaciones
+## Limitations
 
-- Los hooks no se ejecutan en operaciones `list()` (solo lectura)
-- Los hooks se ejecutan en orden de registro
-- No hay forma de "cancelar" un hook una vez registrado
-- Los hooks comparten el mismo contexto de transacción
+- Hooks don't execute on `list()` operations (read-only)
+- Hooks execute in registration order
+- No way to "unregister" a hook once registered
+- Hooks share the same transaction context
 
 ---
 
-**Última actualización**: 2025-01-31  
-**Versión**: Fase 4
+**Last updated**: 2025-01-31  
+**Version**: Phase 4
