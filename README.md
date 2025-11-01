@@ -149,9 +149,9 @@ $crud->handleSubmission();
 
 ## 📚 Documentation
 
-- [Hooks System Guide](docs/HOOKS.en.md) - 10 lifecycle hooks explained
-- [Many-to-Many Relationships](docs/MANY_TO_MANY.en.md) - M:N setup guide
-- [Customization Guide](docs/CUSTOMIZATION.en.md) - Metadata options
+- [Hooks System Guide](docs/HOOKS.md) - 10 lifecycle hooks explained
+- [Many-to-Many Relationships](docs/MANY_TO_MANY.md) - M:N setup guide
+- [Customization Guide](docs/CUSTOMIZATION.md) - Metadata options
 - [Changelog](CHANGELOG.md) - Version history
 - [Contributing](CONTRIBUTING.md) - How to contribute
 

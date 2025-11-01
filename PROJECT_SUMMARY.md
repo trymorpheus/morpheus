@@ -107,10 +107,10 @@ DynamicCRUD/
 | Document | Description |
 |----------|-------------|
 | `README.md` | Introduction and basic usage |
-| `docs/CUSTOMIZATION.en.md` | Customization guide |
-| `docs/HOOKS.en.md` | Hooks system with 8 examples |
-| `docs/MANY_TO_MANY.en.md` | M:N relationships |
-| `LIMITATIONS.md` | Limitations and solutions |
+| `docs/CUSTOMIZATION.md` | Customization guide |
+| `docs/HOOKS.md` | Hooks system with 8 examples |
+| `docs/MANY_TO_MANY.md` | M:N relationships |
+| `LIMITATIONS.es.md` | Limitations and solutions |
 | `BUGS.md` | Bug registry (6 resolved) |
 | `FASE1-4_CHECKLIST.md` | Phase checklists |
 
