@@ -49,7 +49,7 @@ class CRUDHandler
             array_filter($this->schema['columns'], fn($col) => !$col['is_primary'])
         );
         
-        $data = $this->security->sanitizeInput($_POST, $allowedColumns);
+        $data = $this->security->sanitizeInput($_POST, $allowedColumns, $this->schema);
         
         $validator = new ValidationEngine($this->schema);
         
@@ -75,7 +75,12 @@ class CRUDHandler
         );
         
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute($data);
+        
+        foreach ($data as $key => $value) {
+            $stmt->bindValue(":{$key}", $value, $value === null ? \PDO::PARAM_NULL : \PDO::PARAM_STR);
+        }
+        
+        $stmt->execute();
         
         return (int) $this->pdo->lastInsertId();
     }
@@ -92,9 +97,15 @@ class CRUDHandler
             $pk
         );
         
-        $data['id'] = $id;
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute($data);
+        
+        foreach ($data as $key => $value) {
+            $stmt->bindValue(":{$key}", $value, $value === null ? \PDO::PARAM_NULL : \PDO::PARAM_STR);
+        }
+        
+        $stmt->bindValue(':id', $id, \PDO::PARAM_INT);
+        
+        $stmt->execute();
         
         return $id;
     }

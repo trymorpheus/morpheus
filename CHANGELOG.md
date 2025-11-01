@@ -44,15 +44,40 @@ y este proyecto adhiere a [Versionado Semántico](https://semver.org/lang/es/).
 - URL (FILTER_VALIDATE_URL)
 - Fechas (strtotime)
 
-## [Unreleased] - Fase 2
+## [0.2.0] - 2025 - Fase 2
+
+### Añadido
+- Detección automática de claves foráneas desde INFORMATION_SCHEMA
+- Generación de selects con datos de tablas relacionadas
+- Sistema de caché con FileCacheStrategy
+- Operación list() con paginación completa
+- Operación delete() con prepared statements
+- ListGenerator para renderizado de tablas
+- Script clear_cache.php para limpieza manual
+- Metadato "hidden" para campos autogenerados
+- Metadato "display_column" para claves foráneas
+- Ejemplos: posts.php (FK), categories.php (CRUD completo)
+
+### Corregido
+- Manejo correcto de valores NULL en campos opcionales
+- Conversión automática de cadenas vacías a NULL
+- Uso de PDO::PARAM_NULL en prepared statements
+- Validación omitida para campos hidden
+
+### Mejorado
+- SecurityModule ahora maneja campos nullable
+- CRUDHandler usa bindValue para tipos correctos
+- FormGenerator renderiza selects para FK automáticamente
+- SchemaAnalyzer con caché integrado
+
+## [Unreleased] - Fase 3
 
 ### Planificado
-- Detección y manejo de claves foráneas
 - Validación cliente con JavaScript
-- Sistema de caché (APCu/archivos)
 - Subida de archivos
-- Operaciones READ (listado con paginación) y DELETE
-- Carga AJAX para selects grandes
+- Hooks/Eventos (beforeSave, afterCreate, etc.)
+- Relaciones muchos-a-muchos
+- Sistema de auditoría
 
 ---
 

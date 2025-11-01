@@ -4,8 +4,9 @@
 - [x] Detección automática desde INFORMATION_SCHEMA
 - [x] Generación de select con datos relacionados
 - [x] Configuración display_column en metadatos
-- [x] Soporte relaciones opcionales
+- [x] Soporte relaciones opcionales (nullable)
 - [x] Metadato hidden para campos autogenerados
+- [x] Manejo correcto de valores NULL en BD
 
 ## 2. Sistema de Caché
 - [x] Interface CacheStrategy
@@ -17,23 +18,27 @@
 
 ## 3. READ y DELETE
 - [x] Método list con paginación
-- [x] Operación DELETE
-- [x] Confirmación eliminación
-- [x] ListGenerator para renderizado
+- [x] Operación DELETE con prepared statements
+- [x] Confirmación eliminación JavaScript
+- [x] ListGenerator para renderizado tablas
 - [x] Filtros y ordenamiento
+- [x] Navegación entre páginas
+- [x] Ejemplo completo (categories.php)
 
-## 4. Validación Cliente
-- [ ] Generación reglas JS
+---
+
+**Estado**: ✅ COMPLETADA
+
+## Pendiente para Fase 3
+
+### Validación Cliente (JavaScript)
+- [ ] Generación reglas JS desde metadatos
 - [ ] Validación tiempo real
 - [ ] Mensajes error dinámicos
 - [ ] Validación asíncrona unicidad
 
-## 5. Subida Archivos
-- [ ] Detección campos file
+### Subida de Archivos
+- [ ] Detección campos file desde metadatos
 - [ ] Input type file
-- [ ] Validación MIME
-- [ ] Almacenamiento rutas
-
----
-
-**Estado**: 🚧 EN PROGRESO
+- [ ] Validación MIME y tamaño
+- [ ] Almacenamiento rutas en BD

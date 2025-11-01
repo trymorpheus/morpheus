@@ -316,36 +316,67 @@ La librería NO incluirá:
 1. **Claves Foráneas**:
    - Detección automática de relaciones.
    - Generación de `<select>` con datos de tablas relacionadas.
-   - Carga de opciones vía AJAX para tablas grandes.
+   - Metadato `display_column` para personalizar.
+   - Soporte para relaciones opcionales (nullable).
 
-2. **Validación Cliente (JavaScript)**:
-   - Generación de reglas JS desde metadatos.
-   - Validación asíncrona (unicidad de campos).
-   - Mensajes de error en tiempo real.
-
-3. **Sistema de Caché**:
-   - Implementación de `CacheStrategy` con APCu y archivos.
+2. **Sistema de Caché**:
+   - Implementación de `CacheStrategy` con archivos.
    - Caché de esquemas con TTL configurable.
+   - Script de limpieza manual.
 
-4. **Subida de Archivos**:
-   - Mapeo de campos `VARCHAR` a `<input type="file">`.
-   - Validación de tipos MIME y tamaño.
-   - Almacenamiento de rutas en BD.
-
-5. **Operaciones READ y DELETE**:
-   - Listado con paginación básica.
+3. **Operaciones READ y DELETE**:
+   - Listado con paginación completa.
+   - Filtros y ordenamiento.
    - Confirmación para eliminación.
+   - ListGenerator para renderizado.
+
+4. **Mejoras de Validación**:
+   - Metadato `hidden` para campos autogenerados.
+   - Manejo correcto de valores NULL.
+   - Conversión automática de cadenas vacías a NULL.
 
 **Entregables**:
 - Soporte completo para CRUD.
 - Manejo de relaciones simples (1:N).
 - Sistema de caché funcional.
+- 3 ejemplos funcionales.
 
 **Duración estimada**: 3-4 semanas.
+**Duración real**: 1 sesión.
 
 ---
 
-##### **Fase 3: Características Avanzadas**
+##### **Fase 3: Validación Cliente y Archivos**
+**Objetivo**: Mejorar experiencia de usuario con validación en tiempo real y subida de archivos.
+
+**Tareas**:
+1. **Validación Cliente (JavaScript)**:
+   - Generación automática de reglas JS desde metadatos.
+   - Validación en tiempo real (onblur/oninput).
+   - Mensajes de error dinámicos.
+   - Validación asíncrona para unicidad de campos.
+
+2. **Subida de Archivos**:
+   - Metadato para detectar campos file.
+   - Mapeo de campos `VARCHAR` a `<input type="file">`.
+   - Validación de tipos MIME y tamaño.
+   - Almacenamiento de rutas en BD.
+
+3. **Mejoras UX**:
+   - Indicadores de carga.
+   - Mensajes de éxito/error mejorados.
+   - Accesibilidad (ARIA labels).
+
+**Entregables**:
+- Validación cliente funcional.
+- Subida de archivos integrada.
+- Mejor experiencia de usuario.
+
+**Duración estimada**: 2-3 semanas.
+
+---
+
+##### **Fase 4: Características Avanzadas**
 **Objetivo**: Funcionalidades empresariales y escalabilidad.
 
 **Tareas**:
@@ -363,20 +394,15 @@ La librería NO incluirá:
    - Registro de cambios con diff JSON.
    - Integración con sistema de usuarios.
 
-4. **Soporte PostgreSQL**:
-   - Adaptador para diferencias en `INFORMATION_SCHEMA`.
-   - Pruebas de compatibilidad.
-
-5. **Tipos Especiales**:
+4. **Tipos Especiales**:
    - JSON: Editor visual o textarea.
    - ENUM: Radio buttons o select.
    - SET: Checkboxes múltiples.
-   - GEOMETRY: Integración con mapas (Leaflet/Google Maps).
+   - GEOMETRY: Integración con mapas.
 
-6. **Filtros y Búsqueda**:
-   - Sistema de filtros dinámicos en listados.
-   - Búsqueda full-text.
-   - Ordenamiento por columnas.
+5. **Soporte PostgreSQL**:
+   - Adaptador para diferencias en `INFORMATION_SCHEMA`.
+   - Pruebas de compatibilidad.
 
 **Entregables**:
 - Sistema robusto para aplicaciones empresariales.
@@ -387,7 +413,7 @@ La librería NO incluirá:
 
 ---
 
-##### **Fase 4: Optimización y Distribución**
+##### **Fase 5: Optimización y Distribución**
 **Objetivo**: Preparar para producción y comunidad.
 
 **Tareas**:

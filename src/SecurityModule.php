@@ -27,26 +27,48 @@ class SecurityModule
         return isset($_SESSION['_csrf_token']) && hash_equals($_SESSION['_csrf_token'], $token);
     }
 
-    public function sanitizeInput(array $data, array $allowedColumns): array
+    public function sanitizeInput(array $data, array $allowedColumns, array $schema = []): array
     {
         $sanitized = [];
         
         foreach ($allowedColumns as $column) {
             if (isset($data[$column])) {
-                $sanitized[$column] = $this->sanitizeValue($data[$column]);
+                $value = $this->sanitizeValue($data[$column]);
+                
+                // Convertir cadenas vacías a NULL para campos opcionales
+                if ($value === '' && $this->isNullable($column, $schema)) {
+                    $value = null;
+                }
+                
+                $sanitized[$column] = $value;
             }
         }
         
         return $sanitized;
     }
 
-    private function sanitizeValue($value): string
+    private function sanitizeValue($value)
     {
         if (is_array($value)) {
             return '';
         }
         
         return trim($value);
+    }
+
+    private function isNullable(string $columnName, array $schema): bool
+    {
+        if (empty($schema['columns'])) {
+            return false;
+        }
+        
+        foreach ($schema['columns'] as $column) {
+            if ($column['name'] === $columnName) {
+                return $column['is_nullable'];
+            }
+        }
+        
+        return false;
     }
 
     public function escapeOutput(string $value): string

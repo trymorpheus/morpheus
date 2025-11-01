@@ -44,7 +44,9 @@ class ValidationEngine
             return;
         }
         
-        if ($value === null || $value === '') return;
+        if ($value === null || $value === '') {
+            return;
+        }
         
         $this->validateType($column, $value);
         $this->validateLength($column, $value);

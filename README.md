@@ -40,11 +40,32 @@ MODIFY COLUMN email VARCHAR(255) COMMENT '{"type": "email", "label": "Tu correo"
 
 ## Características
 
+### Fase 1 (MVP)
 - ✅ Generación automática de formularios desde estructura SQL
 - ✅ Validación servidor con tipos SQL y metadatos
 - ✅ Protección CSRF integrada
 - ✅ Sanitización automática de datos
 - ✅ Sentencias preparadas (PDO)
+- ✅ Operaciones CREATE y UPDATE
+
+### Fase 2 (Características Intermedias)
+- ✅ Detección automática de claves foráneas
+- ✅ Selects con datos de tablas relacionadas
+- ✅ Sistema de caché (FileCacheStrategy)
+- ✅ Operaciones READ (paginación) y DELETE
+- ✅ Manejo correcto de valores NULL
+- ✅ Metadatos: hidden, display_column
+
+### Fase 3 (Validación Cliente y Archivos) - Planificada
+- [ ] Validación JavaScript en tiempo real
+- [ ] Subida de archivos con validación
+- [ ] Mejoras de accesibilidad
+
+### Fase 4 (Características Avanzadas) - Planificada
+- [ ] Hooks/Eventos (beforeSave, afterCreate)
+- [ ] Relaciones muchos-a-muchos
+- [ ] Sistema de auditoría
+- [ ] Soporte PostgreSQL
 
 ## Requisitos
 
