@@ -83,6 +83,11 @@ MODIFY COLUMN email VARCHAR(255) COMMENT '{"type": "email", "label": "Tu correo"
 - PHP 8.0+
 - PDO MySQL
 
+## Autoría
+
+**Creador y Director del Proyecto**: Mario Raúl Carbonell Martínez  
+**Desarrollo**: Amazon Q, Gemini 2.5 Pro
+
 ## Licencia
 
 MIT

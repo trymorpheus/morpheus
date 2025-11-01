@@ -317,8 +317,9 @@ $crud->addManyToMany(
 
 ## 🤝 Colaboración
 
-### Contribuciones Realizadas
-- **Amazon Q**: Desarrollo principal (Fases 1-4)
+### Equipo del Proyecto
+- **Mario Raúl Carbonell Martínez**: Creador, director y arquitecto del proyecto
+- **Amazon Q**: Desarrollo e implementación (Fases 1-4)
 - **Gemini 2.5 Pro**: 
   - Análisis de limitaciones (LIMITATIONS.md)
   - Resolución de BUG-001 (Token CSRF)
@@ -409,7 +410,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 **Versión**: 1.0.0 (Fase 4 completada)  
 **Fecha**: 2025-01-31  
 **Licencia**: MIT  
-**Autores**: Amazon Q (desarrollo principal), Gemini 2.5 Pro (análisis y debugging)
+**Creador y Director del Proyecto**: Mario Raúl Carbonell Martínez  
+**Desarrollo**: Amazon Q (implementación), Gemini 2.5 Pro (análisis y debugging)
 
 ---
 
