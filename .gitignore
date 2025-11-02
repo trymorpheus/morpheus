@@ -32,3 +32,8 @@ config.local.php
 # PHPUnit
 .phpunit.result.cache
 tests/temp_uploads/
+tests/temp_cache/
+
+# Composer lock (allow flexibility in CI)
+# composer.lock is tracked for production stability
+# but CI uses composer update for multi-version testing
