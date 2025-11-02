@@ -21,13 +21,18 @@ Metadata is defined in database column comments using JSON format.
 
 ```json
 {
-  "type": "email|url|file|number|text",
+  "type": "email|url|color|tel|password|search|time|week|month|range|file|number|text",
   "label": "Visible field label",
+  "placeholder": "Placeholder text",
   "tooltip": "Help text that appears on hover",
   "min": 0,
   "max": 100,
+  "step": "0.01",
   "minlength": 3,
+  "pattern": "[0-9]{3}-[0-9]{3}-[0-9]{4}",
+  "readonly": true,
   "hidden": true,
+  "autocomplete": "email",
   "display_column": "name",
   "accept": "image/*",
   "allowed_mimes": ["image/jpeg", "image/png"],
@@ -35,13 +40,45 @@ Metadata is defined in database column comments using JSON format.
 }
 ```
 
+### New HTML5 Input Types
+
+- `color` - Color picker
+- `tel` - Telephone number
+- `password` - Password field
+- `search` - Search input
+- `time` - Time picker
+- `week` - Week picker
+- `month` - Month picker
+- `range` - Slider input
+
 ### Examples by Field Type
 
-#### Email Field
+#### Email Field with Placeholder
 ```sql
 ALTER TABLE users 
 MODIFY COLUMN email VARCHAR(255) 
-COMMENT '{"type": "email", "label": "Email Address", "tooltip": "We will use this email to contact you"}';
+COMMENT '{"type": "email", "label": "Email Address", "placeholder": "user@example.com", "autocomplete": "email", "tooltip": "We will use this email to contact you"}';
+```
+
+#### Color Picker
+```sql
+ALTER TABLE settings 
+MODIFY COLUMN brand_color VARCHAR(7) 
+COMMENT '{"type": "color", "label": "Brand Color", "placeholder": "#000000"}';
+```
+
+#### Phone Number with Pattern
+```sql
+ALTER TABLE contacts 
+MODIFY COLUMN phone VARCHAR(20) 
+COMMENT '{"type": "tel", "label": "Phone", "placeholder": "555-123-4567", "pattern": "[0-9]{3}-[0-9]{3}-[0-9]{4}"}';
+```
+
+#### Range Slider
+```sql
+ALTER TABLE surveys 
+MODIFY COLUMN satisfaction INT 
+COMMENT '{"type": "range", "label": "Satisfaction", "min": 0, "max": 100, "step": 10}';
 ```
 
 #### URL Field

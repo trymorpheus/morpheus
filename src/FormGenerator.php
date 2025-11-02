@@ -125,8 +125,17 @@ class FormGenerator
     {
         $metadata = $column['metadata']['type'] ?? null;
         
+        // Tipos especiales desde metadata
         if ($metadata === 'email') return 'email';
         if ($metadata === 'url') return 'url';
+        if ($metadata === 'color') return 'color';
+        if ($metadata === 'tel') return 'tel';
+        if ($metadata === 'password') return 'password';
+        if ($metadata === 'search') return 'search';
+        if ($metadata === 'time') return 'time';
+        if ($metadata === 'week') return 'week';
+        if ($metadata === 'month') return 'month';
+        if ($metadata === 'range') return 'range';
         
         return match($column['sql_type']) {
             'int', 'bigint', 'smallint', 'tinyint' => 'number',
@@ -166,6 +175,31 @@ class FormGenerator
         // Minlength desde metadatos
         if (isset($column['metadata']['minlength'])) {
             $attrs[] = sprintf('minlength="%d"', $column['metadata']['minlength']);
+        }
+        
+        // Placeholder desde metadatos
+        if (isset($column['metadata']['placeholder'])) {
+            $attrs[] = sprintf('placeholder="%s"', htmlspecialchars($column['metadata']['placeholder']));
+        }
+        
+        // Pattern desde metadatos
+        if (isset($column['metadata']['pattern'])) {
+            $attrs[] = sprintf('pattern="%s"', htmlspecialchars($column['metadata']['pattern']));
+        }
+        
+        // Step desde metadatos (para number/range)
+        if (isset($column['metadata']['step'])) {
+            $attrs[] = sprintf('step="%s"', $column['metadata']['step']);
+        }
+        
+        // Readonly desde metadatos
+        if (isset($column['metadata']['readonly']) && $column['metadata']['readonly']) {
+            $attrs[] = 'readonly';
+        }
+        
+        // Autocomplete desde metadatos
+        if (isset($column['metadata']['autocomplete'])) {
+            $attrs[] = sprintf('autocomplete="%s"', htmlspecialchars($column['metadata']['autocomplete']));
         }
         
         return $attrs ? ' ' . implode(' ', $attrs) : '';

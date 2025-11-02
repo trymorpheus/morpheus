@@ -165,13 +165,18 @@ Configure fields via JSON in `COLUMN_COMMENT`:
 
 | Option | Type | Description | Example |
 |--------|------|-------------|---------|
-| `type` | string | Input type | `"email"`, `"url"`, `"number"`, `"file"` |
+| `type` | string | Input type | `"email"`, `"url"`, `"color"`, `"tel"`, `"password"`, `"search"`, `"time"`, `"week"`, `"month"`, `"range"`, `"file"` |
 | `label` | string | Field label | `"Your Email"` |
+| `placeholder` | string | Placeholder text | `"Enter your name"` |
 | `min` | int | Min value (number) | `18` |
 | `max` | int | Max value (number) | `120` |
 | `minlength` | int | Min length (text) | `3` |
+| `pattern` | string | Regex pattern | `"[0-9]{3}-[0-9]{3}-[0-9]{4}"` |
+| `step` | string | Step increment | `"0.01"`, `"any"` |
 | `tooltip` | string | Help text | `"Enter a valid URL"` |
+| `readonly` | bool | Read-only field | `true` |
 | `hidden` | bool | Hide from form | `true` |
+| `autocomplete` | string | Autocomplete hint | `"email"`, `"tel"`, `"off"` |
 | `display_column` | string | FK display field | `"full_name"` |
 | `accept` | string | File types | `"image/*"` |
 | `max_size` | int | Max file size (bytes) | `2097152` (2MB) |

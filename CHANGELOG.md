@@ -111,25 +111,91 @@ Primera versión estable de DynamicCRUD con 4 fases completadas.
 
 ---
 
-## [Unreleased] - Fase 5 (Futuro)
+## [1.1.0] - 2025-01-31
+
+### 🎉 Fase 5: Testing y CI/CD
+
+Segunda versión con sistema completo de testing automatizado y CI/CD pipeline.
+
+### ✨ Añadido
+
+#### Sistema de Testing
+- **113 tests automatizados** con PHPUnit 9.5/10.0
+- Tests para ValidationEngine (7 tests)
+- Tests para FormGenerator (22 tests)
+- Tests para SchemaAnalyzer (7 tests)
+- Tests para SecurityModule (6 tests)
+- Tests para FileUploadHandler (8 tests: 4 passing, 4 skipped)
+- Tests para CRUDHandler (20 tests)
+- Tests para AuditLogger (6 tests)
+- Tests para ListGenerator (13 tests)
+- Tests para FileCacheStrategy (9 tests)
+- Tests de integración DynamicCRUD (14 tests)
+- Documentación completa de testing (tests/README.md)
+- Configuración PHPUnit (phpunit.xml)
+
+#### CI/CD con GitHub Actions
+- Workflow de tests automáticos en PHP 8.0, 8.1, 8.2, 8.3
+- Workflow de calidad de código (PHP_CodeSniffer + PHPStan)
+- Workflow de releases automáticos
+- Configuración de Dependabot para actualizaciones
+- Badges de CI/CD en README.md
+- MySQL 8.0 service container en CI
+
+#### FormGenerator Enhancements
+- **10 nuevos input types HTML5**: color, tel, password, search, time, week, month, range, file (mejorado)
+- **7 nuevos metadata attributes**: placeholder, pattern, step, readonly, autocomplete
+- Total de **16+ opciones de metadata** disponibles
+- Ejemplo completo (examples/advanced_inputs.php)
+- Documentación actualizada (README.md, CUSTOMIZATION.md)
+
+### 🔧 Corregido
+
+- **PHP 8.4 Deprecation**: Parámetro nullable en FileCacheStrategy constructor
+- **Composer Lock**: CI usa `composer update` para multi-version compatibility
+- **Test Isolation**: `@runTestsInSeparateProcesses` para tests con sesiones
+
+### 🔄 Cambiado
+
+- Actualizado composer.json para PHPUnit 9.5/10.0 compatibility
+- Actualizado .gitignore para excluir archivos de test
+- README.md con badges de CI/CD y estadísticas de testing
+- CUSTOMIZATION.md con tabla completa de metadata options
+
+### 📊 Estadísticas Fase 5
+
+- **Tests totales**: 113
+- **Tests passing**: 108 (95.6%)
+- **Tests skipped**: 5 (4.4%)
+- **Tests failed**: 0 (0%)
+- **Assertions**: 239+
+- **PHP versions tested**: 4 (8.0-8.3)
+- **CI workflows**: 5
+- **Build time**: ~45-50 segundos
+
+---
+
+## [Unreleased] - Futuro
 
 ### 🔮 Planificado
 
 #### Alta Prioridad
 - [ ] Soporte PostgreSQL (patrón Adapter)
-- [ ] Tests automatizados (PHPUnit)
 - [ ] Campos virtuales (confirmación password)
+- [ ] Resolver 5 tests skipped
 
 #### Media Prioridad
 - [ ] UI avanzada para M:N (checkboxes, búsqueda)
 - [ ] Internacionalización (i18n)
 - [ ] Sistema de plantillas
+- [ ] Code coverage reports (Codecov/Coveralls)
 
 #### Baja Prioridad
 - [ ] Rate limiting
 - [ ] Permisos granulares
 - [ ] Soporte SQL Server
 - [ ] API REST automática
+- [ ] E2E testing con Selenium
 
 ---
 
@@ -146,4 +212,5 @@ Primera versión estable de DynamicCRUD con 4 fases completadas.
 ---
 
 **Mantenido por**: Mario Raúl Carbonell Martínez  
-**Última actualización**: 2025-01-31
+**Última actualización**: 2025-01-31  
+**Versión actual**: 1.1.0
