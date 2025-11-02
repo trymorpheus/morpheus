@@ -132,7 +132,7 @@ By default, the system looks for a `name` or `title` column. If your table uses 
 // The system automatically looks for 'name' or 'title'
 
 // Option 2: Modify FormGenerator (advanced)
-// See docs/CUSTOMIZATION.en.md
+// See docs/CUSTOMIZATION.md
 ```
 
 ### Style the select

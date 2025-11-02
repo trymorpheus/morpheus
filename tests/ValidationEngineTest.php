@@ -3,12 +3,13 @@
 namespace DynamicCRUD\Tests;
 
 use DynamicCRUD\ValidationEngine;
+use PHPUnit\Framework\TestCase;
 
-class ValidationEngineTest
+class ValidationEngineTest extends TestCase
 {
     private array $schema;
     
-    public function __construct()
+    protected function setUp(): void
     {
         $this->schema = [
             'table' => 'users',
@@ -22,47 +23,42 @@ class ValidationEngineTest
         ];
     }
     
-    public function testRequiredFields(): void
+    public function testRequiredFieldsValidationFails(): void
     {
         $validator = new ValidationEngine($this->schema);
         $result = $validator->validate(['age' => 25]);
         
-        assert($result === false, 'Validación debe fallar sin campos requeridos');
-        assert(!empty($validator->getErrors()['name']), 'Debe haber error en campo name');
-        
-        echo "✓ testRequiredFields pasó\n";
+        $this->assertFalse($result);
+        $this->assertArrayHasKey('name', $validator->getErrors());
+        $this->assertArrayHasKey('email', $validator->getErrors());
     }
     
-    public function testEmailValidation(): void
+    public function testInvalidEmailValidationFails(): void
     {
         $validator = new ValidationEngine($this->schema);
         $result = $validator->validate([
-            'name' => 'Test',
+            'name' => 'Test User',
             'email' => 'invalid-email'
         ]);
         
-        assert($result === false, 'Validación debe fallar con email inválido');
-        assert(!empty($validator->getErrors()['email']), 'Debe haber error en campo email');
-        
-        echo "✓ testEmailValidation pasó\n";
+        $this->assertFalse($result);
+        $this->assertArrayHasKey('email', $validator->getErrors());
     }
     
-    public function testUrlValidation(): void
+    public function testInvalidUrlValidationFails(): void
     {
         $validator = new ValidationEngine($this->schema);
         $result = $validator->validate([
-            'name' => 'Test',
+            'name' => 'Test User',
             'email' => 'test@example.com',
             'website' => 'not-a-url'
         ]);
         
-        assert($result === false, 'Validación debe fallar con URL inválida');
-        assert(!empty($validator->getErrors()['website']), 'Debe haber error en campo website');
-        
-        echo "✓ testUrlValidation pasó\n";
+        $this->assertFalse($result);
+        $this->assertArrayHasKey('website', $validator->getErrors());
     }
     
-    public function testValidData(): void
+    public function testValidDataPasses(): void
     {
         $validator = new ValidationEngine($this->schema);
         $result = $validator->validate([
@@ -72,25 +68,83 @@ class ValidationEngineTest
             'website' => 'https://example.com'
         ]);
         
-        assert($result === true, 'Validación debe pasar con datos válidos');
-        assert(empty($validator->getErrors()), 'No debe haber errores');
-        
-        echo "✓ testValidData pasó\n";
+        $this->assertTrue($result);
+        $this->assertEmpty($validator->getErrors());
     }
     
-    public function run(): void
+    public function testNullableFieldsAcceptNull(): void
     {
-        echo "Ejecutando tests de ValidationEngine...\n\n";
-        $this->testRequiredFields();
-        $this->testEmailValidation();
-        $this->testUrlValidation();
-        $this->testValidData();
-        echo "\n✓ Todos los tests pasaron\n";
+        $validator = new ValidationEngine($this->schema);
+        $result = $validator->validate([
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'age' => null,
+            'website' => null
+        ]);
+        
+        $this->assertTrue($result);
+        $this->assertEmpty($validator->getErrors());
     }
-}
-
-if (basename(__FILE__) === basename($_SERVER['PHP_SELF'])) {
-    require_once __DIR__ . '/../vendor/autoload.php';
-    $test = new ValidationEngineTest();
-    $test->run();
+    
+    public function testMinMaxValidation(): void
+    {
+        $schema = $this->schema;
+        $schema['columns'][] = [
+            'name' => 'score',
+            'sql_type' => 'int',
+            'max_length' => null,
+            'is_nullable' => false,
+            'is_primary' => false,
+            'metadata' => ['min' => 0, 'max' => 100]
+        ];
+        
+        $validator = new ValidationEngine($schema);
+        
+        // Test below min
+        $result = $validator->validate([
+            'name' => 'Test',
+            'email' => 'test@example.com',
+            'score' => -1
+        ]);
+        $this->assertFalse($result);
+        
+        // Test above max
+        $result = $validator->validate([
+            'name' => 'Test',
+            'email' => 'test@example.com',
+            'score' => 101
+        ]);
+        $this->assertFalse($result);
+        
+        // Test valid range
+        $result = $validator->validate([
+            'name' => 'Test',
+            'email' => 'test@example.com',
+            'score' => 50
+        ]);
+        $this->assertTrue($result);
+    }
+    
+    public function testMinLengthValidation(): void
+    {
+        $schema = $this->schema;
+        $schema['columns'][0]['metadata'] = ['minlength' => 3];
+        
+        $validator = new ValidationEngine($schema);
+        
+        // Test too short
+        $result = $validator->validate([
+            'name' => 'AB',
+            'email' => 'test@example.com'
+        ]);
+        $this->assertFalse($result);
+        $this->assertArrayHasKey('name', $validator->getErrors());
+        
+        // Test valid length
+        $result = $validator->validate([
+            'name' => 'ABC',
+            'email' => 'test@example.com'
+        ]);
+        $this->assertTrue($result);
+    }
 }

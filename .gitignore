@@ -1,20 +1,5 @@
 # Dependencies
-/vendor/
-composer.lock
-
-# IDE
-.idea/
-.vscode/
-*.swp
-*.swo
-*~
-
-# Testing
-.phpunit.result.cache
-/coverage/
-
-# Logs
-*.log
+vendor/
 
 # Cache
 cache/*.json
@@ -23,18 +8,27 @@ cache/*.json
 # Uploads
 uploads/*
 !uploads/.gitkeep
-examples/uploads/*
-!examples/uploads/.gitkeep
 
-# Local config
-examples/config_local.php
+# Private documents
+local_docs/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
 
 # OS
 .DS_Store
 Thumbs.db
 
-# Local docs
-/local_docs/
+# Logs
+*.log
 
-# Memory bank
-/.amazonq/
+# Local config
+config.local.php
+
+# PHPUnit
+.phpunit.result.cache
+tests/temp_uploads/
