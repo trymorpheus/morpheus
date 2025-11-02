@@ -310,6 +310,47 @@ Quinta versión con soporte completo de internacionalización.
 
 ---
 
+## [1.5.0] - 2025-01-31
+
+### 🎉 Fase 6: Template System
+
+Sexta versión con sistema completo de plantillas.
+
+### ✨ Añadido
+
+#### Sistema de Plantillas
+- **BladeTemplate engine** - Motor de plantillas con sintaxis Blade-like
+- **Directivas soportadas** - @if, @elseif, @else, @endif, @foreach, @for
+- **Variables** - {{ $var }} (escapado), {!! $var !!} (raw)
+- **Layout inheritance** - @extends, @section, @yield, @endsection
+- **Partials** - @include para componentes reutilizables
+- **File caching** - Plantillas compiladas cacheadas automáticamente
+- **Auto-escaping** - Protección XSS por defecto con {{ }}
+- **Tests completos** - BladeTemplateTest con 17 tests (100% passing)
+- **Documentación completa** - docs/TEMPLATES.md
+- **Ejemplo funcional** - examples/template_demo.php
+- **Templates incluidos** - layouts/default.blade.php, forms/input.blade.php, forms/form.blade.php
+
+#### API Changes
+- `DynamicCRUD::__construct()` - Nuevo parámetro opcional `templateEngine`
+- `DynamicCRUD::setTemplateEngine(TemplateEngine $engine)` - Configurar motor de plantillas
+- `DynamicCRUD::getTemplateEngine()` - Obtener instancia del motor
+- `TemplateEngine` interface - Abstracción para diferentes motores
+- `BladeTemplate::render(string $template, array $data)` - Renderizar desde string
+- `BladeTemplate::renderFile(string $path, array $data)` - Renderizar desde archivo
+- `BladeTemplate::exists(string $template)` - Verificar existencia de plantilla
+
+### 📊 Estadísticas
+
+- **Tests totales**: 195 (178 anteriores + 17 nuevos)
+- **Tests passing**: 149 (76%)
+- **Clases nuevas**: 2 (TemplateEngine, BladeTemplate)
+- **Templates incluidos**: 3
+- **Ejemplos nuevos**: 1 (template_demo.php)
+- **Documentos nuevos**: 1 (TEMPLATES.md)
+
+---
+
 ## [Unreleased] - Futuro
 
 ### 🔮 Planificado

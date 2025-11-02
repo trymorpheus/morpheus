@@ -33,6 +33,7 @@ Stop writing repetitive CRUD code. DynamicCRUD analyzes your MySQL schema and cr
 ### ⚡ Advanced
 - **Multi-database support** (MySQL, PostgreSQL)
 - **Internationalization (i18n)** - 3 languages included (EN, ES, FR)
+- **Template System** - Blade-like syntax for custom layouts
 - **Hooks/Events system** (10 lifecycle hooks)
 - **Virtual fields** (password confirmation, terms acceptance)
 - **Automatic transactions** with rollback on error
@@ -191,7 +192,36 @@ echo $crud->renderForm();
 <a href="?lang=fr">🇫🇷 Français</a>
 ```
 
-### 8. Audit Logging
+### 8. Template System
+
+```php
+use DynamicCRUD\Template\BladeTemplate;
+
+// Create template engine
+$engine = new BladeTemplate(__DIR__ . '/templates', __DIR__ . '/cache');
+
+// Use with DynamicCRUD
+$crud = new DynamicCRUD($pdo, 'users');
+$crud->setTemplateEngine($engine);
+
+// Or render templates directly
+echo $engine->render('Hello, {{ $name }}!', ['name' => 'World']);
+```
+
+**Blade-like syntax:**
+```blade
+@if ($user->isAdmin())
+    <p>Welcome, Admin!</p>
+@else
+    <p>Welcome, User!</p>
+@endif
+
+@foreach ($items as $item)
+    <li>{{ $item }}</li>
+@endforeach
+```
+
+### 9. Audit Logging
 
 ```php
 $crud = new DynamicCRUD($pdo, 'users');
@@ -205,6 +235,7 @@ $crud->handleSubmission();
 
 ## 📚 Documentation
 
+- [Template System Guide](docs/TEMPLATES.md) - Blade-like templates
 - [Internationalization (i18n) Guide](docs/I18N.md) - Multi-language support
 - [Hooks System Guide](docs/HOOKS.md) - 10 lifecycle hooks explained
 - [Virtual Fields Guide](docs/VIRTUAL_FIELDS.md) - Password confirmation, terms acceptance
@@ -276,8 +307,8 @@ COMMENT '{"type": "email", "label": "Email", "tooltip": "Required field", "minle
 
 DynamicCRUD has comprehensive test coverage:
 
-- **178 tests** with **315+ assertions**
-- **78% passing rate** (139 passing, 33 failing, 6 skipped)
+- **195 tests** with **340+ assertions**
+- **76% passing rate** (149 passing, 40 failing, 6 skipped)
 - Automated CI/CD with GitHub Actions
 - Tests run on PHP 8.0, 8.1, 8.2, 8.3
 
@@ -322,25 +353,33 @@ vendor/bin/phpunit --testdox
 - Client + Server translation support
 - 31 new tests for i18n (100% passing)
 
+### ✅ Completed (v1.5.0)
+- Template System - Blade-like syntax
+- Layout inheritance (@extends, @section, @yield)
+- Partials (@include)
+- Automatic escaping ({{ }} vs {!! !!})
+- File caching for performance
+- 17 new tests for templates (100% passing)
+
 ### 🔮 Planned (v2.0+)
-- [ ] Template System (Blade-like syntax)
 - [ ] SQL Server support
 - [ ] REST API generation
 - [ ] GraphQL support
 - [ ] More languages (DE, IT, PT)
+- [ ] Advanced template features
 
 ---
 
 ## 📊 Project Stats
 
-- **14 PHP classes** (~4,500 lines)
-- **10 working examples**
-- **9 technical documents**
-- **178 automated tests** (78% passing)
+- **16 PHP classes** (~5,000 lines)
+- **11 working examples**
+- **10 technical documents**
+- **195 automated tests** (76% passing)
 - **Languages supported**: 3 (English, Spanish, French)
 - **Databases supported**: 2 (MySQL, PostgreSQL)
+- **Template engine**: Blade-like syntax
 - **Development time**: < 2 days
-- **Databases tested**: MySQL, PostgreSQL
 
 ---
 

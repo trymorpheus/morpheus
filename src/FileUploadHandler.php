@@ -8,9 +8,9 @@ class FileUploadHandler
     private array $allowedMimes;
     private int $maxSize;
 
-    public function __construct(string $uploadDir = 'uploads', array $allowedMimes = [], int $maxSize = 5242880)
+    public function __construct(?string $uploadDir = null, array $allowedMimes = [], int $maxSize = 5242880)
     {
-        $this->uploadDir = rtrim($uploadDir, '/\\');
+        $this->uploadDir = rtrim($uploadDir ?? 'uploads', '/\\');
         $this->allowedMimes = $allowedMimes;
         $this->maxSize = $maxSize; // 5MB por defecto
         

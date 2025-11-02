@@ -3,6 +3,8 @@
 namespace DynamicCRUD;
 
 use PDO;
+use DynamicCRUD\I18n\Translator;
+use DynamicCRUD\Template\TemplateEngine;
 
 class FormGenerator
 {
@@ -12,6 +14,9 @@ class FormGenerator
     private ?PDO $pdo;
     private ?CRUDHandler $handler;
 
+    private ?Translator $translator = null;
+    private ?TemplateEngine $templateEngine = null;
+    
     public function __construct(array $schema, array $data = [], string $csrfToken = '', ?PDO $pdo = null, ?CRUDHandler $handler = null)
     {
         $this->schema = $schema;
@@ -19,6 +24,18 @@ class FormGenerator
         $this->csrfToken = $csrfToken;
         $this->pdo = $pdo;
         $this->handler = $handler;
+    }
+    
+    public function setTranslator(Translator $translator): self
+    {
+        $this->translator = $translator;
+        return $this;
+    }
+    
+    public function setTemplateEngine(TemplateEngine $engine): self
+    {
+        $this->templateEngine = $engine;
+        return $this;
     }
 
     public function render(): string

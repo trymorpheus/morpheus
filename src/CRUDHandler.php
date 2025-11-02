@@ -481,4 +481,15 @@ class CRUDHandler
     {
         return $this->translator;
     }
+    
+    public function getSchema(): array
+    {
+        return $this->schema;
+    }
+    
+    public function setAuditLogger(AuditLogger $logger): self
+    {
+        $this->auditLogger = $logger;
+        return $this;
+    }
 }

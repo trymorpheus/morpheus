@@ -1,0 +1,1 @@
+Escaped: <?php echo htmlspecialchars(($html) ?? ''); ?><br>Raw: <?php echo $html; ?>
