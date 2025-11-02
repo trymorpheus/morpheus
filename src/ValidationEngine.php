@@ -2,14 +2,18 @@
 
 namespace DynamicCRUD;
 
+use DynamicCRUD\I18n\Translator;
+
 class ValidationEngine
 {
     private array $schema;
     private array $errors = [];
+    private ?Translator $translator = null;
 
-    public function __construct(array $schema)
+    public function __construct(array $schema, ?Translator $translator = null)
     {
         $this->schema = $schema;
+        $this->translator = $translator;
     }
 
     public function validate(array $data): bool
@@ -40,7 +44,10 @@ class ValidationEngine
         }
         
         if (!$column['is_nullable'] && ($value === null || $value === '')) {
-            $this->errors[$name][] = "El campo {$name} es requerido";
+            $message = $this->translator 
+                ? $this->translator->t('validation.required', ['field' => $name])
+                : "El campo {$name} es requerido";
+            $this->errors[$name][] = $message;
             return;
         }
         
@@ -63,7 +70,10 @@ class ValidationEngine
             case 'smallint':
             case 'tinyint':
                 if (!filter_var($value, FILTER_VALIDATE_INT)) {
-                    $this->errors[$name][] = "El campo {$name} debe ser un número entero";
+                    $message = $this->translator
+                        ? $this->translator->t('validation.number', ['field' => $name])
+                        : "El campo {$name} debe ser un número entero";
+                    $this->errors[$name][] = $message;
                 }
                 break;
                 
@@ -71,7 +81,10 @@ class ValidationEngine
             case 'float':
             case 'double':
                 if (!is_numeric($value)) {
-                    $this->errors[$name][] = "El campo {$name} debe ser un número";
+                    $message = $this->translator
+                        ? $this->translator->t('validation.number', ['field' => $name])
+                        : "El campo {$name} debe ser un número";
+                    $this->errors[$name][] = $message;
                 }
                 break;
                 
@@ -93,11 +106,10 @@ class ValidationEngine
         $length = strlen($value);
         
         if ($length > $column['max_length']) {
-            $this->errors[$name][] = sprintf(
-                "El campo %s no puede exceder %d caracteres",
-                $name,
-                $column['max_length']
-            );
+            $message = $this->translator
+                ? $this->translator->t('validation.maxlength', ['field' => $name, 'maxlength' => $column['max_length']])
+                : sprintf("El campo %s no puede exceder %d caracteres", $name, $column['max_length']);
+            $this->errors[$name][] = $message;
         }
     }
 
@@ -107,32 +119,49 @@ class ValidationEngine
         $type = $column['metadata']['type'] ?? null;
         
         if ($type === 'email' && !filter_var($value, FILTER_VALIDATE_EMAIL)) {
-            $this->errors[$name][] = "El campo {$name} debe ser un email válido";
+            $message = $this->translator
+                ? $this->translator->t('validation.email', ['field' => $name])
+                : "El campo {$name} debe ser un email válido";
+            $this->errors[$name][] = $message;
         }
         
         if ($type === 'url') {
-            // Verificar que comience con http:// o https://
             if (!preg_match('/^https?:\/\//i', $value)) {
-                $this->errors[$name][] = "El campo {$name} debe comenzar con http:// o https://";
+                $message = $this->translator
+                    ? $this->translator->t('validation.url', ['field' => $name])
+                    : "El campo {$name} debe comenzar con http:// o https://";
+                $this->errors[$name][] = $message;
             } elseif (!filter_var($value, FILTER_VALIDATE_URL)) {
-                $this->errors[$name][] = "El campo {$name} debe ser una URL válida";
+                $message = $this->translator
+                    ? $this->translator->t('validation.url', ['field' => $name])
+                    : "El campo {$name} debe ser una URL válida";
+                $this->errors[$name][] = $message;
             }
         }
         
         // Validar min/max para números
         if (is_numeric($value)) {
             if (isset($column['metadata']['min']) && $value < $column['metadata']['min']) {
-                $this->errors[$name][] = "El campo {$name} debe ser mayor o igual a {$column['metadata']['min']}";
+                $message = $this->translator
+                    ? $this->translator->t('validation.min', ['field' => $name, 'min' => $column['metadata']['min']])
+                    : "El campo {$name} debe ser mayor o igual a {$column['metadata']['min']}";
+                $this->errors[$name][] = $message;
             }
             
             if (isset($column['metadata']['max']) && $value > $column['metadata']['max']) {
-                $this->errors[$name][] = "El campo {$name} debe ser menor o igual a {$column['metadata']['max']}";
+                $message = $this->translator
+                    ? $this->translator->t('validation.max', ['field' => $name, 'max' => $column['metadata']['max']])
+                    : "El campo {$name} debe ser menor o igual a {$column['metadata']['max']}";
+                $this->errors[$name][] = $message;
             }
         }
         
         // Validar minlength
         if (isset($column['metadata']['minlength']) && strlen($value) < $column['metadata']['minlength']) {
-            $this->errors[$name][] = "El campo {$name} debe tener al menos {$column['metadata']['minlength']} caracteres";
+            $message = $this->translator
+                ? $this->translator->t('validation.minlength', ['field' => $name, 'minlength' => $column['metadata']['minlength']])
+                : "El campo {$name} debe tener al menos {$column['metadata']['minlength']} caracteres";
+            $this->errors[$name][] = $message;
         }
     }
 }

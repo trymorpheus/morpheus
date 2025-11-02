@@ -4,6 +4,7 @@ namespace DynamicCRUD;
 
 use PDO;
 use DynamicCRUD\Cache\CacheStrategy;
+use DynamicCRUD\I18n\Translator;
 
 class CRUDHandler
 {
@@ -17,6 +18,7 @@ class CRUDHandler
     private array $manyToManyRelations = [];
     private ?AuditLogger $auditLogger = null;
     private array $virtualFields = [];
+    private ?Translator $translator = null;
 
     public function __construct(PDO $pdo, string $table, ?CacheStrategy $cache = null, ?string $uploadDir = null)
     {
@@ -52,7 +54,8 @@ class CRUDHandler
         $csrfToken = $_POST['csrf_token'] ?? '';
         
         if (!$this->security->validateCsrfToken($csrfToken)) {
-            return ['success' => false, 'error' => 'Token CSRF inválido'];
+            $error = $this->translator ? $this->translator->t('error.csrf_invalid') : 'Token CSRF inválido';
+            return ['success' => false, 'error' => $error];
         }
         
         try {
@@ -97,7 +100,7 @@ class CRUDHandler
             }
         }
         
-        $validator = new ValidationEngine($this->schema);
+        $validator = new ValidationEngine($this->schema, $this->translator);
         
         if (!$validator->validate($data)) {
             $this->pdo->rollBack();
@@ -352,13 +355,14 @@ class CRUDHandler
     
     // Métodos para Relaciones Muchos a Muchos
     
-    public function addManyToMany(string $fieldName, string $pivotTable, string $localKey, string $foreignKey, string $relatedTable): self
+    public function addManyToMany(string $fieldName, string $pivotTable, string $localKey, string $foreignKey, string $relatedTable, string $uiType = 'checkboxes'): self
     {
         $this->manyToManyRelations[$fieldName] = [
             'pivot_table' => $pivotTable,
             'local_key' => $localKey,
             'foreign_key' => $foreignKey,
-            'related_table' => $relatedTable
+            'related_table' => $relatedTable,
+            'ui_type' => $uiType
         ];
         
         return $this;
@@ -463,5 +467,18 @@ class CRUDHandler
     public function getVirtualFields(): array
     {
         return $this->virtualFields;
+    }
+    
+    // Métodos para i18n
+    
+    public function setTranslator(Translator $translator): self
+    {
+        $this->translator = $translator;
+        return $this;
+    }
+    
+    public function getTranslator(): ?Translator
+    {
+        return $this->translator;
     }
 }

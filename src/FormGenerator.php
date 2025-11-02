@@ -49,7 +49,11 @@ class FormGenerator
             $html .= $this->renderManyToManyFields() . "\n";
         }
         
-        $html .= '<button type="submit">Guardar</button>' . "\n";
+        $submitLabel = 'Guardar';
+        if ($this->handler && $this->handler->getTranslator()) {
+            $submitLabel = $this->handler->getTranslator()->t('form.submit');
+        }
+        $html .= sprintf('<button type="submit">%s</button>', htmlspecialchars($submitLabel)) . "\n";
         $html .= '</form>' . "\n";
         
         return $html;
@@ -229,7 +233,11 @@ class FormGenerator
         );
         
         if ($column['is_nullable']) {
-            $html .= '<option value="">-- Seleccionar --</option>';
+            $selectLabel = '-- Seleccionar --';
+            if ($this->handler && $this->handler->getTranslator()) {
+                $selectLabel = $this->handler->getTranslator()->t('common.select');
+            }
+            $html .= sprintf('<option value="">%s</option>', htmlspecialchars($selectLabel));
         }
         
         foreach ($column['enum_values'] as $enumValue) {
@@ -260,7 +268,11 @@ class FormGenerator
         );
         
         if ($column['is_nullable']) {
-            $html .= '<option value="">-- Seleccionar --</option>';
+            $selectLabel = '-- Seleccionar --';
+            if ($this->handler && $this->handler->getTranslator()) {
+                $selectLabel = $this->handler->getTranslator()->t('common.select');
+            }
+            $html .= sprintf('<option value="">%s</option>', htmlspecialchars($selectLabel));
         }
         
         foreach ($options as $option) {
@@ -297,8 +309,33 @@ class FormGenerator
 
     private function renderAssets(): string
     {
-        return '<link rel="stylesheet" href="assets/dynamiccrud.css">' .
-               '<script src="assets/dynamiccrud.js" defer></script>';
+        $html = '<link rel="stylesheet" href="assets/dynamiccrud.css">';
+        
+        // Add translations for JavaScript
+        if ($this->handler && $this->handler->getTranslator()) {
+            $t = $this->handler->getTranslator();
+            $translations = [
+                'required' => $t->t('validation.required', ['field' => '']),
+                'email' => $t->t('validation.email', ['field' => '']),
+                'url' => $t->t('validation.url', ['field' => '']),
+                'number' => $t->t('validation.number', ['field' => '']),
+                'min' => $t->t('validation.min', ['field' => '', 'min' => '']),
+                'max' => $t->t('validation.max', ['field' => '', 'max' => '']),
+                'minlength' => $t->t('validation.minlength', ['field' => '', 'minlength' => '']),
+                'maxlength' => $t->t('validation.maxlength', ['field' => '', 'maxlength' => '']),
+            ];
+            $html .= '<script>window.DynamicCRUDTranslations = ' . json_encode($translations) . ';</script>';
+        }
+        
+        $html .= '<script src="assets/dynamiccrud.js" defer></script>';
+        
+        // Add M:N assets if needed
+        if ($this->handler && !empty($this->handler->getManyToManyRelations())) {
+            $html .= '<link rel="stylesheet" href="assets/manytomany.css">';
+            $html .= '<script src="assets/manytomany.js" defer></script>';
+        }
+        
+        return $html;
     }
 
     private function getValidationAttributes(array $column): string
@@ -395,24 +432,93 @@ class FormGenerator
             
             $label = ucfirst(str_replace('_', ' ', $fieldName));
             
-            $html .= '<div class="form-group">' . "\n";
-            $html .= sprintf('  <label for="%s">%s</label>', $fieldName, htmlspecialchars($label)) . "\n";
-            $html .= sprintf('  <select name="%s[]" id="%s" multiple size="5" style="height: auto;">', $fieldName, $fieldName) . "\n";
+            // Check if advanced UI is requested
+            $useAdvancedUI = ($relation['ui_type'] ?? 'checkboxes') === 'checkboxes';
             
-            foreach ($options as $option) {
-                $selected = in_array($option['value'], $selectedValues) ? ' selected' : '';
-                $html .= sprintf(
-                    '    <option value="%s"%s>%s</option>',
-                    htmlspecialchars($option['value']),
-                    $selected,
-                    htmlspecialchars($option['label'])
-                ) . "\n";
+            if ($useAdvancedUI) {
+                $html .= $this->renderManyToManyCheckboxes($fieldName, $label, $options, $selectedValues);
+            } else {
+                $html .= $this->renderManyToManySelect($fieldName, $label, $options, $selectedValues);
             }
-            
-            $html .= '  </select>' . "\n";
-            $html .= '  <small style="color: #666; display: block; margin-top: 4px;">Mantén presionado Ctrl (Cmd en Mac) para seleccionar múltiples</small>' . "\n";
-            $html .= '</div>';
         }
+        
+        return $html;
+    }
+    
+    private function renderManyToManyCheckboxes(string $fieldName, string $label, array $options, array $selectedValues): string
+    {
+        $translator = $this->handler ? $this->handler->getTranslator() : null;
+        $selectAllLabel = $translator ? $translator->t('m2n.select_all') : 'Seleccionar visibles';
+        $clearAllLabel = $translator ? $translator->t('m2n.clear_all') : 'Limpiar todo';
+        $searchPlaceholder = $translator ? $translator->t('m2n.search') : 'Buscar...';
+        
+        $html = '<div class="form-group">' . "\n";
+        $html .= sprintf('  <label>%s</label>', htmlspecialchars($label)) . "\n";
+        $html .= '  <div class="m2m-container">' . "\n";
+        $html .= '    <div class="m2m-actions">' . "\n";
+        $html .= sprintf('      <button type="button" class="m2m-select-all">%s</button>', htmlspecialchars($selectAllLabel)) . "\n";
+        $html .= sprintf('      <button type="button" class="m2m-clear-all">%s</button>', htmlspecialchars($clearAllLabel)) . "\n";
+        $html .= '    </div>' . "\n";
+        $html .= sprintf('    <input type="text" class="m2m-search" placeholder="%s">', htmlspecialchars($searchPlaceholder)) . "\n";
+        $html .= '    <div class="m2m-options">' . "\n";
+        
+        foreach ($options as $option) {
+            $checked = in_array($option['value'], $selectedValues) ? ' checked' : '';
+            $html .= '      <div class="m2m-option">' . "\n";
+            $html .= sprintf(
+                '        <input type="checkbox" name="%s[]" id="%s_%s" value="%s"%s>' . "\n",
+                $fieldName,
+                $fieldName,
+                $option['value'],
+                htmlspecialchars($option['value']),
+                $checked
+            );
+            $html .= sprintf(
+                '        <label for="%s_%s">%s</label>' . "\n",
+                $fieldName,
+                $option['value'],
+                htmlspecialchars($option['label'])
+            );
+            $html .= '      </div>' . "\n";
+        }
+        
+        $html .= '    </div>' . "\n";
+        
+        $statsTemplate = ':count de :total seleccionados';
+        if ($translator) {
+            $statsTemplate = $translator->t('m2n.selected');
+        }
+        $html .= sprintf('    <div class="m2m-stats" data-template="%s"></div>', htmlspecialchars($statsTemplate)) . "\n";
+        $html .= '  </div>' . "\n";
+        $html .= '</div>';
+        
+        return $html;
+    }
+    
+    private function renderManyToManySelect(string $fieldName, string $label, array $options, array $selectedValues): string
+    {
+        $html = '<div class="form-group">' . "\n";
+        $html .= sprintf('  <label for="%s">%s</label>', $fieldName, htmlspecialchars($label)) . "\n";
+        $html .= sprintf('  <select name="%s[]" id="%s" multiple size="5" style="height: auto;">', $fieldName, $fieldName) . "\n";
+        
+        foreach ($options as $option) {
+            $selected = in_array($option['value'], $selectedValues) ? ' selected' : '';
+            $html .= sprintf(
+                '    <option value="%s"%s>%s</option>',
+                htmlspecialchars($option['value']),
+                $selected,
+                htmlspecialchars($option['label'])
+            ) . "\n";
+        }
+        
+        $html .= '  </select>' . "\n";
+        
+        $hintLabel = 'Mantén presionado Ctrl (Cmd en Mac) para seleccionar múltiples';
+        if ($this->handler && $this->handler->getTranslator()) {
+            $hintLabel = $this->handler->getTranslator()->t('m2n.hint');
+        }
+        $html .= sprintf('  <small style="color: #666; display: block; margin-top: 4px;">%s</small>', htmlspecialchars($hintLabel)) . "\n";
+        $html .= '</div>';
         
         return $html;
     }

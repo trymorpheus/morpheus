@@ -250,6 +250,66 @@ Tercera versión con soporte para campos virtuales.
 
 ---
 
+## [1.4.0] - 2025-01-31
+
+### 🎉 Fase 6: Internationalization (i18n)
+
+Quinta versión con soporte completo de internacionalización.
+
+### ✨ Añadido
+
+#### Sistema de Internacionalización
+- **Translator class** - Sistema completo de traducciones
+- **3 idiomas incluidos** - English (en), Spanish (es), French (fr)
+- **Auto-detección de locale** - URL (?lang=), sesión, navegador (Accept-Language)
+- **40+ traducciones** por idioma (validación, formularios, mensajes, UI)
+- **Traducción servidor** - PHP (ValidationEngine, FormGenerator, CRUDHandler)
+- **Traducción cliente** - JavaScript (dynamiccrud.js)
+- **Cambio dinámico** - Language switcher con banderas
+- **Extensible** - Fácil agregar nuevos idiomas
+- **Tests completos** - TranslatorTest con 31 tests (100% passing)
+- **Documentación completa** - docs/I18N.md
+- **Ejemplo funcional** - examples/i18n_demo.php
+
+#### Advanced M:N UI
+- **Checkbox UI** - Interfaz con checkboxes en lugar de select multiple
+- **Búsqueda en tiempo real** - Filtrado instantáneo de opciones
+- **Select/Clear All** - Botones para seleccionar/limpiar todo
+- **Contador de selección** - Muestra cantidad seleccionada
+- **Estilos mejorados** - manytomany.css con scrollbar y stats
+- **JavaScript modular** - ManyToManyUI class en manytomany.js
+- **Backward compatible** - ui_type='select' para UI antigua
+
+#### API Changes
+- `DynamicCRUD::__construct()` - Nuevo parámetro opcional `locale`
+- `DynamicCRUD::setLocale(string $locale)` - Cambiar idioma
+- `DynamicCRUD::getTranslator()` - Obtener instancia de Translator
+- `DynamicCRUD::addManyToMany()` - Nuevo parámetro `ui_type` ('checkboxes' o 'select')
+- `Translator::t(string $key, array $params)` - Traducir con parámetros
+- `Translator::getAllTranslations()` - Obtener todas las traducciones
+- `Translator::detectLocale()` - Detección automática de idioma
+
+### 🔄 Cambiado
+
+- **FormGenerator** - Inyecta window.DynamicCRUDTranslations en HTML
+- **ValidationEngine** - Usa Translator para mensajes de error
+- **CRUDHandler** - Pasa Translator a ValidationEngine
+- **dynamiccrud.js** - Usa traducciones dinámicas en lugar de hardcoded
+- **Translation files** - Formato de parámetros cambiado de :field a {field}
+
+### 📊 Estadísticas
+
+- **Tests totales**: 178 (147 anteriores + 31 nuevos)
+- **Tests passing**: 139 (78%)
+- **Idiomas soportados**: 3 (EN, ES, FR)
+- **Traducciones por idioma**: 40+
+- **Clases nuevas**: 1 (Translator)
+- **Assets nuevos**: 2 (manytomany.css, manytomany.js)
+- **Ejemplos nuevos**: 2 (i18n_demo.php, advanced_m2n_demo.php)
+- **Documentos nuevos**: 1 (I18N.md)
+
+---
+
 ## [Unreleased] - Futuro
 
 ### 🔮 Planificado
@@ -257,20 +317,22 @@ Tercera versión con soporte para campos virtuales.
 #### Alta Prioridad
 - [x] Soporte PostgreSQL (patrón Adapter) - v1.3.0
 - [x] Campos virtuales (confirmación password) - v1.2.0
-- [ ] Tests para PostgreSQL
-- [ ] Resolver 5 tests skipped
+- [x] Tests para PostgreSQL - v1.3.0
+- [x] UI avanzada para M:N (checkboxes, búsqueda) - v1.4.0
+- [x] Internacionalización (i18n) - v1.4.0
+- [ ] Resolver tests fallidos (33 failing)
 
 #### Media Prioridad
-- [ ] UI avanzada para M:N (checkboxes, búsqueda)
-- [ ] Internacionalización (i18n)
-- [ ] Sistema de plantillas
+- [ ] Sistema de plantillas (Blade-like)
+- [ ] Más idiomas (DE, IT, PT, ZH, JA)
 - [ ] Code coverage reports (Codecov/Coveralls)
+- [ ] Soporte SQL Server
 
 #### Baja Prioridad
 - [ ] Rate limiting
 - [ ] Permisos granulares
-- [ ] Soporte SQL Server
 - [ ] API REST automática
+- [ ] GraphQL support
 - [ ] E2E testing con Selenium
 
 ---
@@ -289,4 +351,4 @@ Tercera versión con soporte para campos virtuales.
 
 **Mantenido por**: Mario Raúl Carbonell Martínez  
 **Última actualización**: 2025-01-31  
-**Versión actual**: 1.1.0
+**Versión actual**: 1.4.0

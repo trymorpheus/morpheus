@@ -32,6 +32,7 @@ Stop writing repetitive CRUD code. DynamicCRUD analyzes your MySQL schema and cr
 
 ### ⚡ Advanced
 - **Multi-database support** (MySQL, PostgreSQL)
+- **Internationalization (i18n)** - 3 languages included (EN, ES, FR)
 - **Hooks/Events system** (10 lifecycle hooks)
 - **Virtual fields** (password confirmation, terms acceptance)
 - **Automatic transactions** with rollback on error
@@ -170,7 +171,27 @@ $crud->beforeSave(function($data) {
 });
 ```
 
-### 7. Audit Logging
+### 7. Internationalization (i18n)
+
+```php
+// Auto-detects language from URL (?lang=es), session, or browser
+$crud = new DynamicCRUD($pdo, 'users');
+
+// Or force a specific language
+$crud = new DynamicCRUD($pdo, 'users', locale: 'es');
+
+echo $crud->renderForm();
+// Form, validation messages, and UI are now in Spanish!
+```
+
+**Language Switcher:**
+```php
+<a href="?lang=en">🇬🇧 English</a>
+<a href="?lang=es">🇪🇸 Español</a>
+<a href="?lang=fr">🇫🇷 Français</a>
+```
+
+### 8. Audit Logging
 
 ```php
 $crud = new DynamicCRUD($pdo, 'users');
@@ -184,6 +205,7 @@ $crud->handleSubmission();
 
 ## 📚 Documentation
 
+- [Internationalization (i18n) Guide](docs/I18N.md) - Multi-language support
 - [Hooks System Guide](docs/HOOKS.md) - 10 lifecycle hooks explained
 - [Virtual Fields Guide](docs/VIRTUAL_FIELDS.md) - Password confirmation, terms acceptance
 - [Many-to-Many Relationships](docs/MANY_TO_MANY.md) - M:N setup guide
@@ -254,8 +276,8 @@ COMMENT '{"type": "email", "label": "Email", "tooltip": "Required field", "minle
 
 DynamicCRUD has comprehensive test coverage:
 
-- **113 tests** with **239+ assertions**
-- **95.6% passing rate**
+- **178 tests** with **315+ assertions**
+- **78% passing rate** (139 passing, 33 failing, 6 skipped)
 - Automated CI/CD with GitHub Actions
 - Tests run on PHP 8.0, 8.1, 8.2, 8.3
 
@@ -293,24 +315,31 @@ vendor/bin/phpunit --testdox
 - CI/CD pipeline (GitHub Actions)
 - FormGenerator enhancements (16+ metadata options)
 
+### ✅ Completed (v1.4.0)
+- Internationalization (i18n) - 3 languages (EN, ES, FR)
+- Advanced M:N UI (checkboxes with search)
+- Translator class with auto-detection
+- Client + Server translation support
+- 31 new tests for i18n (100% passing)
+
 ### 🔮 Planned (v2.0+)
-- [ ] Advanced M:N UI (checkboxes, search)
-- [ ] Internationalization (i18n)
+- [ ] Template System (Blade-like syntax)
 - [ ] SQL Server support
 - [ ] REST API generation
 - [ ] GraphQL support
+- [ ] More languages (DE, IT, PT)
 
 ---
 
 ## 📊 Project Stats
 
-- **13 PHP classes** (~4,200 lines)
-- **9 working examples**
-- **8 technical documents**
-- **147 automated tests** (95.2% passing)
+- **14 PHP classes** (~4,500 lines)
+- **10 working examples**
+- **9 technical documents**
+- **178 automated tests** (78% passing)
+- **Languages supported**: 3 (English, Spanish, French)
 - **Databases supported**: 2 (MySQL, PostgreSQL)
 - **Development time**: < 2 days
-- **Test coverage**: 95.2%
 - **Databases tested**: MySQL, PostgreSQL
 
 ---

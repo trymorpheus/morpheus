@@ -5,14 +5,37 @@ namespace DynamicCRUD;
 use PDO;
 use DynamicCRUD\Cache\CacheStrategy;
 use DynamicCRUD\VirtualField;
+use DynamicCRUD\I18n\Translator;
 
 class DynamicCRUD
 {
     private CRUDHandler $handler;
+    private ?Translator $translator = null;
 
-    public function __construct(PDO $pdo, string $table, ?CacheStrategy $cache = null)
+    public function __construct(PDO $pdo, string $table, ?CacheStrategy $cache = null, ?string $locale = null)
     {
         $this->handler = new CRUDHandler($pdo, $table, $cache);
+        
+        if ($locale !== null) {
+            $this->translator = new Translator($locale);
+            $this->handler->setTranslator($this->translator);
+        }
+    }
+    
+    public function setLocale(string $locale): self
+    {
+        if ($this->translator === null) {
+            $this->translator = new Translator($locale);
+        } else {
+            $this->translator->setLocale($locale);
+        }
+        $this->handler->setTranslator($this->translator);
+        return $this;
+    }
+    
+    public function getTranslator(): ?Translator
+    {
+        return $this->translator;
     }
 
     public function renderForm(?int $id = null): string
@@ -105,9 +128,9 @@ class DynamicCRUD
     
     // Métodos para Relaciones Muchos a Muchos
     
-    public function addManyToMany(string $fieldName, string $pivotTable, string $localKey, string $foreignKey, string $relatedTable): self
+    public function addManyToMany(string $fieldName, string $pivotTable, string $localKey, string $foreignKey, string $relatedTable, string $uiType = 'checkboxes'): self
     {
-        $this->handler->addManyToMany($fieldName, $pivotTable, $localKey, $foreignKey, $relatedTable);
+        $this->handler->addManyToMany($fieldName, $pivotTable, $localKey, $foreignKey, $relatedTable, $uiType);
         return $this;
     }
     

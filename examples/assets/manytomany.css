@@ -1,0 +1,127 @@
+/* Many-to-Many Advanced UI Styles */
+
+.m2m-container {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 15px;
+    background: #f9f9f9;
+}
+
+.m2m-search {
+    width: 100%;
+    padding: 8px 12px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.m2m-search:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.1);
+}
+
+.m2m-options {
+    max-height: 300px;
+    overflow-y: auto;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+.m2m-option {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    margin-bottom: 5px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.m2m-option:hover {
+    background: #f0f0f0;
+}
+
+.m2m-option.hidden {
+    display: none;
+}
+
+.m2m-option input[type="checkbox"] {
+    margin-right: 10px;
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+}
+
+.m2m-option label {
+    cursor: pointer;
+    margin: 0;
+    flex: 1;
+    user-select: none;
+}
+
+.m2m-stats {
+    margin-top: 10px;
+    padding: 8px;
+    background: #e8f5e9;
+    border-radius: 3px;
+    font-size: 13px;
+    color: #2e7d32;
+    text-align: center;
+}
+
+.m2m-select-all {
+    margin-bottom: 10px;
+    padding: 6px 12px;
+    background: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 13px;
+    margin-right: 5px;
+}
+
+.m2m-select-all:hover {
+    background: #1976D2;
+}
+
+.m2m-clear-all {
+    padding: 6px 12px;
+    background: #f44336;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.m2m-clear-all:hover {
+    background: #d32f2f;
+}
+
+.m2m-actions {
+    margin-bottom: 10px;
+}
+
+/* Scrollbar styling */
+.m2m-options::-webkit-scrollbar {
+    width: 8px;
+}
+
+.m2m-options::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.m2m-options::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.m2m-options::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}

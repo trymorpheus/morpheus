@@ -7,7 +7,16 @@ class DynamicCRUDValidator {
         this.form = document.querySelector(formSelector);
         if (!this.form) return;
         
+        this.translations = window.DynamicCRUDTranslations || {};
         this.init();
+    }
+    
+    t(key, params = {}) {
+        let text = this.translations[key] || key;
+        Object.keys(params).forEach(param => {
+            text = text.replace(`:${param}`, params[param]);
+        });
+        return text.replace(/:\w+/g, '').trim();
     }
 
     init() {
@@ -19,12 +28,12 @@ class DynamicCRUDValidator {
                 
                 // Validar maxlength en tiempo real
                 if (field.maxLength > 0 && value.length >= field.maxLength) {
-                    this.showError(field, `Máximo ${field.maxLength} caracteres`);
+                    this.showError(field, this.t('maxlength', {maxlength: field.maxLength}));
                 }
                 
                 // Validar minlength en tiempo real
                 if (field.minLength > 0 && value.length > 0 && value.length < field.minLength) {
-                    this.showError(field, `Mínimo ${field.minLength} caracteres`);
+                    this.showError(field, this.t('minlength', {minlength: field.minLength}));
                 }
                 
                 // Validar min/max para números
@@ -32,10 +41,10 @@ class DynamicCRUDValidator {
                     const num = parseFloat(value);
                     if (!isNaN(num)) {
                         if (field.min && num < parseFloat(field.min)) {
-                            this.showError(field, `Debe ser mayor o igual a ${field.min}`);
+                            this.showError(field, this.t('min', {min: field.min}));
                         }
                         if (field.max && num > parseFloat(field.max)) {
-                            this.showError(field, `Debe ser menor o igual a ${field.max}`);
+                            this.showError(field, this.t('max', {max: field.max}));
                         }
                     }
                 }
@@ -58,42 +67,42 @@ class DynamicCRUDValidator {
         const errors = [];
 
         if (field.hasAttribute('required') && !value) {
-            errors.push('Este campo es requerido');
+            errors.push(this.t('required'));
         }
 
         if (value) {
             if (field.type === 'email') {
                 if (!this.isValidEmail(value)) {
-                    errors.push('Debe ser un email válido');
+                    errors.push(this.t('email'));
                 }
             }
 
             if (field.type === 'url') {
                 if (!this.isValidUrl(value)) {
-                    errors.push('Debe ser una URL válida');
+                    errors.push(this.t('url'));
                 }
             }
 
             if (field.type === 'number') {
                 const num = parseFloat(value);
                 if (isNaN(num)) {
-                    errors.push('Debe ser un número válido');
+                    errors.push(this.t('number'));
                 } else {
                     if (field.min && num < parseFloat(field.min)) {
-                        errors.push(`Debe ser mayor o igual a ${field.min}`);
+                        errors.push(this.t('min', {min: field.min}));
                     }
                     if (field.max && num > parseFloat(field.max)) {
-                        errors.push(`Debe ser menor o igual a ${field.max}`);
+                        errors.push(this.t('max', {max: field.max}));
                     }
                 }
             }
 
             if (field.maxLength > 0 && value.length > field.maxLength) {
-                errors.push(`Máximo ${field.maxLength} caracteres`);
+                errors.push(this.t('maxlength', {maxlength: field.maxLength}));
             }
             
             if (field.minLength > 0 && value.length < field.minLength) {
-                errors.push(`Mínimo ${field.minLength} caracteres`);
+                errors.push(this.t('minlength', {minlength: field.minLength}));
             }
         }
 
