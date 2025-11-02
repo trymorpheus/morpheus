@@ -199,4 +199,19 @@ class DynamicCRUD
     {
         return $this->templateEngine;
     }
+    
+    public function delete(int $id): bool
+    {
+        return $this->handler->delete($id);
+    }
+    
+    public function list(array $options = []): array
+    {
+        return $this->handler->list($options);
+    }
+    
+    public function getAuditHistory(int $recordId): array
+    {
+        return $this->handler->getAuditHistory($recordId);
+    }
 }

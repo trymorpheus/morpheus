@@ -58,7 +58,8 @@ class CRUDHandlerTest extends TestCase
         $_POST = [
             'csrf_token' => $this->generateValidToken(),
             'name' => 'john',
-            'email' => 'test_hook1@example.com'
+            'email' => 'test_hook1@example.com',
+            'password' => 'test123'
         ];
 
         $result = $this->handler->handleSubmission();
@@ -82,7 +83,8 @@ class CRUDHandlerTest extends TestCase
         $_POST = [
             'csrf_token' => $this->generateValidToken(),
             'name' => 'Test',
-            'email' => 'test_hook2@example.com'
+            'email' => 'test_hook2@example.com',
+            'password' => 'test123'
         ];
 
         $this->handler->handleSubmission();
@@ -101,7 +103,8 @@ class CRUDHandlerTest extends TestCase
         $_POST = [
             'csrf_token' => $this->generateValidToken(),
             'name' => 'Test',
-            'email' => 'test_hook3@example.com'
+            'email' => 'test_hook3@example.com',
+            'password' => 'test123'
         ];
 
         $this->handler->handleSubmission();
@@ -119,7 +122,8 @@ class CRUDHandlerTest extends TestCase
         $_POST = [
             'csrf_token' => $this->generateValidToken(),
             'name' => 'Test',
-            'email' => 'test_hook4@example.com'
+            'email' => 'test_hook4@example.com',
+            'password' => 'test123'
         ];
 
         $result = $this->handler->handleSubmission();
@@ -140,7 +144,8 @@ class CRUDHandlerTest extends TestCase
         $_POST = [
             'csrf_token' => $this->generateValidToken(),
             'name' => 'Test',
-            'email' => 'test_hook5@example.com'
+            'email' => 'test_hook5@example.com',
+            'password' => 'test123'
         ];
 
         $this->handler->handleSubmission();
@@ -158,7 +163,8 @@ class CRUDHandlerTest extends TestCase
         $_POST = [
             'csrf_token' => $this->generateValidToken(),
             'name' => 'Test',
-            'email' => 'test_hook6@example.com'
+            'email' => 'test_hook6@example.com',
+            'password' => 'test123'
         ];
 
         $result = $this->handler->handleSubmission();
@@ -181,7 +187,8 @@ class CRUDHandlerTest extends TestCase
             'csrf_token' => $this->generateValidToken(),
             'id' => $id,
             'name' => 'Updated',
-            'email' => 'test_update1@example.com'
+            'email' => 'test_update1@example.com',
+            'password' => 'test123'
         ];
 
         $this->handler->handleSubmission();
@@ -201,7 +208,8 @@ class CRUDHandlerTest extends TestCase
             'csrf_token' => $this->generateValidToken(),
             'id' => $id,
             'name' => 'Updated',
-            'email' => 'test_update2@example.com'
+            'email' => 'test_update2@example.com',
+            'password' => 'test123'
         ];
 
         $this->handler->handleSubmission();
@@ -241,7 +249,8 @@ class CRUDHandlerTest extends TestCase
         $_POST = [
             'csrf_token' => $this->generateValidToken(),
             'name' => 'John Doe',
-            'email' => 'test_create@example.com'
+            'email' => 'test_create@example.com',
+            'password' => 'test123'
         ];
 
         $result = $this->handler->handleSubmission();
@@ -259,7 +268,8 @@ class CRUDHandlerTest extends TestCase
             'csrf_token' => $this->generateValidToken(),
             'id' => $id,
             'name' => 'Jane Doe',
-            'email' => 'test_update@example.com'
+            'email' => 'test_update@example.com',
+            'password' => 'test123'
         ];
 
         $result = $this->handler->handleSubmission();
@@ -290,7 +300,8 @@ class CRUDHandlerTest extends TestCase
         $_POST = [
             'csrf_token' => $this->generateValidToken(),
             'name' => 'Test',
-            'email' => 'test_rollback@example.com'
+            'email' => 'test_rollback@example.com',
+            'password' => 'test123'
         ];
 
         $result = $this->handler->handleSubmission();
@@ -370,8 +381,8 @@ class CRUDHandlerTest extends TestCase
 
     private function createTestUser(string $email): int
     {
-        $stmt = $this->pdo->prepare("INSERT INTO users (name, email) VALUES (:name, :email)");
-        $stmt->execute(['name' => 'Test User', 'email' => $email]);
+        $stmt = $this->pdo->prepare("INSERT INTO users (name, email, password) VALUES (:name, :email, :password)");
+        $stmt->execute(['name' => 'Test User', 'email' => $email, 'password' => 'test123']);
         return (int) $this->pdo->lastInsertId();
     }
 

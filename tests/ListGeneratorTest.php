@@ -45,7 +45,7 @@ class ListGeneratorTest extends TestCase
         $this->cleanupTestData();
         
         for ($i = 1; $i <= 25; $i++) {
-            $this->pdo->exec("INSERT INTO users (name, email) VALUES ('User $i', 'user$i@test.com')");
+            $this->pdo->exec("INSERT INTO users (name, email, password) VALUES ('User $i', 'user$i@test.com', 'test123')");
         }
     }
 

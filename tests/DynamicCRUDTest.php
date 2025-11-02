@@ -90,7 +90,8 @@ class DynamicCRUDTest extends TestCase
         $_POST = [
             'csrf_token' => $token,
             'name' => 'Integration Test',
-            'email' => 'integration_create@test.com'
+            'email' => 'integration_create@test.com',
+            'password' => 'test123'
         ];
 
         $result = $this->crud->handleSubmission();
@@ -115,7 +116,8 @@ class DynamicCRUDTest extends TestCase
             'csrf_token' => $token,
             'id' => $id,
             'name' => 'Updated Name',
-            'email' => 'integration_test@test.com'
+            'email' => 'integration_test@test.com',
+            'password' => 'test123'
         ];
 
         $result = $this->crud->handleSubmission();
@@ -165,7 +167,8 @@ class DynamicCRUDTest extends TestCase
         $_POST = [
             'csrf_token' => $token,
             'name' => 'lowercase',
-            'email' => 'integration_hooks@test.com'
+            'email' => 'integration_hooks@test.com',
+            'password' => 'test123'
         ];
 
         $result = $this->crud->handleSubmission();
@@ -198,7 +201,8 @@ class DynamicCRUDTest extends TestCase
         $_POST = [
             'csrf_token' => $token,
             'name' => 'Audit Test',
-            'email' => 'integration_audit@test.com'
+            'email' => 'integration_audit@test.com',
+            'password' => 'test123'
         ];
 
         $result = $this->crud->handleSubmission();
@@ -259,8 +263,8 @@ class DynamicCRUDTest extends TestCase
 
     private function createTestUser(string $email = 'integration_test@test.com'): int
     {
-        $stmt = $this->pdo->prepare("INSERT INTO users (name, email) VALUES (:name, :email)");
-        $stmt->execute(['name' => 'Test User', 'email' => $email]);
+        $stmt = $this->pdo->prepare("INSERT INTO users (name, email, password) VALUES (:name, :email, :password)");
+        $stmt->execute(['name' => 'Test User', 'email' => $email, 'password' => 'test123']);
         return (int) $this->pdo->lastInsertId();
     }
 
