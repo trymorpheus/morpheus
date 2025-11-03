@@ -271,8 +271,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 5. **Limita el tamaño de archivos** tanto en PHP (`upload_max_filesize`) como en metadatos
 6. **Sanitiza nombres de archivos** - el sistema lo hace automáticamente con `uniqid()`
 7. **Implementa CSRF** - el sistema lo incluye por defecto, no lo desactives
-
----
-
-**Última actualización**: 2025-01-31  
-**Versión**: Fase 3

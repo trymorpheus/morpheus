@@ -250,8 +250,3 @@ $crud->beforeSave(function($data) {
 - Hooks execute in registration order
 - No way to "unregister" a hook once registered
 - Hooks share the same transaction context
-
----
-
-**Last updated**: 2025-01-31  
-**Version**: Phase 4

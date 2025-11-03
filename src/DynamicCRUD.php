@@ -217,6 +217,16 @@ class DynamicCRUD
         return $this->handler->delete($id);
     }
     
+    public function restore(int $id): bool
+    {
+        return $this->handler->restore($id);
+    }
+    
+    public function forceDelete(int $id): bool
+    {
+        return $this->handler->forceDelete($id);
+    }
+    
     public function list(array $options = []): array
     {
         return $this->handler->list($options);

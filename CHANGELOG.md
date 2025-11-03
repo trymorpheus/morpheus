@@ -34,6 +34,15 @@ Complete authentication and authorization system with metadata-driven configurat
 - Dynamic action button filtering based on permissions
 - Owner field auto-inclusion in SELECT queries
 
+#### Soft Deletes
+- **Soft delete support** - Mark records as deleted without removing them
+- `delete()` method performs soft delete when enabled
+- `restore()` method to recover soft-deleted records
+- `forceDelete()` method to permanently remove records
+- Automatic filtering of deleted records in lists
+- Configurable via table metadata (`behaviors.soft_deletes`)
+- Custom column support (default: `deleted_at`)
+
 #### Integration
 - `enableAuthentication()` method in DynamicCRUD
 - `renderLoginForm()` and `renderRegistrationForm()` methods
@@ -53,6 +62,9 @@ Complete authentication and authorization system with metadata-driven configurat
   - `basic-rbac.php` - Form with permission checks
   - `list-with-permissions.php` - List with dynamic buttons
   - `setup.sql` - Database setup with permissions
+- `examples/09-soft-deletes/` - Soft deletes example
+  - `index.php` - Complete soft delete demo with restore/force delete
+  - `setup.sql` - Database setup with soft delete metadata
 
 #### Testing
 - **AuthenticationManagerTest** - 16 tests (100% passing)
@@ -62,7 +74,13 @@ Complete authentication and authorization system with metadata-driven configurat
   - Security tests (4)
 - **PermissionManagerTest** - 9 tests (100% passing)
 - **TableMetadataTest** - 17 tests (100% passing)
-- All existing tests updated and passing (221/221)
+- **SoftDeletesTest** - 10 tests (100% passing)
+  - Soft delete behavior (2)
+  - Restore functionality (1)
+  - Force delete (2)
+  - Metadata detection (3)
+  - Multiple operations (2)
+- All existing tests updated and passing (231/231)
 
 #### Documentation
 - Updated `docs/RBAC.md` with authentication guide
@@ -84,11 +102,12 @@ Complete authentication and authorization system with metadata-driven configurat
 
 ### 📊 Statistics
 - **2 new classes** (AuthenticationManager, enhanced PermissionManager)
-- **4 new examples** in 08-authentication/
-- **42 new tests** (16 auth + 9 permissions + 17 metadata)
-- **221 total tests** (100% passing, 90% coverage)
+- **5 new examples** (4 in 08-authentication/, 1 in 09-soft-deletes/)
+- **52 new tests** (16 auth + 9 permissions + 17 metadata + 10 soft deletes)
+- **231 total tests** (100% passing, 90% coverage)
 - **Authentication features**: 8 (register, login, logout, rate limiting, sessions, CSRF, remember me, auto-login)
 - **RBAC features**: 6 (table permissions, row-level security, wildcards, owner checks, dynamic buttons, auto-enforcement)
+- **Soft delete features**: 3 (soft delete, restore, force delete)
 
 ---
 

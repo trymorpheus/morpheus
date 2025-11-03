@@ -238,8 +238,3 @@ $crud->addManyToMany('courses', 'student_courses', 'student_id', 'course_id', 'c
 ## Ejemplo Completo
 
 Ver `examples/many_to_many_demo.php` para un ejemplo funcional completo.
-
----
-
-**Última actualización**: 2025-01-31  
-**Versión**: Fase 4

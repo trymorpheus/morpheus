@@ -224,4 +224,21 @@ class TableMetadata
         return $this->hasAuthentication() && 
                ($this->metadata['authentication']['login']['enabled'] ?? false);
     }
+    
+    // Soft Deletes
+    public function hasSoftDeletes(): bool
+    {
+        return isset($this->metadata['behaviors']['soft_deletes']) && 
+               ($this->metadata['behaviors']['soft_deletes']['enabled'] ?? false);
+    }
+    
+    public function getSoftDeleteColumn(): string
+    {
+        return $this->metadata['behaviors']['soft_deletes']['column'] ?? 'deleted_at';
+    }
+    
+    public function getSoftDeleteConfig(): array
+    {
+        return $this->metadata['behaviors']['soft_deletes'] ?? [];
+    }
 }

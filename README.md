@@ -33,6 +33,7 @@ Stop writing repetitive CRUD code. DynamicCRUD analyzes your MySQL schema and cr
 ### ⚡ Advanced
 - **Authentication** - Register, login, logout with rate limiting
 - **RBAC** - Role-based access control with row-level security
+- **Soft Deletes** - Mark records as deleted, restore or permanently delete
 - **Multi-database support** (MySQL, PostgreSQL)
 - **Internationalization (i18n)** - 3 languages included (EN, ES, FR)
 - **Template System** - Blade-like syntax for custom layouts
@@ -58,7 +59,7 @@ composer require dynamiccrud/dynamiccrud
 
 ## ✨ What's New in v2.1
 
-**Authentication & RBAC** - Complete user authentication and authorization!
+**Authentication, RBAC & Soft Deletes** - Complete user authentication, authorization, and soft delete support!
 
 ```sql
 CREATE TABLE users (
@@ -95,6 +96,11 @@ if ($crud->isAuthenticated()) {
     $user = $crud->getCurrentUser();
     echo "Welcome, {$user['name']}!";
 }
+
+// Soft Deletes
+$crud->delete($id);        // Soft delete (marks as deleted)
+$crud->restore($id);       // Restore deleted record
+$crud->forceDelete($id);   // Permanently delete
 ```
 
 👉 [See RBAC & Authentication Guide](docs/RBAC.md)
@@ -395,8 +401,8 @@ COMMENT '{"type": "email", "label": "Email", "tooltip": "Required field", "minle
 
 DynamicCRUD has comprehensive test coverage:
 
-- **221 tests** with **400+ assertions**
-- **100% passing rate** (221 passing, 0 failing)
+- **231 tests** with **420+ assertions**
+- **100% passing rate** (231 passing, 0 failing)
 - **90% code coverage**
 - Automated CI/CD with GitHub Actions
 - Tests run on PHP 8.0, 8.1, 8.2, 8.3
@@ -408,6 +414,7 @@ php vendor/phpunit/phpunit/phpunit
 # Run specific test suite
 php vendor/phpunit/phpunit/phpunit tests/AuthenticationManagerTest.php
 php vendor/phpunit/phpunit/phpunit tests/PermissionManagerTest.php
+php vendor/phpunit/phpunit/phpunit tests/SoftDeletesTest.php
 ```
 
 ---
@@ -424,10 +431,14 @@ php vendor/phpunit/phpunit/phpunit tests/PermissionManagerTest.php
   - Table-level permissions
   - Row-level security
   - Automatic enforcement in forms/lists
+- **Soft Deletes**
+  - Mark records as deleted without removing
+  - Restore deleted records
+  - Force delete for permanent removal
 - AuthenticationManager class
 - PermissionManager class
-- 4 new examples in 08-authentication/
-- 42 new tests (100% passing)
+- 5 new examples (4 auth + 1 soft deletes)
+- 52 new tests (100% passing)
 
 ### ✅ Completed (v2.0.0)
 - **Table Metadata System** (Phase 1 - Quick Wins)
@@ -491,15 +502,16 @@ php vendor/phpunit/phpunit/phpunit tests/PermissionManagerTest.php
 
 ## 📊 Project Stats
 
-- **21 PHP classes** (~7,500 lines)
-- **19 working examples** (4 in v2.1, 4 in v2.0)
+- **21 PHP classes** (~7,800 lines)
+- **20 working examples** (5 in v2.1, 4 in v2.0)
 - **13 technical documents**
-- **221 automated tests** (100% passing, 90% coverage)
+- **231 automated tests** (100% passing, 90% coverage)
 - **Languages supported**: 3 (English, Spanish, French)
 - **Databases supported**: 2 (MySQL, PostgreSQL)
 - **Template engine**: Blade-like syntax
 - **Authentication**: Register, login, logout, rate limiting
 - **RBAC**: Table + row-level permissions
+- **Soft Deletes**: Delete, restore, force delete
 - **Table metadata features**: 4 (UI/UX, Forms, Behaviors, Search)
 
 ---

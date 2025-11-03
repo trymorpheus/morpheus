@@ -250,11 +250,20 @@ class CRUDHandler
         return $id;
     }
 
-    private function findById(int $id): array
+    private function findById(int $id, bool $withTrashed = false): array
     {
         $pk = $this->schema['primary_key'];
         
-        $sql = sprintf("SELECT * FROM %s WHERE %s = :id LIMIT 1", $this->table, $pk);
+        $sql = sprintf("SELECT * FROM %s WHERE %s = :id", $this->table, $pk);
+        
+        // Exclude soft deleted records unless withTrashed is true
+        if (!$withTrashed && $this->tableMetadata && $this->tableMetadata->hasSoftDeletes()) {
+            $column = $this->tableMetadata->getSoftDeleteColumn();
+            $sql .= sprintf(" AND %s IS NULL", $column);
+        }
+        
+        $sql .= " LIMIT 1";
+        
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute(['id' => $id]);
         
@@ -287,9 +296,18 @@ class CRUDHandler
             $oldValues = $this->auditLogger ? $this->findById($id) : [];
             
             $pk = $this->schema['primary_key'];
-            $sql = sprintf("DELETE FROM %s WHERE %s = :id", $this->table, $pk);
-            $stmt = $this->pdo->prepare($sql);
-            $result = $stmt->execute(['id' => $id]);
+            
+            // Check if soft deletes enabled
+            if ($this->tableMetadata && $this->tableMetadata->hasSoftDeletes()) {
+                $column = $this->tableMetadata->getSoftDeleteColumn();
+                $sql = sprintf("UPDATE %s SET %s = :deleted_at WHERE %s = :id", $this->table, $column, $pk);
+                $stmt = $this->pdo->prepare($sql);
+                $result = $stmt->execute(['deleted_at' => date('Y-m-d H:i:s'), 'id' => $id]);
+            } else {
+                $sql = sprintf("DELETE FROM %s WHERE %s = :id", $this->table, $pk);
+                $stmt = $this->pdo->prepare($sql);
+                $result = $stmt->execute(['id' => $id]);
+            }
             
             // Auditoría: registrar DELETE
             if ($this->auditLogger && $result) {
@@ -298,6 +316,54 @@ class CRUDHandler
             
             // Hook: afterDelete
             $this->executeHook('afterDelete', $id);
+            
+            $this->pdo->commit();
+            return $result;
+            
+        } catch (\Exception $e) {
+            $this->pdo->rollBack();
+            throw $e;
+        }
+    }
+    
+    public function restore(int $id): bool
+    {
+        if (!$this->tableMetadata || !$this->tableMetadata->hasSoftDeletes()) {
+            throw new \Exception('Soft deletes not enabled for this table');
+        }
+        
+        $pk = $this->schema['primary_key'];
+        $column = $this->tableMetadata->getSoftDeleteColumn();
+        
+        $sql = sprintf("UPDATE %s SET %s = NULL WHERE %s = :id", $this->table, $column, $pk);
+        $stmt = $this->pdo->prepare($sql);
+        
+        return $stmt->execute(['id' => $id]);
+    }
+    
+    public function forceDelete(int $id): bool
+    {
+        // Check permissions
+        if ($this->permissionManager) {
+            $record = $this->findById($id, true);
+            if (!$this->permissionManager->canDelete($record)) {
+                throw new \Exception($this->translator ? $this->translator->t('error.permission_denied') : 'No tienes permiso para realizar esta acción');
+            }
+        }
+        
+        try {
+            $this->pdo->beginTransaction();
+            
+            $oldValues = $this->auditLogger ? $this->findById($id, true) : [];
+            
+            $pk = $this->schema['primary_key'];
+            $sql = sprintf("DELETE FROM %s WHERE %s = :id", $this->table, $pk);
+            $stmt = $this->pdo->prepare($sql);
+            $result = $stmt->execute(['id' => $id]);
+            
+            if ($this->auditLogger && $result) {
+                $this->auditLogger->logDelete($this->table, $id, $oldValues);
+            }
             
             $this->pdo->commit();
             return $result;

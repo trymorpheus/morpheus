@@ -119,6 +119,15 @@ class ListGenerator
             }
         }
         
+        // Soft Deletes - exclude deleted records unless withTrashed is requested
+        if ($this->tableMetadata && $this->tableMetadata->hasSoftDeletes()) {
+            $withTrashed = $_GET['withTrashed'] ?? false;
+            if (!$withTrashed) {
+                $column = $this->tableMetadata->getSoftDeleteColumn();
+                $conditions[] = "$column IS NULL";
+            }
+        }
+        
         $where = !empty($conditions) ? 'WHERE ' . implode(' AND ', $conditions) : '';
         $sort = $this->tableMetadata?->getDefaultSort() ?? 'id DESC';
         

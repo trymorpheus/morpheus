@@ -250,8 +250,3 @@ $crud->beforeSave(function($data) {
 - Los hooks se ejecutan en orden de registro
 - No hay forma de "cancelar" un hook una vez registrado
 - Los hooks comparten el mismo contexto de transacción
-
----
-
-**Última actualización**: 2025-01-31  
-**Versión**: Fase 4

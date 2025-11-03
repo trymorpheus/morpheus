@@ -147,6 +147,85 @@ Before investing in ports, PHP version should have:
 
 ## 🚀 Other Future Ideas
 
+### Metadata Storage in Separate Tables
+
+**Concept:** Store metadata in dedicated tables instead of (or in addition to) table/column comments.
+
+**Motivation:**
+- Some databases don't support comments (Oracle, SQL Server limitations)
+- No size limits on metadata (comments have character limits)
+- Easier to query and manage metadata
+- Better for complex metadata structures
+- Enables versioning and auditing of metadata changes
+
+**Proposed Schema:**
+```sql
+CREATE TABLE dynamiccrud_table_metadata (
+    table_name VARCHAR(255) PRIMARY KEY,
+    metadata JSON NOT NULL,
+    version INT DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE dynamiccrud_column_metadata (
+    table_name VARCHAR(255),
+    column_name VARCHAR(255),
+    metadata JSON NOT NULL,
+    PRIMARY KEY (table_name, column_name),
+    FOREIGN KEY (table_name) REFERENCES dynamiccrud_table_metadata(table_name) ON DELETE CASCADE
+);
+```
+
+**Hybrid Approach (Best of Both Worlds):**
+
+1. **Priority 1:** Check `dynamiccrud_table_metadata` table (if exists)
+2. **Priority 2:** Check table/column `COMMENT` (fallback)
+3. **Priority 3:** Use defaults
+
+```php
+// Configuration
+$crud = new DynamicCRUD($pdo, 'users', [
+    'metadata_source' => 'auto', // 'auto', 'comments', 'tables'
+    'metadata_table_prefix' => 'dynamiccrud_'
+]);
+```
+
+**Advantages:**
+- ✅ Universal database compatibility
+- ✅ No size limits on metadata
+- ✅ Easy to query: `SELECT * FROM dynamiccrud_table_metadata WHERE ...`
+- ✅ Versioning and auditing built-in
+- ✅ Can add indexes for performance
+- ✅ Foreign keys ensure referential integrity
+- ✅ Easier migration between environments
+
+**Disadvantages:**
+- ❌ Synchronization issues (orphaned metadata if table dropped)
+- ❌ Two places to maintain (schema + metadata tables)
+- ❌ SQL dumps don't include metadata automatically
+- ❌ Requires setup (create metadata tables first)
+
+**Use Cases:**
+- **Comments:** Small/medium projects, MySQL/PostgreSQL, rapid prototyping
+- **Tables:** Enterprise projects, Oracle/SQL Server, complex metadata (>1000 chars)
+
+**Migration Tool:**
+```bash
+# Move metadata from comments to tables
+php dynamiccrud migrate:metadata --from=comments --to=tables
+
+# Move metadata from tables to comments
+php dynamiccrud migrate:metadata --from=tables --to=comments
+```
+
+**Status:** Documented idea (Mario's suggestion)  
+**Priority:** ⭐⭐⭐⭐  
+**Target Version:** v2.2 or v2.3  
+**Complexity:** 🟡 Medium
+
+---
+
 ### REST API Generator
 Auto-generate REST APIs from database schema with same metadata approach.
 
