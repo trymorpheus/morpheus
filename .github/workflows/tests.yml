@@ -64,10 +64,7 @@ jobs:
     
     - name: Setup MySQL database
       run: |
-        mysql -h 127.0.0.1 -P 3306 -u root -prootpassword test < examples/setup.sql
-        mysql -h 127.0.0.1 -P 3306 -u root -prootpassword test < examples/setup_phase2.sql
-        mysql -h 127.0.0.1 -P 3306 -u root -prootpassword test < examples/setup_many_to_many.sql
-        mysql -h 127.0.0.1 -P 3306 -u root -prootpassword test < examples/setup_audit.sql
+        mysql -h 127.0.0.1 -P 3306 -u root -prootpassword test < examples/setup/mysql.sql
     
     - name: Wait for PostgreSQL
       run: |
@@ -78,7 +75,7 @@ jobs:
     
     - name: Setup PostgreSQL database
       run: |
-        PGPASSWORD=postgres psql -h 127.0.0.1 -p 5432 -U postgres test < examples/setup_postgres.sql
+        PGPASSWORD=postgres psql -h 127.0.0.1 -p 5432 -U postgres test < examples/setup/postgresql.sql
       env:
         PGPASSWORD: postgres
     
