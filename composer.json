@@ -30,6 +30,9 @@
             "DynamicCRUD\\Tests\\": "tests/"
         }
     },
+    "bin": [
+        "bin/dynamiccrud"
+    ],
     "minimum-stability": "stable",
     "prefer-stable": true
 }

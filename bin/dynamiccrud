@@ -1,0 +1,33 @@
+#!/usr/bin/env php
+<?php
+
+// DynamicCRUD CLI Tool
+// Usage: php dynamiccrud <command> [options]
+
+if (php_sapi_name() !== 'cli') {
+    exit('This script must be run from the command line.' . PHP_EOL);
+}
+
+// Find autoloader
+$autoloadPaths = [
+    __DIR__ . '/../vendor/autoload.php',
+    __DIR__ . '/../../../autoload.php',
+];
+
+$autoloaded = false;
+foreach ($autoloadPaths as $path) {
+    if (file_exists($path)) {
+        require $path;
+        $autoloaded = true;
+        break;
+    }
+}
+
+if (!$autoloaded) {
+    exit('Error: Composer autoloader not found. Run: composer install' . PHP_EOL);
+}
+
+use DynamicCRUD\CLI\Application;
+
+$app = new Application();
+$app->run($argv);

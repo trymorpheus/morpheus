@@ -31,6 +31,7 @@ Stop writing repetitive CRUD code. DynamicCRUD analyzes your MySQL schema and cr
 - **Custom display columns** for related data
 
 ### ⚡ Advanced
+- **CLI Tool** - Command-line interface for project management
 - **Authentication** - Register, login, logout with rate limiting
 - **RBAC** - Role-based access control with row-level security
 - **Soft Deletes** - Mark records as deleted, restore or permanently delete
@@ -54,6 +55,16 @@ composer require dynamiccrud/dynamiccrud
 ```
 
 **Requirements:** PHP 8.0+, MySQL 5.7+ or PostgreSQL 12+, PDO extension
+
+### CLI Tool
+
+After installation, initialize your project:
+
+```bash
+php vendor/bin/dynamiccrud init
+php vendor/bin/dynamiccrud list:tables
+php vendor/bin/dynamiccrud generate:metadata users
+```
 
 ---
 
@@ -502,13 +513,14 @@ php vendor/phpunit/phpunit/phpunit tests/SoftDeletesTest.php
 
 ## 📊 Project Stats
 
-- **21 PHP classes** (~7,800 lines)
+- **21 PHP classes** (~8,000 lines)
 - **20 working examples** (5 in v2.1, 4 in v2.0)
 - **13 technical documents**
 - **231 automated tests** (100% passing, 90% coverage)
 - **Languages supported**: 3 (English, Spanish, French)
 - **Databases supported**: 2 (MySQL, PostgreSQL)
 - **Template engine**: Blade-like syntax
+- **CLI Tool**: 5 commands (init, generate, validate, clear, list)
 - **Authentication**: Register, login, logout, rate limiting
 - **RBAC**: Table + row-level permissions
 - **Soft Deletes**: Delete, restore, force delete
