@@ -19,6 +19,7 @@ class CRUDHandler
     private ?AuditLogger $auditLogger = null;
     private array $virtualFields = [];
     private ?Translator $translator = null;
+    private $tableMetadata = null;
 
     public function __construct(PDO $pdo, string $table, ?CacheStrategy $cache = null, ?string $uploadDir = null)
     {
@@ -33,6 +34,7 @@ class CRUDHandler
         
         $this->fileHandler = new FileUploadHandler($uploadDir);
         $this->schema = $this->analyzer->getTableSchema($table);
+        $this->tableMetadata = new Metadata\TableMetadata($pdo, $table);
     }
 
     public function renderForm(?int $id = null): string
@@ -127,10 +129,14 @@ class CRUDHandler
         // Hook: afterValidate
         $data = $this->executeHook('afterValidate', $data);
         
+        $isUpdate = isset($_POST['id']) && $_POST['id'];
+        
+        // Apply automatic behaviors
+        $data = $this->applyAutomaticBehaviors($data, $isUpdate);
+        
         // Hook: beforeSave
         $data = $this->executeHook('beforeSave', $data);
         
-        $isUpdate = isset($_POST['id']) && $_POST['id'];
         $id = $isUpdate ? (int)$_POST['id'] : null;
         
         if ($isUpdate) {
@@ -491,5 +497,92 @@ class CRUDHandler
     {
         $this->auditLogger = $logger;
         return $this;
+    }
+    
+    public function getTableMetadata()
+    {
+        return $this->tableMetadata;
+    }
+    
+    private function applyAutomaticBehaviors(array $data, bool $isUpdate): array
+    {
+        if (!$this->tableMetadata) {
+            return $data;
+        }
+        
+        // Timestamps
+        if ($this->tableMetadata->hasTimestamps()) {
+            $timestamps = $this->tableMetadata->getTimestampFields();
+            
+            if (!$isUpdate && isset($timestamps['created_at'])) {
+                $data[$timestamps['created_at']] = date('Y-m-d H:i:s');
+            }
+            
+            if (isset($timestamps['updated_at'])) {
+                $data[$timestamps['updated_at']] = date('Y-m-d H:i:s');
+            }
+        }
+        
+        // Sluggable
+        if ($this->tableMetadata->isSluggable()) {
+            $config = $this->tableMetadata->getSluggableConfig();
+            $source = $config['source'] ?? 'title';
+            $target = $config['target'] ?? 'slug';
+            $separator = $config['separator'] ?? '-';
+            $lowercase = $config['lowercase'] ?? true;
+            $unique = $config['unique'] ?? true;
+            
+            if (isset($data[$source]) && empty($data[$target])) {
+                $slug = $data[$source];
+                $slug = preg_replace('/[^\w\s-]/u', '', $slug);
+                $slug = preg_replace('/[\s_]+/', $separator, $slug);
+                $slug = trim($slug, $separator);
+                
+                if ($lowercase) {
+                    $slug = strtolower($slug);
+                }
+                
+                if ($unique) {
+                    $slug = $this->makeSlugUnique($slug, $target, $isUpdate ? (int)$_POST['id'] : null);
+                }
+                
+                $data[$target] = $slug;
+            }
+        }
+        
+        return $data;
+    }
+    
+    private function makeSlugUnique(string $slug, string $column, ?int $excludeId = null): string
+    {
+        $originalSlug = $slug;
+        $counter = 1;
+        
+        while ($this->slugExists($slug, $column, $excludeId)) {
+            $slug = $originalSlug . '-' . $counter;
+            $counter++;
+        }
+        
+        return $slug;
+    }
+    
+    private function slugExists(string $slug, string $column, ?int $excludeId = null): bool
+    {
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE {$column} = :slug";
+        
+        if ($excludeId !== null) {
+            $pk = $this->schema['primary_key'];
+            $sql .= " AND {$pk} != :id";
+        }
+        
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':slug', $slug);
+        
+        if ($excludeId !== null) {
+            $stmt->bindValue(':id', $excludeId, \PDO::PARAM_INT);
+        }
+        
+        $stmt->execute();
+        return $stmt->fetchColumn() > 0;
     }
 }

@@ -19,7 +19,11 @@ CREATE TABLE users (
     email VARCHAR(255) NOT NULL UNIQUE COMMENT '{"type": "email", "label": "Email Address", "placeholder": "user@example.com", "tooltip": "We will never share your email", "autocomplete": "email"}',
     password VARCHAR(255) NOT NULL COMMENT '{"type": "password", "label": "Password", "minlength": 8, "placeholder": "Min 8 characters", "tooltip": "Use a strong password"}',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '{"hidden": true}'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 
+COMMENT='{"display_name": "User Management", "icon": "👥", "description": "Complete user administration", "color": "#667eea", "list_view": {"columns": ["id", "name", "email", "created_at"], "default_sort": "created_at DESC", "per_page": 25, "searchable": ["name", "email"], "actions": ["edit", "delete"]}}';
+
+-- Ensure database uses utf8mb4
+ALTER DATABASE test CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 -- Categories table (Foreign keys)
 CREATE TABLE categories (
@@ -29,20 +33,22 @@ CREATE TABLE categories (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '{"hidden": true}'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Posts table (Foreign keys, Hooks, M:N)
+-- Posts table (Foreign keys, Hooks, M:N, Auto-behaviors)
 CREATE TABLE posts (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255) NOT NULL COMMENT '{"label": "Post Title", "placeholder": "Enter an engaging title", "minlength": 5}',
-    slug VARCHAR(255) UNIQUE COMMENT '{"label": "URL Slug", "placeholder": "auto-generated-from-title", "tooltip": "Leave empty to auto-generate", "pattern": "[a-z0-9-]+"}',
+    slug VARCHAR(255) UNIQUE COMMENT '{"label": "URL Slug", "placeholder": "auto-generated-from-title", "tooltip": "Leave empty to auto-generate", "pattern": "[a-z0-9-]+", "readonly": true}',
     content TEXT COMMENT '{"label": "Content", "placeholder": "Write your post content here..."}',
     status ENUM('draft', 'published') DEFAULT 'draft' COMMENT '{"type": "select", "label": "Status"}',
     published_at DATETIME COMMENT '{"type": "datetime-local", "label": "Publish Date", "tooltip": "Auto-set when status is published"}',
     category_id INT COMMENT '{"label": "Category"}',
     user_id INT COMMENT '{"label": "Author", "display_column": "name"}',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '{"hidden": true}',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '{"readonly": true, "label": "Created"}',
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '{"readonly": true, "label": "Updated"}',
     FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+COMMENT='{"display_name": "Blog Posts", "icon": "📝", "color": "#28a745", "list_view": {"columns": ["id", "title", "status", "created_at"], "default_sort": "created_at DESC", "per_page": 3, "searchable": ["title", "content"], "actions": ["edit", "delete"]}, "filters": [{"field": "status", "type": "select", "label": "Estado", "options": ["draft", "published"]}, {"field": "created_at", "type": "daterange", "label": "Fecha de Creación"}], "behaviors": {"timestamps": {"created_at": "created_at", "updated_at": "updated_at"}, "sluggable": {"source": "title", "target": "slug", "unique": true, "separator": "-", "lowercase": true}}}';
 
 -- Tags table (M:N)
 CREATE TABLE tags (
@@ -131,7 +137,10 @@ INSERT INTO users (name, email, password) VALUES
 
 INSERT INTO posts (title, slug, content, status, category_id, user_id) VALUES
 ('Getting Started with DynamicCRUD', 'getting-started-dynamiccrud', 'Learn how to use DynamicCRUD...', 'published', 1, 1),
-('Advanced PHP Techniques', 'advanced-php-techniques', 'Explore advanced PHP patterns...', 'draft', 1, 2);
+('Advanced PHP Techniques', 'advanced-php-techniques', 'Explore advanced PHP patterns...', 'draft', 1, 2),
+('MySQL Performance Tips', 'mysql-performance-tips', 'Optimize your database queries...', 'published', 1, 1),
+('Building REST APIs', 'building-rest-apis', 'Create scalable APIs with PHP...', 'published', 1, 2),
+('Docker for Developers', 'docker-for-developers', 'Containerize your applications...', 'draft', 1, 1);
 
 INSERT INTO post_tags (post_id, tag_id) VALUES
 (1, 1), (1, 2), (1, 4),
@@ -140,6 +149,12 @@ INSERT INTO post_tags (post_id, tag_id) VALUES
 INSERT INTO products (name, description, price, category_id) VALUES
 ('Laptop Pro', 'High-performance laptop', 1299.99, 1),
 ('Wireless Mouse', 'Ergonomic wireless mouse', 29.99, 1);
+
+-- Add table metadata to contacts table with tabs
+ALTER TABLE contacts COMMENT='{"display_name": "Contact Forms", "icon": "📧", "color": "#17a2b8", "list_view": {"columns": ["id", "name", "email", "created_at"], "default_sort": "created_at DESC", "per_page": 25, "searchable": ["name", "email", "message"], "actions": ["edit", "delete"]}, "form": {"layout": "tabs", "tabs": [{"name": "basic", "label": "Basic Info", "fields": ["name", "email"]}, {"name": "contact", "label": "Contact Details", "fields": ["phone", "website"]}, {"name": "message", "label": "Message", "fields": ["message"]}]}}';
+
+-- Add table metadata to products table
+ALTER TABLE products COMMENT='{"display_name": "Products", "icon": "🛍️", "color": "#fd7e14", "list_view": {"columns": ["id", "name", "price", "category_id"], "default_sort": "name ASC", "per_page": 20, "searchable": ["name", "description"], "actions": ["edit", "delete"]}}';
 
 COMMIT;
 

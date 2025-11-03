@@ -5,6 +5,7 @@ namespace DynamicCRUD;
 use DynamicCRUD\Cache\CacheStrategy;
 use DynamicCRUD\I18n\Translator;
 use DynamicCRUD\Template\TemplateEngine;
+use DynamicCRUD\Metadata\TableMetadata;
 use PDO;
 
 class DynamicCRUD
@@ -12,11 +13,13 @@ class DynamicCRUD
     private PDO $pdo;
     private string $table;
     private CRUDHandler $handler;
-    private ListGenerator $listGenerator;
+
     private ?CacheStrategy $cache;
     private ?string $uploadDir;
     private ?Translator $translator = null;
     private ?TemplateEngine $templateEngine = null;
+    private TableMetadata $tableMetadata;
+    private array $schema;
 
     public function __construct(
         PDO $pdo, 
@@ -33,14 +36,13 @@ class DynamicCRUD
         $this->templateEngine = $templateEngine;
         
         $this->translator = new Translator($locale);
+        $this->tableMetadata = new TableMetadata($pdo, $table);
         
         $this->handler = new CRUDHandler($pdo, $table, $cache, $uploadDir);
         $this->handler->setTranslator($this->translator);
         
         $analyzer = new SchemaAnalyzer($pdo, $cache);
-        $schema = $analyzer->getTableSchema($table);
-        
-        $this->listGenerator = new ListGenerator($pdo, $schema);
+        $this->schema = $analyzer->getTableSchema($table);
     }
 
     public function renderForm(?int $id = null): string
@@ -57,12 +59,13 @@ class DynamicCRUD
         $csrfToken = $security->generateCsrfToken();
         
         $generator = new FormGenerator(
-            $this->handler->getSchema(),
+            $this->schema,
             $data,
             $csrfToken,
             $this->pdo,
             $this->handler
         );
+        $generator->setTableMetadata($this->tableMetadata);
         $generator->setTranslator($this->translator);
         if ($this->templateEngine) {
             $generator->setTemplateEngine($this->templateEngine);
@@ -76,22 +79,20 @@ class DynamicCRUD
         return $this->handler->handleSubmission($_POST, $_FILES);
     }
 
-    public function renderList(int $page = 1, int $perPage = 10, array $filters = [], ?string $sortBy = null, string $sortDir = 'ASC'): string
+    public function renderList(array $options = []): string
     {
-        $options = [
-            'page' => $page,
-            'per_page' => $perPage,
-            'filters' => $filters,
-            'sort_by' => $sortBy,
-            'sort_dir' => $sortDir
-        ];
-        
-        $result = $this->listGenerator->list($options);
-        
-        $html = $this->listGenerator->renderTable($result['data']);
-        $html .= $this->listGenerator->renderPagination($result['pagination']);
-        
-        return $html;
+        $generator = new ListGenerator($this->pdo, $this->table, $this->schema, $this->tableMetadata);
+        return $generator->render($options);
+    }
+    
+    public function getTableMetadata(): TableMetadata
+    {
+        return $this->tableMetadata;
+    }
+    
+    public function getHandler(): CRUDHandler
+    {
+        return $this->handler;
     }
 
     public function addManyToMany(
@@ -213,5 +214,10 @@ class DynamicCRUD
     public function getAuditHistory(int $recordId): array
     {
         return $this->handler->getAuditHistory($recordId);
+    }
+    
+    public function getSchema(): array
+    {
+        return $this->schema;
     }
 }

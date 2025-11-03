@@ -16,6 +16,7 @@ class FormGenerator
 
     private ?Translator $translator = null;
     private ?TemplateEngine $templateEngine = null;
+    private $tableMetadata = null;
     
     public function __construct(array $schema, array $data = [], string $csrfToken = '', ?PDO $pdo = null, ?CRUDHandler $handler = null)
     {
@@ -37,13 +38,25 @@ class FormGenerator
         $this->templateEngine = $engine;
         return $this;
     }
+    
+    public function setTableMetadata($metadata): self
+    {
+        $this->tableMetadata = $metadata;
+        return $this;
+    }
 
     public function render(): string
     {
-        $html = $this->renderAssets() . "\n";
+        $html = $this->renderStyles() . "\n";
+        $html .= $this->renderAssets() . "\n";
         $enctype = $this->hasFileFields() ? ' enctype="multipart/form-data"' : '';
         $html .= '<form method="POST" class="dynamic-crud-form"' . $enctype . '>' . "\n";
         $html .= $this->renderCsrfField() . "\n";
+        
+        // Check if we should use tabbed layout
+        if ($this->tableMetadata && $this->tableMetadata->getFormLayout() === 'tabs') {
+            return $this->renderTabbedForm($html, $this->tableMetadata);
+        }
         
         $pk = $this->schema['primary_key'];
         if (!empty($this->data[$pk])) {
@@ -72,6 +85,81 @@ class FormGenerator
         }
         $html .= sprintf('<button type="submit">%s</button>', htmlspecialchars($submitLabel)) . "\n";
         $html .= '</form>' . "\n";
+        
+        return $html;
+    }
+    
+    private function renderTabbedForm(string $formStart, $metadata): string
+    {
+        $tabs = $metadata->getTabs();
+        if (empty($tabs)) {
+            return $this->render(); // Fallback to standard
+        }
+        
+        $html = $this->renderStyles() . "\n";
+        $html .= $this->renderAssets() . "\n";
+        $enctype = $this->hasFileFields() ? ' enctype="multipart/form-data"' : '';
+        $html .= '<form method="POST" class="dynamic-crud-form"' . $enctype . '>' . "\n";
+        $html .= $this->renderCsrfField() . "\n";
+        
+        $pk = $this->schema['primary_key'];
+        if (!empty($this->data[$pk])) {
+            $html .= sprintf('<input type="hidden" name="id" value="%s">', htmlspecialchars($this->data[$pk])) . "\n";
+        };
+        
+        // Tab navigation
+        $html .= '<div class="form-tabs">' . "\n";
+        $html .= '  <div class="tab-nav">' . "\n";
+        foreach ($tabs as $index => $tab) {
+            $active = $index === 0 ? ' active' : '';
+            $html .= sprintf('    <button type="button" class="tab-button%s" data-tab="%s">%s</button>',
+                $active, $tab['name'], htmlspecialchars($tab['label'])) . "\n";
+        }
+        $html .= '  </div>' . "\n";
+        
+        // Tab content
+        foreach ($tabs as $index => $tab) {
+            $active = $index === 0 ? ' active' : '';
+            $html .= sprintf('  <div class="tab-content%s" data-tab="%s">', $active, $tab['name']) . "\n";
+            
+            foreach ($this->schema['columns'] as $column) {
+                if ($column['is_primary']) continue;
+                if ($column['metadata']['hidden'] ?? false) continue;
+                if (!in_array($column['name'], $tab['fields'])) continue;
+                
+                $html .= $this->renderField($column) . "\n";
+            }
+            
+            $html .= '  </div>' . "\n";
+        }
+        
+        $html .= '</div>' . "\n";
+        
+        // Virtual fields and M:N
+        if ($this->handler) {
+            $html .= $this->renderVirtualFields() . "\n";
+            $html .= $this->renderManyToManyFields() . "\n";
+        }
+        
+        $submitLabel = 'Guardar';
+        if ($this->handler && $this->handler->getTranslator()) {
+            $submitLabel = $this->handler->getTranslator()->t('form.submit');
+        }
+        $html .= sprintf('<button type="submit">%s</button>', htmlspecialchars($submitLabel)) . "\n";
+        $html .= '</form>' . "\n";
+        
+        // Add tab switching JS
+        $html .= '<script>
+        document.querySelectorAll(".tab-button").forEach(btn => {
+            btn.addEventListener("click", function() {
+                const tabName = this.dataset.tab;
+                document.querySelectorAll(".tab-button").forEach(b => b.classList.remove("active"));
+                document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+                this.classList.add("active");
+                document.querySelector(`.tab-content[data-tab="${tabName}"]`).classList.add("active");
+            });
+        });
+        </script>' . "\n";
         
         return $html;
     }
@@ -324,6 +412,44 @@ class FormGenerator
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    private function renderStyles(): string
+    {
+        return '<style>
+        .dynamic-crud-form { max-width: 800px; margin: 20px auto; padding: 30px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,0.1); }
+        .form-group textarea { min-height: 100px; resize: vertical; }
+        button[type="submit"] { background: #667eea; color: white; padding: 12px 30px; border: none; border-radius: 4px; font-size: 16px; font-weight: 600; cursor: pointer; }
+        button[type="submit"]:hover { background: #5568d3; }
+        .tooltip { position: relative; display: inline-block; margin-left: 5px; }
+        .tooltip-icon { display: inline-block; width: 16px; height: 16px; background: #667eea; color: white; border-radius: 50%; text-align: center; line-height: 16px; font-size: 12px; cursor: help; }
+        .tooltip-text { visibility: hidden; position: absolute; z-index: 1; bottom: 125%; left: 50%; margin-left: -100px; width: 200px; background: #333; color: white; text-align: center; padding: 8px; border-radius: 4px; font-size: 12px; font-weight: normal; }
+        .tooltip:hover .tooltip-text, .tooltip:focus .tooltip-text { visibility: visible; }
+        .file-info { margin-top: 8px; font-size: 14px; color: #666; }
+        .file-preview img { max-width: 200px; margin-top: 10px; border-radius: 4px; }
+        .form-tabs { margin-bottom: 20px; }
+        .tab-nav { display: flex; gap: 5px; border-bottom: 2px solid #e0e0e0; margin-bottom: 20px; }
+        .tab-button { background: none; border: none; padding: 12px 24px; cursor: pointer; font-size: 14px; font-weight: 500; color: #666; border-bottom: 3px solid transparent; transition: all 0.2s; }
+        .tab-button:hover { color: #667eea; background: #f5f5f5; }
+        .tab-button.active { color: #667eea; border-bottom-color: #667eea; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .m2m-container { border: 1px solid #ddd; border-radius: 4px; padding: 15px; background: #f9f9f9; }
+        .m2m-actions { margin-bottom: 10px; display: flex; gap: 10px; }
+        .m2m-actions button { padding: 6px 12px; font-size: 13px; border: 1px solid #ddd; background: white; border-radius: 4px; cursor: pointer; }
+        .m2m-actions button:hover { background: #f0f0f0; }
+        .m2m-search { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px; }
+        .m2m-options { max-height: 200px; overflow-y: auto; border: 1px solid #ddd; border-radius: 4px; background: white; padding: 10px; }
+        .m2m-option { padding: 6px; display: flex; align-items: center; gap: 8px; }
+        .m2m-option:hover { background: #f5f5f5; }
+        .m2m-option input[type="checkbox"] { margin: 0; }
+        .m2m-option label { margin: 0; cursor: pointer; flex: 1; }
+        .m2m-stats { margin-top: 10px; font-size: 13px; color: #666; text-align: right; }
+        </style>';
+    }
+    
     private function renderAssets(): string
     {
         $html = '';
