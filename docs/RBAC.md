@@ -489,6 +489,49 @@ $_SESSION['user_email'] // User email
 // Extends session lifetime to 7200 seconds (2 hours)
 ```
 
+### Password Reset
+
+Complete password reset flow with secure token generation:
+
+```php
+$crud = new DynamicCRUD($pdo, 'users');
+$crud->enableAuthentication();
+
+// Request password reset
+$result = $crud->requestPasswordReset($email);
+if ($result['success']) {
+    $token = $result['token'];
+    // In production: Send email with reset link
+    // For demo: Display link on screen
+    $resetLink = "https://example.com/reset-password.php?token=$token";
+}
+
+// Validate reset token
+$email = $crud->validateResetToken($token);
+if ($email) {
+    // Token is valid, show reset form
+}
+
+// Reset password
+$result = $crud->resetPassword($token, $newPassword);
+if ($result['success']) {
+    // Password reset successful
+}
+```
+
+**Features:**
+- Secure token generation (64-character hex)
+- 1-hour token expiration
+- Automatic token cleanup after use
+- Auto-creation of `password_resets` table
+- Multiple reset requests supported
+
+**Security:**
+- Tokens generated with `random_bytes(32)`
+- Bcrypt password hashing
+- Token validation with expiration check
+- Protection against timing attacks
+
 ---
 
 ## Integration with Authentication

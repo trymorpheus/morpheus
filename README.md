@@ -331,6 +331,7 @@ $crud->handleSubmission();
 ## 📚 Documentation
 
 ### v2.1 Features (NEW!)
+- [CLI Tool Guide](docs/CLI.md) - Command-line interface documentation
 - [RBAC & Authentication Guide](docs/RBAC.md) - Complete auth & permissions guide
 
 ### v2.0 Features
@@ -513,15 +514,15 @@ php vendor/phpunit/phpunit/phpunit tests/SoftDeletesTest.php
 
 ## 📊 Project Stats
 
-- **21 PHP classes** (~8,000 lines)
-- **20 working examples** (5 in v2.1, 4 in v2.0)
-- **13 technical documents**
-- **231 automated tests** (100% passing, 90% coverage)
+- **27 PHP classes** (~9,000 lines)
+- **22 working examples** (6 in v2.1, 4 in v2.0)
+- **14 technical documents**
+- **242 automated tests** (100% passing, 90% coverage)
 - **Languages supported**: 3 (English, Spanish, French)
 - **Databases supported**: 2 (MySQL, PostgreSQL)
 - **Template engine**: Blade-like syntax
 - **CLI Tool**: 5 commands (init, generate, validate, clear, list)
-- **Authentication**: Register, login, logout, rate limiting
+- **Authentication**: Register, login, logout, password reset, rate limiting
 - **RBAC**: Table + row-level permissions
 - **Soft Deletes**: Delete, restore, force delete
 - **Table metadata features**: 4 (UI/UX, Forms, Behaviors, Search)
