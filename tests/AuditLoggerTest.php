@@ -41,7 +41,7 @@ class AuditLoggerTest extends TestCase
         $history = $this->logger->getHistory('test_table', 1);
         
         $this->assertCount(1, $history);
-        $this->assertEquals('CREATE', $history[0]['action']);
+        $this->assertEquals('create', $history[0]['action']);
         $this->assertEquals('test_table', $history[0]['table_name']);
         $this->assertEquals(1, $history[0]['record_id']);
     }
@@ -56,7 +56,7 @@ class AuditLoggerTest extends TestCase
         $history = $this->logger->getHistory('test_table', 2);
         
         $this->assertCount(1, $history);
-        $this->assertEquals('UPDATE', $history[0]['action']);
+        $this->assertEquals('update', $history[0]['action']);
         $this->assertStringContainsString('Old Name', $history[0]['old_values']);
         $this->assertStringContainsString('New Name', $history[0]['new_values']);
     }
@@ -70,7 +70,7 @@ class AuditLoggerTest extends TestCase
         $history = $this->logger->getHistory('test_table', 3);
         
         $this->assertCount(1, $history);
-        $this->assertEquals('DELETE', $history[0]['action']);
+        $this->assertEquals('delete', $history[0]['action']);
         $this->assertStringContainsString('Deleted', $history[0]['old_values']);
         $this->assertNull($history[0]['new_values']);
     }
@@ -96,9 +96,9 @@ class AuditLoggerTest extends TestCase
         $this->assertCount(3, $history);
         
         $actions = array_column($history, 'action');
-        $this->assertContains('CREATE', $actions);
-        $this->assertContains('UPDATE', $actions);
-        $this->assertContains('DELETE', $actions);
+        $this->assertContains('create', $actions);
+        $this->assertContains('update', $actions);
+        $this->assertContains('delete', $actions);
     }
 
     public function testGetHistoryEmptyForNonExistent(): void

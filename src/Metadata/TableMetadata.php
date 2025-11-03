@@ -178,4 +178,26 @@ class TableMetadata
     {
         return $this->metadata['filters'] ?? [];
     }
+
+    // Permissions & Security
+    public function getPermissions(): array
+    {
+        return $this->metadata['permissions'] ?? [];
+    }
+
+    public function getRowLevelSecurity(): ?array
+    {
+        return $this->metadata['row_level_security'] ?? null;
+    }
+
+    public function hasPermissions(): bool
+    {
+        return !empty($this->metadata['permissions']);
+    }
+
+    public function hasRowLevelSecurity(): bool
+    {
+        return isset($this->metadata['row_level_security']) && 
+               ($this->metadata['row_level_security']['enabled'] ?? false);
+    }
 }

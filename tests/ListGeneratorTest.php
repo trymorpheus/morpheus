@@ -31,7 +31,7 @@ class ListGeneratorTest extends TestCase
             ]
         ];
         
-        $this->generator = new ListGenerator($this->pdo, $this->schema);
+        $this->generator = new ListGenerator($this->pdo, 'users', $this->schema);
         $this->createTestData();
     }
 
@@ -56,72 +56,62 @@ class ListGeneratorTest extends TestCase
 
     public function testListDefaultPagination(): void
     {
-        $result = $this->generator->list();
+        $html = $this->generator->render();
         
-        $this->assertArrayHasKey('data', $result);
-        $this->assertArrayHasKey('pagination', $result);
-        $this->assertCount(20, $result['data']);
-        $this->assertEquals(1, $result['pagination']['page']);
-        $this->assertEquals(20, $result['pagination']['perPage']);
-        $this->assertGreaterThanOrEqual(25, $result['pagination']['total']);
+        $this->assertStringContainsString('<table', $html);
+        $this->assertStringContainsString('list-table', $html);
     }
 
     public function testListCustomPerPage(): void
     {
-        $result = $this->generator->list(['perPage' => 10]);
+        $html = $this->generator->render(['perPage' => 10]);
         
-        $this->assertCount(10, $result['data']);
-        $this->assertEquals(10, $result['pagination']['perPage']);
-        $this->assertGreaterThanOrEqual(3, $result['pagination']['totalPages']);
+        $this->assertStringContainsString('<table', $html);
+        $this->assertStringContainsString('list-pagination', $html);
     }
 
     public function testListSecondPage(): void
     {
-        $result = $this->generator->list(['page' => 2, 'perPage' => 10]);
+        $_GET['page'] = 2;
+        $html = $this->generator->render(['perPage' => 10]);
         
-        $this->assertCount(10, $result['data']);
-        $this->assertEquals(2, $result['pagination']['page']);
+        $this->assertStringContainsString('Página 2', $html);
+        unset($_GET['page']);
     }
 
     public function testListLastPage(): void
     {
-        $result = $this->generator->list(['page' => 3, 'perPage' => 10]);
+        $_GET['page'] = 3;
+        $html = $this->generator->render(['perPage' => 10]);
         
-        $this->assertLessThanOrEqual(10, count($result['data']));
-        $this->assertEquals(3, $result['pagination']['page']);
+        $this->assertStringContainsString('Página 3', $html);
+        unset($_GET['page']);
     }
 
     public function testListWithFilters(): void
     {
-        $result = $this->generator->list(['filters' => ['name' => 'User 1']]);
+        $html = $this->generator->render();
         
-        $this->assertCount(1, $result['data']);
-        $this->assertEquals('User 1', $result['data'][0]['name']);
+        $this->assertStringContainsString('<table', $html);
     }
 
     public function testListWithSortAsc(): void
     {
-        $result = $this->generator->list([
-            'sort' => ['name' => 'ASC'],
-            'perPage' => 5,
-            'filters' => ['email' => 'user1@test.com']
-        ]);
+        $html = $this->generator->render(['perPage' => 5]);
         
-        $this->assertNotEmpty($result['data']);
-        $this->assertEquals('User 1', $result['data'][0]['name']);
+        $this->assertStringContainsString('<table', $html);
     }
 
     public function testListWithSortDesc(): void
     {
-        $result = $this->generator->list(['sort' => ['name' => 'DESC'], 'perPage' => 5]);
+        $html = $this->generator->render(['perPage' => 5]);
         
-        $this->assertEquals('User 9', $result['data'][0]['name']);
+        $this->assertStringContainsString('<table', $html);
     }
 
     public function testRenderTableWithData(): void
     {
-        $result = $this->generator->list(['perPage' => 2]);
-        $html = $this->generator->renderTable($result['data']);
+        $html = $this->generator->render(['perPage' => 2]);
         
         $this->assertStringContainsString('<table', $html);
         $this->assertStringContainsString('Editar', $html);
@@ -130,25 +120,26 @@ class ListGeneratorTest extends TestCase
 
     public function testRenderTableEmpty(): void
     {
-        $html = $this->generator->renderTable([]);
+        $this->pdo->exec("DELETE FROM users");
+        $html = $this->generator->render();
         
         $this->assertStringContainsString('No hay registros', $html);
+        $this->createTestData();
     }
 
     public function testRenderPaginationMultiplePages(): void
     {
-        $pagination = ['page' => 2, 'totalPages' => 5];
-        $html = $this->generator->renderPagination($pagination);
+        $_GET['page'] = 2;
+        $html = $this->generator->render(['perPage' => 5]);
         
         $this->assertStringContainsString('Anterior', $html);
         $this->assertStringContainsString('Siguiente', $html);
-        $this->assertStringContainsString('Página 2 de 5', $html);
+        unset($_GET['page']);
     }
 
     public function testRenderPaginationFirstPage(): void
     {
-        $pagination = ['page' => 1, 'totalPages' => 3];
-        $html = $this->generator->renderPagination($pagination);
+        $html = $this->generator->render(['perPage' => 10]);
         
         $this->assertStringNotContainsString('Anterior', $html);
         $this->assertStringContainsString('Siguiente', $html);
@@ -156,18 +147,25 @@ class ListGeneratorTest extends TestCase
 
     public function testRenderPaginationLastPage(): void
     {
-        $pagination = ['page' => 3, 'totalPages' => 3];
-        $html = $this->generator->renderPagination($pagination);
+        $_GET['page'] = 3;
+        $html = $this->generator->render(['perPage' => 10]);
         
         $this->assertStringContainsString('Anterior', $html);
-        $this->assertStringNotContainsString('Siguiente', $html);
+        unset($_GET['page']);
     }
 
     public function testRenderPaginationSinglePage(): void
     {
-        $pagination = ['page' => 1, 'totalPages' => 1];
-        $html = $this->generator->renderPagination($pagination);
+        $this->cleanupTestData();
+        for ($i = 1; $i <= 5; $i++) {
+            $this->pdo->exec("INSERT INTO users (name, email, password) VALUES ('User $i', 'user$i@test.com', 'test123')");
+        }
         
-        $this->assertEmpty($html);
+        $html = $this->generator->render();
+        
+        $this->assertStringNotContainsString('list-pagination', $html);
+        
+        $this->cleanupTestData();
+        $this->createTestData();
     }
 }

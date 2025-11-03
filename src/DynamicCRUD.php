@@ -6,6 +6,7 @@ use DynamicCRUD\Cache\CacheStrategy;
 use DynamicCRUD\I18n\Translator;
 use DynamicCRUD\Template\TemplateEngine;
 use DynamicCRUD\Metadata\TableMetadata;
+use DynamicCRUD\Security\PermissionManager;
 use PDO;
 
 class DynamicCRUD
@@ -20,6 +21,7 @@ class DynamicCRUD
     private ?TemplateEngine $templateEngine = null;
     private TableMetadata $tableMetadata;
     private array $schema;
+    private PermissionManager $permissionManager;
 
     public function __construct(
         PDO $pdo, 
@@ -38,8 +40,15 @@ class DynamicCRUD
         $this->translator = new Translator($locale);
         $this->tableMetadata = new TableMetadata($pdo, $table);
         
+        $metadata = [
+            'permissions' => $this->tableMetadata->getPermissions(),
+            'row_level_security' => $this->tableMetadata->getRowLevelSecurity()
+        ];
+        $this->permissionManager = new PermissionManager($pdo, $table, $metadata);
+        
         $this->handler = new CRUDHandler($pdo, $table, $cache, $uploadDir);
         $this->handler->setTranslator($this->translator);
+        $this->handler->setPermissionManager($this->permissionManager);
         
         $analyzer = new SchemaAnalyzer($pdo, $cache);
         $this->schema = $analyzer->getTableSchema($table);
@@ -81,7 +90,7 @@ class DynamicCRUD
 
     public function renderList(array $options = []): string
     {
-        $generator = new ListGenerator($this->pdo, $this->table, $this->schema, $this->tableMetadata);
+        $generator = new ListGenerator($this->pdo, $this->table, $this->schema, $this->tableMetadata, $this->permissionManager);
         return $generator->render($options);
     }
     
@@ -219,5 +228,16 @@ class DynamicCRUD
     public function getSchema(): array
     {
         return $this->schema;
+    }
+
+    public function getPermissionManager(): PermissionManager
+    {
+        return $this->permissionManager;
+    }
+
+    public function setCurrentUser(?int $userId, ?string $role): self
+    {
+        $this->permissionManager->setCurrentUser($userId, $role);
+        return $this;
     }
 }

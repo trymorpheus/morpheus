@@ -292,8 +292,8 @@ class FormGeneratorTest extends TestCase
         $generator = new FormGenerator($this->schema, []);
         $html = $generator->render();
 
-        $this->assertStringContainsString('dynamiccrud.css', $html);
-        $this->assertStringContainsString('dynamiccrud.js', $html);
+        $this->assertStringContainsString('<style>', $html);
+        $this->assertStringContainsString('.dynamic-crud-form', $html);
     }
 
     public function testHtmlEscaping(): void

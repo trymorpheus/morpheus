@@ -4,6 +4,7 @@ namespace DynamicCRUD;
 
 use PDO;
 use DynamicCRUD\Metadata\TableMetadata;
+use DynamicCRUD\Security\PermissionManager;
 
 class ListGenerator
 {
@@ -11,13 +12,15 @@ class ListGenerator
     private string $table;
     private array $schema;
     private ?TableMetadata $tableMetadata;
+    private ?PermissionManager $permissionManager = null;
     
-    public function __construct(PDO $pdo, string $table, array $schema = [], ?TableMetadata $tableMetadata = null)
+    public function __construct(PDO $pdo, string $table, array $schema = [], ?TableMetadata $tableMetadata = null, ?PermissionManager $permissionManager = null)
     {
         $this->pdo = $pdo;
         $this->table = $table;
         $this->schema = $schema;
         $this->tableMetadata = $tableMetadata;
+        $this->permissionManager = $permissionManager;
     }
     
     public function render(array $options = []): string
@@ -75,6 +78,14 @@ class ListGenerator
             $columns = array_map(fn($col) => $col['name'], $this->schema['columns']);
         }
         
+        // Always include owner_field for permission checks
+        if ($this->permissionManager && $this->permissionManager->hasRowLevelSecurity()) {
+            $ownerField = $this->permissionManager->getRowLevelSecurity()['owner_field'] ?? 'user_id';
+            if (!in_array($ownerField, $columns)) {
+                $columns[] = $ownerField;
+            }
+        }
+        
         $select = implode(', ', $columns);
         $conditions = [];
         $params = [];
@@ -129,9 +140,9 @@ class ListGenerator
         $html = '<div class="list-search">' . "\n";
         $html .= '  <form method="GET" class="search-form">' . "\n";
         
-        // Preserve filter parameters
+        // Preserve filter parameters (including 'user' for demo)
         foreach ($_GET as $key => $value) {
-            if ($key !== 'search' && $key !== 'page') {
+            if ($key !== 'search' && $key !== 'page' && $key !== 'delete' && $key !== 'id') {
                 if (is_array($value)) {
                     foreach ($value as $v) {
                         $html .= sprintf('    <input type="hidden" name="%s[]" value="%s">', htmlspecialchars($key), htmlspecialchars($v)) . "\n";
@@ -164,9 +175,11 @@ class ListGenerator
         $html = '<div class="list-filters">' . "\n";
         $html .= '  <form method="GET" class="filters-form">' . "\n";
         
-        // Preserve search parameter
-        if (!empty($_GET['search'])) {
-            $html .= sprintf('    <input type="hidden" name="search" value="%s">', htmlspecialchars($_GET['search'])) . "\n";
+        // Preserve search and other parameters (including 'user' for demo)
+        foreach ($_GET as $key => $value) {
+            if ($key !== 'page' && !is_array($value)) {
+                $html .= sprintf('    <input type="hidden" name="%s" value="%s">', htmlspecialchars($key), htmlspecialchars($value)) . "\n";
+            }
         }
         
         foreach ($filters as $filter) {
@@ -238,18 +251,40 @@ class ListGenerator
             
             if (!empty($actions)) {
                 $html .= '      <td>' . "\n";
-                $pk = $this->schema['primary_key'];
-                $id = $record[$pk] ?? $record['id'];
+                $pk = $this->schema['primary_key'] ?? 'id';
+                $id = $record[$pk] ?? $record['id'] ?? null;
+                
+                if ($id === null) {
+                    $html .= "      </td>\n";
+                    continue;
+                }
+                
+                $actionButtons = [];
+                
+                // Preserve query parameters in action links
+                $queryParams = $_GET;
+                unset($queryParams['id'], $queryParams['delete'], $queryParams['view']);
+                $queryString = http_build_query($queryParams);
+                $separator = $queryString ? '&' : '';
                 
                 foreach ($actions as $action) {
                     if ($action === 'edit') {
-                        $html .= sprintf('        <a href="?id=%s">Editar</a> ', $id);
+                        if (!$this->permissionManager || $this->permissionManager->canUpdate($record)) {
+                            $actionButtons[] = sprintf('<a href="?%sid=%s" class="action-edit">✏️ Editar</a>', $queryString . $separator, $id);
+                        }
                     } elseif ($action === 'delete') {
-                        $html .= sprintf('        <a href="?delete=%s" onclick="return confirm(\'¿Eliminar?\')">Eliminar</a>', $id);
+                        if (!$this->permissionManager || $this->permissionManager->canDelete($record)) {
+                            $actionButtons[] = sprintf('<a href="?%sdelete=%s" class="action-delete" onclick="return confirm(\'¿Eliminar?\')">🗑️ Eliminar</a>', $queryString . $separator, $id);
+                        }
+                    } elseif ($action === 'view') {
+                        if (!$this->permissionManager || $this->permissionManager->canRead($record)) {
+                            $actionButtons[] = sprintf('<a href="?%sview=%s" class="action-view">👁️ Ver</a>', $queryString . $separator, $id);
+                        }
                     }
                 }
                 
-                $html .= "\n      </td>\n";
+                $html .= '        ' . implode(' ', $actionButtons) . "\n";
+                $html .= "      </td>\n";
             }
             
             $html .= '    </tr>' . "\n";

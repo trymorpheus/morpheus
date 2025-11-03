@@ -5,6 +5,7 @@ namespace DynamicCRUD;
 use PDO;
 use DynamicCRUD\Cache\CacheStrategy;
 use DynamicCRUD\I18n\Translator;
+use DynamicCRUD\Security\PermissionManager;
 
 class CRUDHandler
 {
@@ -20,6 +21,7 @@ class CRUDHandler
     private array $virtualFields = [];
     private ?Translator $translator = null;
     private $tableMetadata = null;
+    private ?PermissionManager $permissionManager = null;
 
     public function __construct(PDO $pdo, string $table, ?CacheStrategy $cache = null, ?string $uploadDir = null)
     {
@@ -58,6 +60,24 @@ class CRUDHandler
         if (!$this->security->validateCsrfToken($csrfToken)) {
             $error = $this->translator ? $this->translator->t('error.csrf_invalid') : 'Token CSRF inválido';
             return ['success' => false, 'error' => $error];
+        }
+        
+        $isUpdate = isset($_POST['id']) && $_POST['id'];
+        
+        // Check permissions
+        if ($this->permissionManager) {
+            if ($isUpdate) {
+                $record = $this->findById((int)$_POST['id']);
+                if (!$this->permissionManager->canUpdate($record)) {
+                    $error = $this->translator ? $this->translator->t('error.permission_denied') : 'No tienes permiso para realizar esta acción';
+                    return ['success' => false, 'error' => $error];
+                }
+            } else {
+                if (!$this->permissionManager->canCreate()) {
+                    $error = $this->translator ? $this->translator->t('error.permission_denied') : 'No tienes permiso para realizar esta acción';
+                    return ['success' => false, 'error' => $error];
+                }
+            }
         }
         
         try {
@@ -128,8 +148,6 @@ class CRUDHandler
         
         // Hook: afterValidate
         $data = $this->executeHook('afterValidate', $data);
-        
-        $isUpdate = isset($_POST['id']) && $_POST['id'];
         
         // Apply automatic behaviors
         $data = $this->applyAutomaticBehaviors($data, $isUpdate);
@@ -251,6 +269,14 @@ class CRUDHandler
 
     public function delete(int $id): bool
     {
+        // Check permissions
+        if ($this->permissionManager) {
+            $record = $this->findById($id);
+            if (!$this->permissionManager->canDelete($record)) {
+                throw new \Exception($this->translator ? $this->translator->t('error.permission_denied') : 'No tienes permiso para realizar esta acción');
+            }
+        }
+        
         try {
             $this->pdo->beginTransaction();
             
@@ -584,5 +610,16 @@ class CRUDHandler
         
         $stmt->execute();
         return $stmt->fetchColumn() > 0;
+    }
+    
+    public function setPermissionManager(PermissionManager $permissionManager): self
+    {
+        $this->permissionManager = $permissionManager;
+        return $this;
+    }
+    
+    public function getPermissionManager(): ?PermissionManager
+    {
+        return $this->permissionManager;
     }
 }
