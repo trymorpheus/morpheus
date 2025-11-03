@@ -156,6 +156,219 @@ ALTER TABLE contacts COMMENT='{"display_name": "Contact Forms", "icon": "📧", 
 -- Add table metadata to products table
 ALTER TABLE products COMMENT='{"display_name": "Products", "icon": "🛍️", "color": "#fd7e14", "list_view": {"columns": ["id", "name", "price", "category_id"], "default_sort": "name ASC", "per_page": 20, "searchable": ["name", "description"], "actions": ["edit", "delete"]}}';
 
+
+-- RBAC Example Setup
+-- This creates tables with permission metadata
+-- Uses blog_ prefix to avoid conflicts with other examples
+
+-- Blog posts table with RBAC metadata
+CREATE TABLE IF NOT EXISTS blog_posts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) UNIQUE,
+    content TEXT,
+    status ENUM('draft', 'published') DEFAULT 'draft',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) COMMENT = '{
+    "display_name": "Blog Posts",
+    "icon": "📝",
+    "permissions": {
+        "create": ["admin", "editor", "author"],
+        "read": ["*"],
+        "update": ["admin", "editor"],
+        "delete": ["admin"]
+    },
+    "row_level_security": {
+        "enabled": true,
+        "owner_field": "user_id",
+        "owner_can_edit": true,
+        "owner_can_delete": false
+    },
+    "behaviors": {
+        "timestamps": {
+            "created_at": "created_at",
+            "updated_at": "updated_at"
+        },
+        "sluggable": {
+            "source": "title",
+            "target": "slug",
+            "unique": true
+        }
+    },
+    "list_view": {
+        "columns": ["id", "title", "status", "created_at"],
+        "searchable": ["title", "content"],
+        "per_page": 20
+    }
+}';
+
+-- Blog users table
+CREATE TABLE IF NOT EXISTS blog_users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role ENUM('admin', 'editor', 'author', 'user', 'guest') DEFAULT 'user',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) COMMENT = '{
+    "display_name": "Users",
+    "icon": "👤",
+    "permissions": {
+        "create": ["admin"],
+        "read": ["admin", "editor"],
+        "update": ["admin"],
+        "delete": ["admin"]
+    }
+}';
+
+-- Blog comments table with row-level security
+CREATE TABLE IF NOT EXISTS blog_comments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    post_id INT NOT NULL,
+    user_id INT NOT NULL,
+    content TEXT NOT NULL,
+    approved BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (post_id) REFERENCES blog_posts(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES blog_users(id) ON DELETE CASCADE
+) COMMENT = '{
+    "display_name": "Comments",
+    "icon": "💬",
+    "permissions": {
+        "create": ["admin", "editor", "author", "user"],
+        "read": ["*"],
+        "update": ["admin", "editor"],
+        "delete": ["admin", "editor"]
+    },
+    "row_level_security": {
+        "enabled": true,
+        "owner_field": "user_id",
+        "owner_can_edit": true,
+        "owner_can_delete": true
+    }
+}';
+
+-- Sample data
+INSERT INTO blog_users (name, email, password, role) VALUES
+('Admin User', 'admin@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin'),
+('Editor User', 'editor@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'editor'),
+('Author User', 'author@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'author'),
+('Regular User', 'user@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'user')
+ON DUPLICATE KEY UPDATE id=id;
+
+INSERT INTO blog_posts (user_id, title, content, status) VALUES
+(1, 'Welcome to the Blog', 'This is the first post', 'published'),
+(2, 'Editor Post', 'Written by editor', 'published'),
+(3, 'Author Post', 'Written by author', 'draft')
+ON DUPLICATE KEY UPDATE id=id;
+
+
+-- Authentication Example Setup
+-- Run this SQL to set up the authentication example
+
+-- Create users table with authentication metadata
+DROP TABLE IF EXISTS auth_users;
+
+CREATE TABLE auth_users (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(50) DEFAULT 'user',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) COMMENT = '{
+    "display_name": "Users",
+    "icon": "👤",
+    "authentication": {
+        "enabled": true,
+        "identifier_field": "email",
+        "password_field": "password",
+        "registration": {
+            "enabled": true,
+            "auto_login": true,
+            "default_role": "user",
+            "required_fields": ["name", "email", "password"]
+        },
+        "login": {
+            "enabled": true,
+            "remember_me": true,
+            "max_attempts": 5,
+            "lockout_duration": 900,
+            "session_lifetime": 7200
+        }
+    },
+    "permissions": {
+        "create": ["guest"],
+        "read": ["owner", "admin"],
+        "update": ["owner", "admin"],
+        "delete": ["admin"]
+    },
+    "row_level_security": {
+        "enabled": true,
+        "owner_field": "id",
+        "owner_can_edit": true,
+        "owner_can_delete": false
+    }
+}';
+
+-- Insert a test admin user (password: admin12345)
+INSERT INTO auth_users (name, email, password, role) VALUES 
+('Admin User', 'admin@example.com', '$2y$12$EkzVHPA16c10XIEtF/Mx4ugRJGli0rh5CapMB6gmW5jzHvqGqZfFi', 'admin');
+
+-- Insert a test regular user (password: user12345)
+INSERT INTO auth_users (name, email, password, role) VALUES 
+('Regular User', 'user@example.com', '$2y$12$Oj1SrtKt4A4iHO40LL6GBu5k134Lhd7bCLlIEbtlHACpNZEOtGF3W', 'user');
+
+
+-- Soft Deletes Example Setup
+-- Run this SQL to set up the soft deletes example
+
+-- Create posts table with soft deletes
+DROP TABLE IF EXISTS soft_posts;
+
+CREATE TABLE soft_posts (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(255) NOT NULL,
+    content TEXT,
+    author VARCHAR(100),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP NULL DEFAULT NULL
+) COMMENT = '{
+    "display_name": "Posts (Soft Deletes)",
+    "icon": "📝",
+    "description": "Posts with soft delete support",
+    "behaviors": {
+        "soft_deletes": {
+            "enabled": true,
+            "column": "deleted_at"
+        },
+        "timestamps": {
+            "created_at": "created_at",
+            "updated_at": "updated_at"
+        }
+    },
+    "list_view": {
+        "columns": ["id", "title", "author", "created_at", "deleted_at"],
+        "searchable": ["title", "content", "author"],
+        "per_page": 10
+    }
+}';
+
+-- Insert sample posts
+INSERT INTO soft_posts (title, content, author) VALUES
+('First Post', 'This is the first post content', 'John Doe'),
+('Second Post', 'This is the second post content', 'Jane Smith'),
+('Third Post', 'This is the third post content', 'Bob Johnson'),
+('Fourth Post', 'This is the fourth post content', 'Alice Williams'),
+('Fifth Post', 'This is the fifth post content', 'Charlie Brown');
+
+-- Soft delete one post for testing
+UPDATE soft_posts SET deleted_at = NOW() WHERE id = 3;
+
+
 COMMIT;
 
 SELECT 'Database setup completed successfully!' as message;
