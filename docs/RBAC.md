@@ -1,13 +1,27 @@
-# RBAC (Role-Based Access Control) Guide
+# RBAC & Authentication Guide
 
 **DynamicCRUD v2.1+**
 
 ## Overview
 
-DynamicCRUD includes a powerful RBAC system that allows you to control access to CRUD operations based on user roles. The system supports both **table-level permissions** (who can perform actions on a table) and **row-level security** (users can only access their own records).
+DynamicCRUD includes a complete authentication and authorization system:
+
+- **Authentication** - User registration, login, logout with rate limiting
+- **RBAC** - Role-Based Access Control for CRUD operations
+- **Table-Level Permissions** - Control who can perform actions on a table
+- **Row-Level Security** - Users can only access their own records
+- **Metadata-Driven** - Configure everything via table comments
 
 ## Key Features
 
+### Authentication
+✅ **User Registration** - With auto-login and default role assignment  
+✅ **Secure Login** - Password hashing with bcrypt  
+✅ **Rate Limiting** - 5 attempts max, 15-minute lockout  
+✅ **Session Management** - Secure sessions with remember me  
+✅ **CSRF Protection** - Built-in token validation
+
+### Authorization (RBAC)
 ✅ **Table-Level Permissions** - Control create, read, update, delete by role  
 ✅ **Row-Level Security** - Users can only edit/delete their own records  
 ✅ **Zero Configuration** - Define permissions in table metadata  
@@ -19,7 +33,122 @@ DynamicCRUD includes a powerful RBAC system that allows you to control access to
 
 ## Quick Start
 
-### 1. Define Permissions in Table Metadata
+### 1. Setup Authentication Table
+
+```sql
+CREATE TABLE users (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(50) DEFAULT 'user',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) COMMENT = '{
+    "display_name": "Users",
+    "icon": "👤",
+    "authentication": {
+        "enabled": true,
+        "identifier_field": "email",
+        "password_field": "password",
+        "registration": {
+            "enabled": true,
+            "auto_login": true,
+            "default_role": "user",
+            "required_fields": ["name", "email", "password"]
+        },
+        "login": {
+            "enabled": true,
+            "remember_me": true,
+            "max_attempts": 5,
+            "lockout_duration": 900,
+            "session_lifetime": 7200
+        }
+    },
+    "permissions": {
+        "create": ["guest"],
+        "read": ["owner", "admin"],
+        "update": ["owner", "admin"],
+        "delete": ["admin"]
+    },
+    "row_level_security": {
+        "enabled": true,
+        "owner_field": "id",
+        "owner_can_edit": true,
+        "owner_can_delete": false
+    }
+}';
+```
+
+### 2. Create Login/Register Pages
+
+**login.php:**
+```php
+<?php
+require 'vendor/autoload.php';
+use DynamicCRUD\DynamicCRUD;
+
+$pdo = new PDO('mysql:host=localhost;dbname=mydb', 'user', 'pass');
+$crud = new DynamicCRUD($pdo, 'users');
+$crud->enableAuthentication();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $result = $crud->handleAuthentication();
+    if ($result['success']) {
+        header('Location: dashboard.php');
+        exit;
+    }
+    $error = $result['error'];
+}
+
+echo $crud->renderLoginForm();
+?>
+```
+
+**register.php:**
+```php
+<?php
+require 'vendor/autoload.php';
+use DynamicCRUD\DynamicCRUD;
+
+$pdo = new PDO('mysql:host=localhost;dbname=mydb', 'user', 'pass');
+$crud = new DynamicCRUD($pdo, 'users');
+$crud->enableAuthentication();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $result = $crud->handleAuthentication();
+    if ($result['success']) {
+        header('Location: dashboard.php');
+        exit;
+    }
+    $error = $result['error'];
+}
+
+echo $crud->renderRegistrationForm();
+?>
+```
+
+**dashboard.php (protected page):**
+```php
+<?php
+session_start();
+require 'vendor/autoload.php';
+use DynamicCRUD\DynamicCRUD;
+
+$pdo = new PDO('mysql:host=localhost;dbname=mydb', 'user', 'pass');
+$crud = new DynamicCRUD($pdo, 'users');
+$crud->enableAuthentication();
+
+if (!$crud->isAuthenticated()) {
+    header('Location: login.php');
+    exit;
+}
+
+$user = $crud->getCurrentUser();
+echo "Welcome, {$user['name']}!";
+?>
+```
+
+### 3. Define Permissions in Table Metadata
 
 ```sql
 CREATE TABLE posts (
@@ -43,7 +172,7 @@ CREATE TABLE posts (
 }';
 ```
 
-### 2. Set Current User in Your Application
+### 4. Set Current User in Your Application
 
 ```php
 $crud = new DynamicCRUD($pdo, 'posts');
@@ -259,18 +388,136 @@ $crud->delete($id);
 
 ---
 
+## Authentication System
+
+### Configuration Options
+
+```json
+{
+  "authentication": {
+    "enabled": true,
+    "identifier_field": "email",
+    "password_field": "password",
+    "registration": {
+      "enabled": true,
+      "auto_login": true,
+      "default_role": "user",
+      "required_fields": ["name", "email", "password"]
+    },
+    "login": {
+      "enabled": true,
+      "remember_me": true,
+      "max_attempts": 5,
+      "lockout_duration": 900,
+      "session_lifetime": 7200
+    }
+  }
+}
+```
+
+### Authentication Methods
+
+```php
+$crud = new DynamicCRUD($pdo, 'users');
+$crud->enableAuthentication();
+
+// Render forms
+echo $crud->renderLoginForm();
+echo $crud->renderRegistrationForm();
+
+// Handle authentication
+$result = $crud->handleAuthentication();
+if ($result['success']) {
+    // Login/register successful
+    $user = $result['user'] ?? null;
+}
+
+// Check authentication status
+if ($crud->isAuthenticated()) {
+    $user = $crud->getCurrentUser();
+    echo "Welcome, {$user['name']}!";
+}
+
+// Logout
+$crud->logout();
+```
+
+### Rate Limiting
+
+Automatic rate limiting prevents brute force attacks:
+
+- **Max attempts**: 5 failed login attempts
+- **Lockout duration**: 900 seconds (15 minutes)
+- **Automatic reset**: After lockout period expires
+
+```php
+// Rate limiting is automatic
+$result = $crud->handleAuthentication();
+
+if (!$result['success']) {
+    // "Too many failed attempts. Try again later."
+    echo $result['error'];
+}
+```
+
+### Password Security
+
+- **Automatic hashing**: Passwords hashed with `password_hash()` (bcrypt)
+- **Secure verification**: Uses `password_verify()` for constant-time comparison
+- **No plaintext storage**: Passwords never stored in plain text
+
+```php
+// Registration automatically hashes passwords
+$crud->handleAuthentication(); // POST with action=register
+
+// Stored in database as:
+// $2y$12$EkzVHPA16c10XIEtF/Mx4ugRJGli0rh5CapMB6gmW5jzHvqGqZfFi
+```
+
+### Session Management
+
+```php
+// Sessions are automatically managed
+session_start(); // Required before using authentication
+
+// Session variables set on login:
+$_SESSION['user_id']    // User ID
+$_SESSION['user_role']  // User role
+$_SESSION['user_email'] // User email
+
+// Remember me (optional)
+// Extends session lifetime to 7200 seconds (2 hours)
+```
+
+---
+
 ## Integration with Authentication
 
-### Session-Based Auth
+### Using Built-in Authentication
 
 ```php
 session_start();
 
-// After login
+$crud = new DynamicCRUD($pdo, 'posts');
+$crud->enableAuthentication();
+
+// Authentication automatically sets current user
+if ($crud->isAuthenticated()) {
+    // User is logged in, permissions enforced
+    echo $crud->renderForm();
+}
+```
+
+### Using Custom Authentication
+
+```php
+session_start();
+
+// Your custom auth system
 $_SESSION['user_id'] = $user['id'];
 $_SESSION['user_role'] = $user['role'];
 
-// In CRUD pages
+// Set current user manually
 $crud = new DynamicCRUD($pdo, 'posts');
 $crud->setCurrentUser(
     $_SESSION['user_id'] ?? null,
@@ -592,6 +839,18 @@ echo '<a href="?edit=' . $id . '">Edit</a>';
 
 ## Examples
 
+### Authentication Examples
+
+See `examples/08-authentication/` for working examples:
+
+- **login.php** - Login form with rate limiting
+- **register.php** - Registration form with auto-login
+- **dashboard.php** - Protected page requiring authentication
+- **profile.php** - Edit profile with row-level security
+- **setup.sql** - Database setup with authentication metadata
+
+### RBAC Examples
+
 See `examples/07-rbac/` for working examples:
 
 - **basic-rbac.php** - Form with permission checks
@@ -619,11 +878,31 @@ Tables without permission metadata work as before (no restrictions).
 
 ---
 
+## Testing
+
+DynamicCRUD includes comprehensive tests for authentication:
+
+```bash
+# Run authentication tests
+php vendor/phpunit/phpunit/phpunit tests/AuthenticationManagerTest.php
+
+# 16 tests covering:
+# - User registration
+# - Password hashing
+# - Login/logout
+# - Session management
+# - Rate limiting
+# - Field filtering (csrf_token, action)
+```
+
+---
+
 ## Related Documentation
 
 - [Table Metadata Guide](TABLE_METADATA.md) - Complete metadata options
 - [Hooks System](HOOKS.md) - Custom logic with hooks
 - [Audit Logging](../README.md#audit-logging) - Track who changed what
+- [Examples](../examples/) - Working code examples
 
 ---
 

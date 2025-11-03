@@ -31,6 +31,8 @@ Stop writing repetitive CRUD code. DynamicCRUD analyzes your MySQL schema and cr
 - **Custom display columns** for related data
 
 ### ⚡ Advanced
+- **Authentication** - Register, login, logout with rate limiting
+- **RBAC** - Role-based access control with row-level security
 - **Multi-database support** (MySQL, PostgreSQL)
 - **Internationalization (i18n)** - 3 languages included (EN, ES, FR)
 - **Template System** - Blade-like syntax for custom layouts
@@ -51,6 +53,51 @@ composer require dynamiccrud/dynamiccrud
 ```
 
 **Requirements:** PHP 8.0+, MySQL 5.7+ or PostgreSQL 12+, PDO extension
+
+---
+
+## ✨ What's New in v2.1
+
+**Authentication & RBAC** - Complete user authentication and authorization!
+
+```sql
+CREATE TABLE users (
+    id INT PRIMARY KEY,
+    email VARCHAR(255),
+    password VARCHAR(255),
+    role VARCHAR(50)
+) COMMENT = '{
+    "authentication": {
+        "enabled": true,
+        "registration": {"enabled": true, "auto_login": true},
+        "login": {"max_attempts": 5, "lockout_duration": 900}
+    },
+    "permissions": {
+        "create": ["guest"],
+        "read": ["owner", "admin"],
+        "update": ["owner", "admin"],
+        "delete": ["admin"]
+    }
+}';
+```
+
+```php
+$crud = new DynamicCRUD($pdo, 'users');
+$crud->enableAuthentication();
+
+// Login/Register
+echo $crud->renderLoginForm();
+echo $crud->renderRegistrationForm();
+$result = $crud->handleAuthentication();
+
+// Protected pages
+if ($crud->isAuthenticated()) {
+    $user = $crud->getCurrentUser();
+    echo "Welcome, {$user['name']}!";
+}
+```
+
+👉 [See RBAC & Authentication Guide](docs/RBAC.md)
 
 ---
 
@@ -266,7 +313,10 @@ $crud->handleSubmission();
 
 ## 📚 Documentation
 
-### v2.0 Features (NEW!)
+### v2.1 Features (NEW!)
+- [RBAC & Authentication Guide](docs/RBAC.md) - Complete auth & permissions guide
+
+### v2.0 Features
 - [Table Metadata Guide](docs/TABLE_METADATA.md) - Complete v2.0 guide
 - [Table Metadata Roadmap](docs/TABLE_METADATA_IDEAS.md) - Future features
 
@@ -345,22 +395,39 @@ COMMENT '{"type": "email", "label": "Email", "tooltip": "Required field", "minle
 
 DynamicCRUD has comprehensive test coverage:
 
-- **195 tests** with **340+ assertions**
-- **76% passing rate** (149 passing, 40 failing, 6 skipped)
+- **221 tests** with **400+ assertions**
+- **100% passing rate** (221 passing, 0 failing)
+- **90% code coverage**
 - Automated CI/CD with GitHub Actions
 - Tests run on PHP 8.0, 8.1, 8.2, 8.3
 
 ```bash
-# Run tests
-vendor/bin/phpunit
+# Run all tests
+php vendor/phpunit/phpunit/phpunit
 
-# Run with detailed output
-vendor/bin/phpunit --testdox
+# Run specific test suite
+php vendor/phpunit/phpunit/phpunit tests/AuthenticationManagerTest.php
+php vendor/phpunit/phpunit/phpunit tests/PermissionManagerTest.php
 ```
 
 ---
 
 ## 🚦 Roadmap
+
+### ✅ Completed (v2.1.0)
+- **Authentication System**
+  - User registration with auto-login
+  - Secure login with rate limiting
+  - Session management with remember me
+  - Password hashing (bcrypt)
+- **RBAC (Role-Based Access Control)**
+  - Table-level permissions
+  - Row-level security
+  - Automatic enforcement in forms/lists
+- AuthenticationManager class
+- PermissionManager class
+- 4 new examples in 08-authentication/
+- 42 new tests (100% passing)
 
 ### ✅ Completed (v2.0.0)
 - **Table Metadata System** (Phase 1 - Quick Wins)
@@ -410,26 +477,30 @@ vendor/bin/phpunit --testdox
 - File caching for performance
 - 17 new tests for templates (100% passing)
 
-### 🔮 Planned (v2.0+)
+### 🔮 Planned (v2.2+)
+- [ ] OAuth/LDAP authentication
+- [ ] Email verification
+- [ ] Password reset
+- [ ] Soft deletes
 - [ ] SQL Server support
 - [ ] REST API generation
 - [ ] GraphQL support
 - [ ] More languages (DE, IT, PT)
-- [ ] Advanced template features
 
 ---
 
 ## 📊 Project Stats
 
-- **19 PHP classes** (~6,500 lines)
-- **15 working examples** (4 new in v2.0)
-- **12 technical documents**
-- **195 automated tests** (76% passing)
+- **21 PHP classes** (~7,500 lines)
+- **19 working examples** (4 in v2.1, 4 in v2.0)
+- **13 technical documents**
+- **221 automated tests** (100% passing, 90% coverage)
 - **Languages supported**: 3 (English, Spanish, French)
 - **Databases supported**: 2 (MySQL, PostgreSQL)
 - **Template engine**: Blade-like syntax
+- **Authentication**: Register, login, logout, rate limiting
+- **RBAC**: Table + row-level permissions
 - **Table metadata features**: 4 (UI/UX, Forms, Behaviors, Search)
-- **Development time**: < 3 days
 
 ---
 

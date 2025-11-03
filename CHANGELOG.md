@@ -7,6 +7,91 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.1.0] - 2024-12-XX
+
+### 🎉 Authentication & RBAC Release
+
+Complete authentication and authorization system with metadata-driven configuration.
+
+### ✨ Added
+
+#### Authentication System
+- **AuthenticationManager** class for user authentication
+- User registration with automatic password hashing (bcrypt)
+- Secure login with password verification
+- Rate limiting (5 attempts, 15-minute lockout)
+- Session management with remember me support
+- Logout functionality with session cleanup
+- CSRF token filtering in registration
+- Auto-login after registration (configurable)
+
+#### RBAC (Role-Based Access Control)
+- **PermissionManager** class for authorization
+- Table-level permissions (create, read, update, delete)
+- Row-level security (owner-based access control)
+- Wildcard permissions (`*` for public access)
+- Permission checks in forms, lists, and handlers
+- Dynamic action button filtering based on permissions
+- Owner field auto-inclusion in SELECT queries
+
+#### Integration
+- `enableAuthentication()` method in DynamicCRUD
+- `renderLoginForm()` and `renderRegistrationForm()` methods
+- `handleAuthentication()` for login/register processing
+- `isAuthenticated()` and `getCurrentUser()` methods
+- `setCurrentUser()` for manual authentication integration
+- Automatic permission enforcement in CRUD operations
+
+#### Examples
+- `examples/08-authentication/` - Complete authentication examples
+  - `login.php` - Login form with test credentials
+  - `register.php` - Registration form
+  - `dashboard.php` - Protected page
+  - `profile.php` - Edit profile with permissions
+  - `setup.sql` - Database setup with test users
+- `examples/07-rbac/` - RBAC examples
+  - `basic-rbac.php` - Form with permission checks
+  - `list-with-permissions.php` - List with dynamic buttons
+  - `setup.sql` - Database setup with permissions
+
+#### Testing
+- **AuthenticationManagerTest** - 16 tests (100% passing)
+  - Registration tests (5)
+  - Login tests (4)
+  - Session tests (3)
+  - Security tests (4)
+- **PermissionManagerTest** - 9 tests (100% passing)
+- **TableMetadataTest** - 17 tests (100% passing)
+- All existing tests updated and passing (221/221)
+
+#### Documentation
+- Updated `docs/RBAC.md` with authentication guide
+- Added authentication configuration examples
+- Added rate limiting documentation
+- Added session management guide
+
+### 🐛 Fixed
+- CSRF token being inserted into database during registration
+- Action field being inserted into database during registration
+- Password hashes not matching in test data
+- ListGenerator not including owner_field in SELECT queries
+- Permission checks failing due to missing owner data
+
+### 🔧 Changed
+- `docs/RBAC.md` renamed to "RBAC & Authentication Guide"
+- Enhanced metadata support for authentication configuration
+- Improved error messages for authentication failures
+
+### 📊 Statistics
+- **2 new classes** (AuthenticationManager, enhanced PermissionManager)
+- **4 new examples** in 08-authentication/
+- **42 new tests** (16 auth + 9 permissions + 17 metadata)
+- **221 total tests** (100% passing, 90% coverage)
+- **Authentication features**: 8 (register, login, logout, rate limiting, sessions, CSRF, remember me, auto-login)
+- **RBAC features**: 6 (table permissions, row-level security, wildcards, owner checks, dynamic buttons, auto-enforcement)
+
+---
+
 ## [2.0.0] - 2024-12-XX
 
 ### 🎉 Major Release - Table Metadata System
@@ -192,6 +277,7 @@ This release introduces **table-level metadata** - a revolutionary way to config
 
 | Version | Release Date | Key Features |
 |---------|--------------|--------------|
+| **2.1.0** | 2024-12-XX | Authentication & RBAC |
 | **2.0.0** | 2024-12-XX | Table Metadata System (Phase 1) |
 | 1.5.0 | 2024-11-XX | Template System |
 | 1.4.0 | 2024-11-XX | Internationalization (i18n) |
@@ -230,10 +316,12 @@ $crud->renderList();  // Now uses metadata
 
 ## Roadmap
 
-### Phase 2: Security & Validation (v2.1) - Planned
-- Permissions & Security (RBAC, soft deletes, row-level)
-- Validation & Rules (unique_together, conditional)
-- Notifications (email, webhooks)
+### Phase 2: Security & Validation (v2.1) - ✅ COMPLETED
+- ✅ Permissions & Security (RBAC, row-level security)
+- ✅ Authentication (register, login, rate limiting)
+- [ ] Soft deletes
+- [ ] Validation & Rules (unique_together, conditional)
+- [ ] Notifications (email, webhooks)
 
 ### Phase 3: Advanced Features (v2.2) - Planned
 - Versioning & Audit enhancements

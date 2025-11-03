@@ -7,6 +7,7 @@ use DynamicCRUD\I18n\Translator;
 use DynamicCRUD\Template\TemplateEngine;
 use DynamicCRUD\Metadata\TableMetadata;
 use DynamicCRUD\Security\PermissionManager;
+use DynamicCRUD\Security\AuthenticationManager;
 use PDO;
 
 class DynamicCRUD
@@ -22,6 +23,7 @@ class DynamicCRUD
     private TableMetadata $tableMetadata;
     private array $schema;
     private PermissionManager $permissionManager;
+    private ?AuthenticationManager $authManager = null;
 
     public function __construct(
         PDO $pdo, 
@@ -239,5 +241,128 @@ class DynamicCRUD
     {
         $this->permissionManager->setCurrentUser($userId, $role);
         return $this;
+    }
+
+    public function enableAuthentication(): self
+    {
+        if ($this->tableMetadata->hasAuthentication()) {
+            $authConfig = $this->tableMetadata->getAuthentication();
+            $this->authManager = new AuthenticationManager($this->pdo, $this->table, $authConfig);
+        }
+        
+        return $this;
+    }
+
+    public function renderRegistrationForm(): string
+    {
+        if (!$this->authManager) {
+            throw new \Exception('Authentication not enabled. Call enableAuthentication() first.');
+        }
+        
+        $security = new SecurityModule();
+        $requiredFields = $this->tableMetadata->getAuthentication()['registration']['required_fields'] ?? ['name', 'email', 'password'];
+        
+        $html = '<div class="auth-container">' . "\n";
+        $html .= '<h2>Register</h2>' . "\n";
+        $html .= '<form method="POST" class="auth-form">' . "\n";
+        $html .= '<input type="hidden" name="csrf_token" value="' . $security->generateCsrfToken() . '">' . "\n";
+        
+        foreach ($requiredFields as $field) {
+            $type = $field === 'password' ? 'password' : ($field === 'email' ? 'email' : 'text');
+            $label = ucfirst($field);
+            
+            $html .= '<div class="form-group">' . "\n";
+            $html .= "  <label for=\"$field\">$label</label>" . "\n";
+            $html .= "  <input type=\"$type\" name=\"$field\" id=\"$field\" required>" . "\n";
+            $html .= '</div>' . "\n";
+        }
+        
+        $html .= '<button type="submit" name="action" value="register">Register</button>' . "\n";
+        $html .= '</form>' . "\n";
+        $html .= '</div>' . "\n";
+        
+        return $html;
+    }
+
+    public function renderLoginForm(): string
+    {
+        if (!$this->authManager) {
+            throw new \Exception('Authentication not enabled. Call enableAuthentication() first.');
+        }
+        
+        $security = new SecurityModule();
+        $identifierField = $this->tableMetadata->getAuthentication()['identifier_field'] ?? 'email';
+        $rememberMe = $this->tableMetadata->getAuthentication()['login']['remember_me'] ?? false;
+        
+        $html = '<div class="auth-container">' . "\n";
+        $html .= '<h2>Login</h2>' . "\n";
+        $html .= '<form method="POST" class="auth-form">' . "\n";
+        $html .= '<input type="hidden" name="csrf_token" value="' . $security->generateCsrfToken() . '">' . "\n";
+        
+        $html .= '<div class="form-group">' . "\n";
+        $html .= "  <label for=\"$identifierField\">" . ucfirst($identifierField) . "</label>" . "\n";
+        $html .= "  <input type=\"email\" name=\"$identifierField\" id=\"$identifierField\" required>" . "\n";
+        $html .= '</div>' . "\n";
+        
+        $html .= '<div class="form-group">' . "\n";
+        $html .= '  <label for="password">Password</label>' . "\n";
+        $html .= '  <input type="password" name="password" id="password" required>' . "\n";
+        $html .= '</div>' . "\n";
+        
+        if ($rememberMe) {
+            $html .= '<div class="form-group">' . "\n";
+            $html .= '  <label><input type="checkbox" name="remember" value="1"> Remember me</label>' . "\n";
+            $html .= '</div>' . "\n";
+        }
+        
+        $html .= '<button type="submit" name="action" value="login">Login</button>' . "\n";
+        $html .= '</form>' . "\n";
+        $html .= '</div>' . "\n";
+        
+        return $html;
+    }
+
+    public function handleAuthentication(): array
+    {
+        if (!$this->authManager) {
+            return ['success' => false, 'error' => 'Authentication not enabled'];
+        }
+        
+        $security = new SecurityModule();
+        if (!$security->validateCsrfToken($_POST['csrf_token'] ?? '')) {
+            return ['success' => false, 'error' => 'Invalid CSRF token'];
+        }
+        
+        $action = $_POST['action'] ?? '';
+        
+        if ($action === 'register') {
+            return $this->authManager->register($_POST);
+        }
+        
+        if ($action === 'login') {
+            $identifierField = $this->tableMetadata->getAuthentication()['identifier_field'] ?? 'email';
+            return $this->authManager->login(
+                $_POST[$identifierField] ?? '',
+                $_POST['password'] ?? '',
+                isset($_POST['remember'])
+            );
+        }
+        
+        if ($action === 'logout') {
+            $this->authManager->logout();
+            return ['success' => true];
+        }
+        
+        return ['success' => false, 'error' => 'Invalid action'];
+    }
+
+    public function getCurrentUser(): ?array
+    {
+        return $this->authManager?->getCurrentUser();
+    }
+
+    public function isAuthenticated(): bool
+    {
+        return $this->authManager?->isAuthenticated() ?? false;
     }
 }

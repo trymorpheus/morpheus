@@ -200,4 +200,28 @@ class TableMetadata
         return isset($this->metadata['row_level_security']) && 
                ($this->metadata['row_level_security']['enabled'] ?? false);
     }
+
+    // Authentication
+    public function getAuthentication(): ?array
+    {
+        return $this->metadata['authentication'] ?? null;
+    }
+
+    public function hasAuthentication(): bool
+    {
+        return isset($this->metadata['authentication']) && 
+               ($this->metadata['authentication']['enabled'] ?? false);
+    }
+
+    public function isRegistrationEnabled(): bool
+    {
+        return $this->hasAuthentication() && 
+               ($this->metadata['authentication']['registration']['enabled'] ?? false);
+    }
+
+    public function isLoginEnabled(): bool
+    {
+        return $this->hasAuthentication() && 
+               ($this->metadata['authentication']['login']['enabled'] ?? false);
+    }
 }
