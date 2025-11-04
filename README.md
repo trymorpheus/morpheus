@@ -68,6 +68,43 @@ php bin/dynamiccrud generate:metadata users
 
 ---
 
+## ✨ What's New in v3.1
+
+**Admin Panel Generator** - Complete admin panel with navigation, dashboard, and integrated CRUD!
+
+```php
+use DynamicCRUD\Admin\AdminPanel;
+
+$pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
+
+$admin = new AdminPanel($pdo, [
+    'title' => 'Mi Admin Panel',
+    'theme' => [
+        'primary' => '#667eea',
+        'sidebar_bg' => '#2d3748',
+        'sidebar_text' => '#e2e8f0'
+    ]
+]);
+
+$admin->addTable('users', ['icon' => '👥', 'label' => 'Usuarios']);
+$admin->addTable('products', ['icon' => '📦', 'label' => 'Productos']);
+$admin->addTable('orders', ['icon' => '🛒', 'label' => 'Pedidos']);
+
+echo $admin->render(); // Full admin panel!
+```
+
+**Features:**
+- 📊 **Dashboard** - Automatic stats cards for all tables
+- 🎨 **Sidebar Navigation** - Customizable menu with icons
+- 🍞 **Breadcrumbs** - Contextual navigation
+- 👤 **User Menu** - Avatar and user info
+- 📱 **Responsive** - Mobile-first design
+- 🔗 **Full Integration** - Uses DynamicCRUD, ListGenerator, FormGenerator
+
+👉 [See Admin Panel Example](examples/18-admin-panel/)
+
+---
+
 ## ✨ What's New in v3.0
 
 **REST API Generator** - Automatic REST API generation with JWT authentication!
@@ -603,7 +640,11 @@ $crud->handleSubmission();
 
 ## 📚 Documentation
 
-### v3.0 Features (NEW!)
+### v3.1 Features (NEW!)
+- Admin Panel Generator - Complete admin panel with dashboard
+- Sidebar Navigation - Customizable menu with icons
+
+### v3.0 Features
 - REST API Generator - Automatic REST API with JWT auth
 - OpenAPI/Swagger - Auto-generated API documentation
 
@@ -862,7 +903,19 @@ php vendor/phpunit/phpunit/phpunit tests/SoftDeletesTest.php
 - 1 new example (REST API tester)
 - 7 new tests (100% passing)
 
-### 🔮 Planned (v3.1+)
+### ✅ Completed (v3.1.0)
+- **Admin Panel Generator**
+  - Complete admin panel with sidebar navigation
+  - Dashboard with automatic stats
+  - Breadcrumbs for contextual navigation
+  - User menu with avatar
+  - Responsive mobile-first design
+  - Full integration with DynamicCRUD components
+- AdminPanel class
+- 1 new example (complete admin panel)
+- 12 new tests (100% passing)
+
+### 🔮 Planned (v3.2+)
 - [ ] GraphQL support
 - [ ] OAuth/LDAP authentication
 - [ ] Email verification
@@ -873,10 +926,10 @@ php vendor/phpunit/phpunit/phpunit tests/SoftDeletesTest.php
 
 ## 📊 Project Stats
 
-- **36 PHP classes** (~12,500 lines)
-- **35 working examples** (1 in v3.0, 2 in v2.9, 1 in v2.8, 1 in v2.7, 2 in v2.5, 2 in v2.3, 4 in v2.2, 6 in v2.1, 4 in v2.0)
+- **37 PHP classes** (~13,000 lines)
+- **36 working examples** (1 in v3.1, 1 in v3.0, 2 in v2.9, 1 in v2.8, 1 in v2.7, 2 in v2.5, 2 in v2.3, 4 in v2.2, 6 in v2.1, 4 in v2.0)
 - **21 technical documents**
-- **316 automated tests** (100% passing, 90% coverage)
+- **328 automated tests** (100% passing, 90% coverage)
 - **19 CLI commands**
 - **Languages supported**: 3 (English, Spanish, French)
 - **Databases supported**: 2 (MySQL, PostgreSQL)
@@ -891,6 +944,7 @@ php vendor/phpunit/phpunit/phpunit tests/SoftDeletesTest.php
 - **File Upload**: Single + multiple with drag & drop
 - **Theming**: Global config with CSS variables
 - **REST API**: Automatic generation with JWT auth
+- **Admin Panel**: Complete admin interface with dashboard
 
 ---
 
