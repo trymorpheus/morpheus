@@ -5,759 +5,329 @@ All notable changes to DynamicCRUD will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
----
-
-## [2.8.0] - 2025-01-XX
-
-### 🎉 Global Config Foundation Release
-
-Centralized configuration storage for application-wide settings.
-
-### ✨ Added
-
-#### Global Metadata System
-- **GlobalMetadata** class for centralized configuration
-- **JSON storage** in `_dynamiccrud_config` table
-- **Automatic caching** for performance
-- **Dot notation** for hierarchical keys
-- **Unicode support** for international characters
-
-#### CLI Commands
-- **config:get** - Get global configuration value
-- **config:set** - Set global configuration value
-- **config:list** - List all global configuration
-- **config:delete** - Delete global configuration key
-
-#### Core Features
-- get(), set(), has(), delete(), all(), clear() methods
-- Automatic table creation on first use
-- In-memory caching for repeated reads
-- JSON encoding/decoding with proper flags
-- Support for complex nested structures
-
-#### Examples
-- `examples/14-global-config/basic-usage.php` - Interactive web interface
-- `examples/14-global-config/README.md` - Complete usage guide
-
-#### Testing
-- **GlobalMetadataTest** - 11 tests (100% passing)
-  - Set and get tests (3)
-  - Has and delete tests (2)
-  - All and clear tests (2)
-  - Caching test (1)
-  - Update test (1)
-  - Unicode test (1)
-  - Complex value test (1)
-- All existing tests passing (300/300)
-
-#### Documentation
-- `docs/GLOBAL_METADATA.md` - Complete global metadata guide
-- Use cases and examples
-- CLI and PHP usage
-- Security considerations
-- Performance benchmarks
-
-### 🔧 Changed
-- CLI Application registers 19 commands (4 new)
-- Enhanced help menu with Global Config section
-
-### 📊 Statistics
-- **1 new class** (GlobalMetadata)
-- **4 new CLI commands**
-- **1 new example directory** (14-global-config/)
-- **11 new tests** (100% passing)
-- **300 total tests** (100% passing, 90% coverage)
-- **19 total CLI commands**
-- **1 new document** (GLOBAL_METADATA.md)
-
----
-
-## [2.7.0] - 2025-01-XX
-
-### 🎉 SQL Dump & Import Release
-
-Export and import table structure and data with metadata preserved.
-
-### ✨ Added
-
-#### SQL Dump Features
-- **DumpSQLCommand** class for SQL export
-- **Full SQL dump** - Structure + data + metadata
-- **Structure only** - Table definition with comments (--structure-only)
-- **Data only** - INSERT statements (--data-only)
-- **Metadata preservation** - Table and column comments included
-- **Output to file** or console
-
-#### SQL Import Features
-- **ImportSQLCommand** class for SQL import
-- **Safe import** - Confirmation prompt before execution
-- **Force mode** - Skip confirmation with --force flag
-- **Transaction support** - DML statements in transactions
-- **DDL handling** - CREATE/DROP/ALTER outside transactions
-- **Error handling** - Rollback on failure
-
-#### CLI Commands
-- **dump:sql** - Export table structure and data to SQL
-- **import:sql** - Import SQL dump file
-
-#### Examples
-- `examples/13-sql-dump/README.md` - Complete SQL dump/import guide
-
-#### Testing
-- **DumpSQLCommandTest** - 3 tests (100% passing)
-  - Full dump test
-  - Structure only test
-  - Data only test
-- **ImportSQLCommandTest** - 1 test (100% passing)
-  - Import with force test
-- All existing tests passing (289/289)
-
-### 🔧 Changed
-- CLI Application registers 15 commands (2 new)
-- Enhanced help menu with SQL dump/import commands
-
-### 📊 Statistics
-- **2 new classes** (DumpSQLCommand, ImportSQLCommand)
-- **2 new CLI commands**
-- **1 new example directory** (13-sql-dump/)
-- **4 new tests** (100% passing)
-- **289 total tests** (100% passing, 90% coverage)
-- **15 total CLI commands**
-
----
-
-## [2.6.0] - 2025-01-XX
-
-### 🎉 Consolidation Release
-
-Improved documentation, guides, and developer experience.
-
-### ✨ Added
-
-#### Documentation
-- **QUICKSTART.md** - Get started in 5 minutes guide
-- **MIGRATION.md** - Complete migration guide for all versions
-- **BEST_PRACTICES.md** - Production-ready patterns and recommendations
-- **examples/README.md** - Comprehensive examples guide with learning path
-
-#### Quick Start Guide
-- 5-minute tutorial
-- Common use cases (admin panel, registration, export, import)
-- Next steps and troubleshooting
-- CLI tools overview
-
-#### Migration Guide
-- Upgrade instructions for v2.0 through v2.5
-- Breaking changes documentation
-- Version compatibility matrix
-- Common migration issues and solutions
-- Rollback instructions
-
-#### Best Practices
-- Security best practices (HTTPS, validation, rate limiting)
-- Performance optimization (caching, pagination, indexing)
-- Code organization patterns
-- Database design recommendations
-- Error handling strategies
-- Testing patterns
-- Deployment checklist
-- Maintenance procedures
-
-#### Examples Documentation
-- 30 examples organized by category
-- Learning path for beginners to advanced
-- Common patterns and troubleshooting
-- Database setup instructions
-
-### 🔧 Changed
-- Enhanced README.md with links to new guides
-- Improved documentation structure
-- Better organization of learning resources
-
-### 📊 Statistics
-- **19 technical documents** (3 new)
-- **30 working examples** (fully documented)
-- **285 automated tests** (100% passing)
-- **13 CLI commands**
-- **31 PHP classes**
-
----
-
-## [2.5.0] - 2025-01-XX
-
-### 🎉 Export/Import Release
-
-CSV export and import functionality with validation, preview, and error handling.
-
-### ✨ Added
-
-#### Export Features
-- **ExportManager** class for data export
-- **CSV export** with customizable columns and filters
-- **Download export** with proper headers
-- **Export to string** for programmatic use
-- WHERE clause support for filtered exports
-- ORDER BY and LIMIT support
-
-#### Import Features
-- **ImportManager** class for data import
-- **CSV import** with automatic validation
-- **Preview mode** - see what will be imported without committing
-- **Skip errors mode** - continue importing on validation errors
-- **Row-by-row validation** with detailed error messages
-- **Template generation** - create CSV templates from table schema
-
-#### CLI Commands
-- **export:csv** - Export table data to CSV file
-- **import:csv** - Import data from CSV with preview and error handling
-- **generate:template** - Generate CSV import template
-
-#### Web Examples
-- `examples/12-export-import/export.php` - Export interface with download
-- `examples/12-export-import/import.php` - Import interface with preview
-
-#### Testing
-- **ExportImportTest** - 5 tests (100% passing)
-- All existing tests passing (285/285)
-
-### 🔧 Changed
-- DynamicCRUD class now includes export(), import(), downloadExport(), generateImportTemplate() methods
-- CLI Application registers 13 commands (3 new)
-- PHP 8.4 compatibility - fixed fputcsv/str_getcsv deprecation warnings
-
-### 📊 Statistics
-- **2 new classes** (ExportManager, ImportManager)
-- **3 new CLI commands**
-- **2 new examples** in 12-export-import/
-- **5 new tests** (100% passing)
-- **285 total tests** (100% passing, 90% coverage)
-- **13 total CLI commands**
-
----
-
-## [2.4.0] - 2025-01-XX
-
-### 🎉 CLI Enhancements Release
-
-Powerful new CLI commands for webhook management, metadata operations, and database testing.
-
-### ✨ Added
-
-#### New CLI Commands
-- **test:connection** - Test database connectivity and display connection info
-- **webhook:configure** - Configure webhooks for tables from command line
-- **test:webhook** - Test webhook connectivity with real HTTP requests
-- **metadata:export** - Export table and column metadata to JSON file
-- **metadata:import** - Import metadata from JSON file for backup/migration
-
-#### CLI Improvements
-- Reorganized help menu with command categories
-- Better error messages and status indicators
-- SSL verification disabled for development webhooks
-- Support for command options (--output, --event)
-
-#### Testing
-- **CLICommandsTest** - 3 integration tests (100% passing)
-- All existing tests passing (280/280)
-
-#### Documentation
-- Updated CLI.md with 5 new commands
-- Added 2 new workflows (webhook setup, metadata migration)
-- Enhanced troubleshooting section
-
-### 🔧 Changed
-- CLI help output now organized by categories
-- Application.php registers 10 commands (5 new)
-
-### 📊 Statistics
-- **5 new CLI commands**
-- **3 new tests** (100% passing)
-- **280 total tests** (100% passing, 90% coverage)
-- **10 total CLI commands**
-
----
-
-## [2.3.0] - 2025-01-XX
-
-### 🎉 Notifications & Webhooks Release
-
-Automatic email notifications and webhook triggers on CRUD events.
-
-### ✨ Added
-
-#### Notifications System
-- **NotificationManager** class for email and webhook handling
-- **Email notifications** with template placeholders (`{{id}}`, `{{data.field}}`)
-- **Webhook triggers** with custom headers and methods (GET, POST, PUT, DELETE)
-- **Event-based triggers** (on_create, on_update, on_delete)
-- **Field-specific notifications** - Only notify when specific fields change
-- **Multiple recipients** - Send to multiple email addresses
-- **Multiple webhooks** - Trigger multiple endpoints per event
-- **Non-blocking execution** - Errors don't prevent CRUD operations
-- **Template placeholders** - Dynamic content in subject and body
-- **JSON payload** - Structured webhook data with event, table, id, data, timestamp
-
-#### Table Metadata Extensions
-- `hasNotifications()` method in TableMetadata
-- `getNotificationConfig()` method in TableMetadata
-- Support for `notifications` and `webhooks` in table COMMENT
-
-#### Integration
-- Automatic notification triggers in CRUDHandler after CRUD events
-- Email sent via PHP `mail()` function (customizable)
-- Webhooks called via cURL with 10-second timeout
-- Graceful error handling with @ suppression
-
-#### Examples
-- `examples/11-notifications/` - Complete notifications examples
-  - `email-notifications.php` - Email notifications on order creation/update
-  - `webhooks.php` - Webhook triggers on contact form submission
-  - `setup.sql` - Database setup with notif_ prefixed tables
-
-#### Testing
-- **NotificationManagerTest** - 7 tests (100% passing)
-  - Email notification tests (3)
-  - Webhook trigger tests (2)
-  - Edge case tests (2)
-- All existing tests passing (277/277)
-
-#### Documentation
-- `docs/NOTIFICATIONS.md` - Complete notifications guide
-- Email configuration examples
-- Webhook configuration with authentication
-- Security considerations
-- Testing with webhook.site
-- Custom email handler examples
-- Performance considerations (async processing)
-
-### 🔧 Changed
-- CRUDHandler now triggers notifications after afterCreate, afterUpdate, afterDelete hooks
-- NotificationManager instantiated only when table has notification config
-
-### 📊 Statistics
-- **1 new class** (NotificationManager)
-- **2 new examples** in 11-notifications/
-- **7 new tests** (100% passing)
-- **277 total tests** (100% passing, 90% coverage)
-- **2 new TableMetadata methods**
-- **Notification features**: 2 (email, webhooks)
-- **Event types**: 3 (on_create, on_update, on_delete)
-
----
-
-## [2.2.0] - 2025-01-XX
-
-### 🎉 Validation Rules & Business Logic Release
-
-Advanced validation rules and business logic configured entirely through table metadata.
-
-### ✨ Added
-
-#### Validation Rules
-- **ValidationRulesEngine** class for advanced validation
-- **unique_together** - Composite unique constraints (e.g., SKU + Category)
-- **required_if** - Conditional required fields based on other field values
-- **conditional** - Dynamic min/max validation with conditions
-- Support for complex expressions in conditions (`>`, `<`, `>=`, `<=`, `==`, `!=`)
-- Automatic integration with CRUDHandler validation flow
-
-#### Business Rules
-- **max_records_per_user** - Limit records per user (quota management)
-- **require_approval** - Approval workflow with configurable roles
-- **owner_field** - Configurable owner field for user-based limits
-- Integration with PermissionManager for user context
-
-#### Table Metadata Extensions
-- `hasValidationRules()` method in TableMetadata
-- `getValidationRules()` method in TableMetadata
-- `hasBusinessRules()` method in TableMetadata
-- `getBusinessRules()` method in TableMetadata
-- `getAllRules()` method for combined rules access
-
-#### Examples
-- `examples/10-validation-rules/` - Complete validation rules examples
-  - `unique-together.php` - Composite unique constraints demo
-  - `required-if.php` - Conditional required fields demo
-  - `conditional.php` - Dynamic validation demo
-  - `business-rules.php` - Business logic demo
-  - `setup.sql` - Database setup with vr_ prefixed tables
-  - `README.md` - Examples guide
-
-#### Testing
-- **ValidationRulesEngineTest** - 12 tests (100% passing)
-  - Unique together tests (3)
-  - Required if tests (3)
-  - Conditional validation tests (3)
-  - Business rules tests (2)
-  - Combined rules test (1)
-- All existing tests passing (243/243)
-
-#### Documentation
-- `docs/VALIDATION_RULES.md` - Complete validation rules guide
-- Configuration examples for all rule types
-- Integration examples with RBAC and hooks
-- Error handling and i18n support
-
-### 🔧 Changed
-- CRUDHandler now validates advanced rules after basic validation
-- Validation errors include field-specific and global messages
-- Transaction rollback on any validation failure
-
-### 📊 Statistics
-- **1 new class** (ValidationRulesEngine)
-- **4 new examples** in 10-validation-rules/
-- **12 new tests** (100% passing)
-- **243 total tests** (100% passing, 90% coverage)
-- **5 new TableMetadata methods**
-- **Validation features**: 3 (unique_together, required_if, conditional)
-- **Business rules**: 2 (max_records_per_user, require_approval)
-
----
-
-## [2.1.0] - 2024-12-XX
-
-### 🎉 Authentication & RBAC Release
-
-Complete authentication and authorization system with metadata-driven configuration.
-
-### ✨ Added
-
-#### Authentication System
-- **AuthenticationManager** class for user authentication
-- User registration with automatic password hashing (bcrypt)
-- Secure login with password verification
-- Rate limiting (5 attempts, 15-minute lockout)
-- Session management with remember me support
-- Logout functionality with session cleanup
-- CSRF token filtering in registration
-- Auto-login after registration (configurable)
-
-#### RBAC (Role-Based Access Control)
-- **PermissionManager** class for authorization
-- Table-level permissions (create, read, update, delete)
-- Row-level security (owner-based access control)
-- Wildcard permissions (`*` for public access)
-- Permission checks in forms, lists, and handlers
-- Dynamic action button filtering based on permissions
-- Owner field auto-inclusion in SELECT queries
-
-#### Soft Deletes
-- **Soft delete support** - Mark records as deleted without removing them
-- `delete()` method performs soft delete when enabled
-- `restore()` method to recover soft-deleted records
-- `forceDelete()` method to permanently remove records
-- Automatic filtering of deleted records in lists
-- Configurable via table metadata (`behaviors.soft_deletes`)
-- Custom column support (default: `deleted_at`)
-
-#### Integration
-- `enableAuthentication()` method in DynamicCRUD
-- `renderLoginForm()` and `renderRegistrationForm()` methods
-- `handleAuthentication()` for login/register processing
-- `isAuthenticated()` and `getCurrentUser()` methods
-- `setCurrentUser()` for manual authentication integration
-- Automatic permission enforcement in CRUD operations
-
-#### Examples
-- `examples/08-authentication/` - Complete authentication examples
-  - `login.php` - Login form with test credentials
-  - `register.php` - Registration form
-  - `dashboard.php` - Protected page
-  - `profile.php` - Edit profile with permissions
-  - `setup.sql` - Database setup with test users
-- `examples/07-rbac/` - RBAC examples
-  - `basic-rbac.php` - Form with permission checks
-  - `list-with-permissions.php` - List with dynamic buttons
-  - `setup.sql` - Database setup with permissions
-- `examples/09-soft-deletes/` - Soft deletes example
-  - `index.php` - Complete soft delete demo with restore/force delete
-  - `setup.sql` - Database setup with soft delete metadata
-
-#### Testing
-- **AuthenticationManagerTest** - 16 tests (100% passing)
-  - Registration tests (5)
-  - Login tests (4)
-  - Session tests (3)
-  - Security tests (4)
-- **PermissionManagerTest** - 9 tests (100% passing)
-- **TableMetadataTest** - 17 tests (100% passing)
-- **SoftDeletesTest** - 10 tests (100% passing)
-  - Soft delete behavior (2)
-  - Restore functionality (1)
-  - Force delete (2)
-  - Metadata detection (3)
-  - Multiple operations (2)
-- All existing tests updated and passing (231/231)
-
-#### Documentation
-- Updated `docs/RBAC.md` with authentication guide
-- Added authentication configuration examples
-- Added rate limiting documentation
-- Added session management guide
-
-### 🐛 Fixed
-- CSRF token being inserted into database during registration
-- Action field being inserted into database during registration
-- Password hashes not matching in test data
-- ListGenerator not including owner_field in SELECT queries
-- Permission checks failing due to missing owner data
-
-### 🔧 Changed
-- `docs/RBAC.md` renamed to "RBAC & Authentication Guide"
-- Enhanced metadata support for authentication configuration
-- Improved error messages for authentication failures
-
-### 📊 Statistics
-- **2 new classes** (AuthenticationManager, enhanced PermissionManager)
-- **5 new examples** (4 in 08-authentication/, 1 in 09-soft-deletes/)
-- **52 new tests** (16 auth + 9 permissions + 17 metadata + 10 soft deletes)
-- **231 total tests** (100% passing, 90% coverage)
-- **Authentication features**: 8 (register, login, logout, rate limiting, sessions, CSRF, remember me, auto-login)
-- **RBAC features**: 6 (table permissions, row-level security, wildcards, owner checks, dynamic buttons, auto-enforcement)
-- **Soft delete features**: 3 (soft delete, restore, force delete)
-
----
-
-## [2.0.0] - 2024-12-XX
-
-### 🎉 Major Release - Table Metadata System
-
-This release introduces **table-level metadata** - a revolutionary way to configure CRUD behavior via JSON in database table comments. Zero PHP configuration needed!
-
-### ✨ Added
-
-#### Table Metadata (Phase 1 - Quick Wins)
-
-**UI/UX Customization**
-- Custom display names, icons, and colors per table
-- Configurable list views (columns, sorting, pagination)
-- Card vs table layout support
-- `ListGenerator` class for rendering customizable lists
-- Search functionality across multiple fields
-- Pagination with query parameter preservation
-
-**Dynamic Forms**
-- Tabbed form layouts via table metadata
-- Organized field groups with visual tab navigation
-- JavaScript tab switching
-- Automatic fallback to standard forms
-
-**Automatic Behaviors**
-- Auto-timestamps (`created_at`, `updated_at`)
-- Auto-slug generation from source field
-- Unique slug handling with numeric suffixes
-- Zero-configuration via table metadata
-
-**Search & Filters**
-- Full-text search across multiple fields
-- Select filters (dropdown)
-- Date range filters
-- Combined search + filters with AND/OR logic
-- Query parameter preservation across pagination
-
-#### Core Enhancements
-- `TableMetadata` class with 20+ methods for metadata access
-- Enhanced `CRUDHandler` with `applyAutomaticBehaviors()`
-- Enhanced `ListGenerator` with search/filter rendering
-- CSS styles in `FormGenerator` for professional UI
-- `renderList()` method in `DynamicCRUD` class
-
-#### Examples
-- `06-table-metadata/ui-customization.php` - List views demo
-- `06-table-metadata/dynamic-forms.php` - Tabbed forms demo
-- `06-table-metadata/automatic-behaviors.php` - Auto-slug/timestamps demo
-- `06-table-metadata/search-filters.php` - Search and filters demo
-- Updated `index.html` with new v2.0 section
-
-#### Documentation
-- `docs/TABLE_METADATA.md` - Complete table metadata guide
-- `docs/TABLE_METADATA_IDEAS.md` - Roadmap and future features
-- `examples/06-table-metadata/README.md` - Examples guide
-
-### 🐛 Fixed
-- TypeError in `applyAutomaticBehaviors()` when `$isUpdate` was null
-- Search not working due to missing `$_GET` parameter reading
-- Pagination not preserving search and filter parameters
-- Corrupted INSERT statements in `mysql.sql`
-- Duplicate ALTER TABLE statements in setup scripts
-
-### 🔧 Changed
-- `ListGenerator` constructor now accepts optional `$schema` parameter
-- `ListGenerator::render()` now reads from `$_GET` automatically
-- Forms now include embedded CSS for better out-of-box experience
-- Posts table now has 5 sample records for better demo
-
-### 📊 Statistics
-- **4 new examples** demonstrating v2.0 features
-- **3 new classes** (TableMetadata, ListGenerator enhancements)
-- **20+ new methods** across existing classes
-- **100% Phase 1 completion** (all Quick Wins implemented)
-
----
-
-## [1.5.0] - 2024-11-XX
-
-### ✨ Added
-- **Template System** - Blade-like syntax for custom layouts
-- Layout inheritance (`@extends`, `@section`, `@yield`)
-- Partials (`@include`)
-- Automatic escaping (`{{ }}` vs `{!! !!}`)
-- File caching for performance
-- `BladeTemplate` class implementing `TemplateEngine` interface
-- 17 new tests for templates (100% passing)
-
-### 📚 Documentation
-- `docs/TEMPLATES.md` - Complete template system guide
-
----
-
-## [1.4.0] - 2024-11-XX
-
-### ✨ Added
+## [3.3.0] - 2024-01-XX
+
+### Added
+- **UI Components Library** - 15 reusable, accessible components
+  - `Components::alert()` - Dismissible alerts (success, danger, warning, info)
+  - `Components::badge()` - Status badges with custom colors
+  - `Components::button()` - Buttons with 3 sizes and link support
+  - `Components::buttonGroup()` - Grouped action buttons
+  - `Components::card()` - Content cards with header/footer
+  - `Components::modal()` - Modal dialogs with custom buttons
+  - `Components::tabs()` - Interactive tabbed content
+  - `Components::accordion()` - Collapsible content sections
+  - `Components::table()` - Styled tables with striped/hover
+  - `Components::breadcrumb()` - Navigation breadcrumbs
+  - `Components::pagination()` - Page navigation
+  - `Components::dropdown()` - Dropdown menus
+  - `Components::statCard()` - Statistics cards with trends
+  - `Components::progressBar()` - Visual progress indicators
+  - `Components::toast()` - Auto-dismissing notifications
+- Themeable color system with `Components::setTheme()`
+- XSS protection with automatic HTML escaping
+- Responsive mobile-first design
+- Modern CSS animations and interactions
+- Complete example in `examples/20-ui-components/`
+- Comprehensive documentation in `docs/UI_COMPONENTS.md`
+- 26 new tests (367 total)
+
+### Changed
+- AdminPanel refactored to use Components library
+- Improved code maintainability and consistency
+
+## [3.2.0] - 2024-01-XX
+
+### Added
+- **Workflow Engine** - State management with transitions
+  - `enableWorkflow()` - Configure workflow states and transitions
+  - `transition()` - Execute state transitions
+  - `getWorkflowHistory()` - Retrieve transition history
+  - Permission-based transition control by user role
+  - Automatic transition buttons in forms
+  - Complete history tracking in `_workflow_history` table
+  - Lifecycle hooks (beforeTransition, afterTransition)
+  - State labels with custom colors
+  - Multiple from states support
+- WorkflowEngine class with validation and UI rendering
+- Integration with CRUDHandler for automatic transitions
+- Integration with FormGenerator for button rendering
+- Complete example in `examples/19-workflow/`
+- Documentation in `docs/WORKFLOW.md`
+- 13 new tests (341 total)
+
+## [3.1.0] - 2024-01-XX
+
+### Added
+- **Admin Panel Generator** - Complete admin interface
+  - `AdminPanel` class for full admin panel generation
+  - Dashboard with automatic stats cards
+  - Sidebar navigation with customizable icons
+  - Breadcrumbs for contextual navigation
+  - User menu with avatar
+  - Responsive mobile-first design
+  - Full integration with DynamicCRUD components
+- Complete example in `examples/18-admin-panel/`
+- 12 new tests (328 total)
+
+## [3.0.0] - 2024-01-XX
+
+### Added
+- **REST API Generator** - Automatic REST API generation
+  - `RestAPIGenerator` class for API endpoints
+  - JWT authentication with token generation
+  - OpenAPI/Swagger documentation
+  - CORS support for cross-origin requests
+  - Automatic pagination for list endpoints
+  - RBAC integration (optional)
+  - GET, POST, PUT, DELETE endpoints for all tables
+- Complete example in `examples/17-rest-api/`
+- 7 new tests (315 total)
+
+## [2.9.0] - 2024-01-XX
+
+### Added
+- **Multiple File Upload** - Drag & drop interface
+  - `multiple_files` field type
+  - Drag & drop UI with file previews
+  - JSON storage for file paths
+  - Max files validation
+  - Existing file management
+- **Theme Integration** - White-label theming
+  - `enableGlobalConfig()` - Apply global theme to forms
+  - CSS variables injection from Global Config
+  - Per-tenant theming capability
+  - Logo and app name customization
+- ThemeManager class
+- FileUploadHandler enhancements
+- 2 new examples (real estate, theme demo)
+- 9 new tests (308 total)
+
+## [2.8.0] - 2024-01-XX
+
+### Added
+- **Global Config Foundation** - Centralized configuration
+  - `GlobalMetadata` class for app-wide settings
+  - CLI commands: `config:set`, `config:get`, `config:list`, `config:delete`
+  - Dot notation for hierarchical keys
+  - JSON value support
+  - Database storage in `_global_metadata` table
+- Complete example in `examples/14-global-config/`
+- Documentation in `docs/GLOBAL_METADATA.md`
+- 4 CLI commands
+- 8 new tests (299 total)
+
+## [2.7.0] - 2024-01-XX
+
+### Added
+- **SQL Dump & Import** - Export/import with metadata
+  - `dump:sql` CLI command for exporting tables
+  - `import:sql` CLI command for importing SQL files
+  - Structure-only and data-only options
+  - Metadata preservation in comments
+  - Force import option
+- Complete example in `examples/13-sql-dump/`
+- 2 CLI commands
+- 6 new tests (291 total)
+
+## [2.6.0] - 2024-01-XX
+
+### Added
+- **Consolidation Release** - Improved documentation
+  - Quick Start Guide (`docs/QUICKSTART.md`)
+  - Migration Guide (`docs/MIGRATION.md`)
+  - Best Practices Guide (`docs/BEST_PRACTICES.md`)
+  - Examples Guide (`examples/README.md`)
+  - Learning path for new users
+
+## [2.5.0] - 2024-01-XX
+
+### Added
+- **Export/Import** - CSV export and import
+  - `export()` method for CSV generation
+  - `import()` method with validation and preview
+  - `generateImportTemplate()` for template generation
+  - CLI commands: `export:csv`, `import:csv`, `generate:template`
+  - Preview mode for import validation
+- Complete examples in `examples/12-export-import/`
+- 3 CLI commands
+- 10 new tests (285 total)
+
+## [2.4.0] - 2024-01-XX
+
+### Added
+- **CLI Enhancements** - New commands
+  - `test:connection` - Test database connectivity
+  - `webhook:configure` - Configure webhooks easily
+  - `test:webhook` - Test webhook endpoints
+  - `metadata:export` - Export table metadata to JSON
+  - `metadata:import` - Import table metadata from JSON
+- Enhanced CLI documentation
+- 5 new CLI commands (19 total)
+- 8 new tests (275 total)
+
+## [2.3.0] - 2024-01-XX
+
+### Added
+- **Notifications & Webhooks** - Automatic notifications
+  - Email notifications on CRUD events
+  - Webhook triggers with custom headers
+  - Template placeholders for dynamic content
+  - Field-specific update notifications
+  - Multiple recipients and webhooks
+  - Non-blocking error handling
+- NotificationManager class
+- Table metadata configuration for notifications
+- 2 new examples in `examples/11-notifications/`
+- Documentation in `docs/NOTIFICATIONS.md`
+- 7 new tests (267 total)
+
+## [2.2.0] - 2024-01-XX
+
+### Added
+- **Validation Rules** - Advanced validation
+  - `unique_together` - Composite unique constraints
+  - `required_if` - Conditional required fields
+  - `conditional` - Dynamic min/max validation
+- **Business Rules** - Business logic
+  - `max_records_per_user` - Record limits per user
+  - `require_approval` - Approval workflows
+- ValidationRulesEngine class
+- Table metadata configuration for rules
+- 4 new examples in `examples/10-validation-rules/`
+- Documentation in `docs/VALIDATION_RULES.md`
+- 12 new tests (260 total)
+
+## [2.1.0] - 2024-01-XX
+
+### Added
+- **Authentication System** - User authentication
+  - `AuthenticationManager` class
+  - User registration with auto-login
+  - Secure login with rate limiting
+  - Session management with remember me
+  - Password hashing (bcrypt)
+  - Password reset functionality
+- **RBAC** - Role-based access control
+  - `PermissionManager` class
+  - Table-level permissions
+  - Row-level security
+  - Automatic enforcement in forms/lists
+- **Soft Deletes** - Non-destructive deletion
+  - `delete()` - Soft delete (marks as deleted)
+  - `restore()` - Restore deleted records
+  - `forceDelete()` - Permanently delete
+  - `deleted_at` column support
+- 5 new examples (4 auth + 1 soft deletes)
+- Documentation in `docs/RBAC.md`
+- 52 new tests (248 total)
+
+## [2.0.0] - 2024-01-XX
+
+### Added
+- **Table Metadata System** - Configuration via table comments
+  - UI/UX Customization (list views, colors, icons)
+  - Dynamic Forms (tabs, fieldsets)
+  - Automatic Behaviors (timestamps, sluggable)
+  - Search & Filters (full-text search + filters)
+- `ListGenerator` class with search/filter rendering
+- `TableMetadata` class with 20+ methods
+- 4 new examples in `examples/06-table-metadata/`
+- Documentation in `docs/TABLE_METADATA.md`
+- 40 new tests (196 total)
+
+## [1.5.0] - 2024-01-XX
+
+### Added
+- **Template System** - Blade-like syntax
+  - `BladeTemplate` class
+  - Layout inheritance (@extends, @section, @yield)
+  - Partials (@include)
+  - Automatic escaping ({{ }} vs {!! !!})
+  - File caching for performance
+- Template examples
+- 17 new tests (156 total)
+
+## [1.4.0] - 2024-01-XX
+
+### Added
 - **Internationalization (i18n)** - Multi-language support
-- 3 languages included: English, Spanish, French
-- Auto-detection from URL, session, or browser
-- `Translator` class with locale management
-- Client + Server translation support
-- Advanced M:N UI with checkboxes and search
-- 31 new tests for i18n (100% passing)
+  - `Translator` class with auto-detection
+  - 3 languages (EN, ES, FR)
+  - Client + Server translation support
+  - Language switcher
+- Advanced M:N UI (checkboxes with search)
+- i18n examples
+- Documentation in `docs/I18N.md`
+- 31 new tests (139 total)
 
-### 📚 Documentation
-- `docs/I18N.md` - Complete i18n guide
+## [1.3.0] - 2024-01-XX
 
----
+### Added
+- **PostgreSQL Support** - Multi-database support
+  - `PostgreSQLAdapter` class
+  - Auto-detection of database driver
+  - Docker setup for MySQL & PostgreSQL
+- Database adapter examples
+- 15 new tests (108 total)
 
-## [1.3.0] - 2024-11-XX
+## [1.2.0] - 2024-01-XX
 
-### ✨ Added
-- **PostgreSQL support** via Adapter pattern
-- Auto-detection of database driver from PDO
-- `PostgreSQLAdapter` class
-- Docker setup for MySQL & PostgreSQL
-- `docker-compose.yml` with 3 services
-
-### 📚 Documentation
-- `DOCKER_SETUP.md` - Docker setup guide
-
----
-
-## [1.2.0] - 2024-11-XX
-
-### ✨ Added
-- **Virtual fields** - Password confirmation, terms acceptance
-- `VirtualField` class with custom validators
-- Comprehensive test suite (113 tests)
-- CI/CD pipeline (GitHub Actions)
+### Added
+- **Virtual Fields** - Non-database fields
+  - `VirtualField` class
+  - Password confirmation
+  - Terms acceptance
+  - Custom validation
 - FormGenerator enhancements (16+ metadata options)
+- CI/CD pipeline (GitHub Actions)
+- 20 new tests (93 total)
 
-### 📚 Documentation
-- `docs/VIRTUAL_FIELDS.md` - Virtual fields guide
+## [1.1.0] - 2024-01-XX
 
----
+### Added
+- **Many-to-Many Relationships** - M:N support
+  - `addManyToMany()` method
+  - Multi-select UI
+  - Automatic pivot table sync
+- M:N examples
+- Documentation in `docs/MANY_TO_MANY.md`
+- 15 new tests (73 total)
 
-## [1.1.0] - 2024-11-XX
+## [1.0.0] - 2024-01-XX
 
-### ✨ Added
-- Many-to-many relationships with multi-select UI
+### Added
+- Initial release
+- Full CRUD operations (Create, Read, Update, Delete)
+- Foreign key relationships with auto-detection
 - Hooks/Events system (10 lifecycle hooks)
-- Audit logging for change tracking
+- Audit logging
 - File uploads with MIME validation
 - Client + Server validation
+- Caching system
+- CSRF protection
+- SQL injection prevention
+- XSS protection
+- 58 tests
 
-### 📚 Documentation
-- `docs/HOOKS.md` - Hooks system guide
-- `docs/MANY_TO_MANY.md` - M:N relationships guide
-
----
-
-## [1.0.0] - 2024-11-XX
-
-### 🎉 Initial Release
-
-### ✨ Features
-- Automatic form generation from database schema
-- Full CRUD operations (Create, Read, Update, Delete)
-- Foreign key auto-detection with dropdown selects
-- CSRF protection built-in
-- SQL injection prevention with prepared statements
-- XSS protection with automatic escaping
-- Smart NULL handling for nullable fields
-- ENUM field support with auto-generated selects
-- MySQL 5.7+ support
-- PSR-4 autoloading
-- Zero configuration needed for basic CRUD
-
-### 📚 Documentation
-- `README.md` - Complete documentation
-- `docs/CUSTOMIZATION.md` - Metadata options guide
-- `CONTRIBUTING.md` - Contribution guidelines
-
-### 🧪 Testing
-- 195 automated tests
-- 76% pass rate (149 passing, 40 failing, 6 skipped)
-- PHPUnit 9.5+ support
+### Features
+- Zero-config form generation from SQL schema
+- Automatic validation
+- Smart NULL handling
+- ENUM field support
+- Metadata-driven configuration (JSON in comments)
+- Transaction safety with automatic rollback
 
 ---
 
-## Version History Summary
+## Legend
 
-| Version | Release Date | Key Features |
-|---------|--------------|--------------|
-| **2.3.0** | 2025-01-XX | Notifications & Webhooks |
-| **2.2.0** | 2025-01-XX | Validation Rules & Business Logic |
-| **2.1.0** | 2024-12-XX | Authentication & RBAC |
-| **2.0.0** | 2024-12-XX | Table Metadata System (Phase 1) |
-| 1.5.0 | 2024-11-XX | Template System |
-| 1.4.0 | 2024-11-XX | Internationalization (i18n) |
-| 1.3.0 | 2024-11-XX | PostgreSQL Support |
-| 1.2.0 | 2024-11-XX | Virtual Fields |
-| 1.1.0 | 2024-11-XX | M:N Relationships, Hooks, Audit |
-| 1.0.0 | 2024-11-XX | Initial Release |
-
----
-
-## Upgrade Guides
-
-### Upgrading to 2.0.0
-
-**Breaking Changes:** None! v2.0 is fully backward compatible.
-
-**New Features:**
-1. Add table metadata to your tables (optional):
-```sql
-ALTER TABLE users COMMENT = '{"display_name": "Users", "icon": "👥"}';
-```
-
-2. Clear cache:
-```bash
-php examples/clear_cache.php
-```
-
-3. Use new features:
-```php
-$crud->renderList();  // Now uses metadata
-```
-
-**Migration Time:** < 5 minutes per table
-
----
-
-## Roadmap
-
-### Phase 2: Security & Validation (v2.1-v2.3) - ✅ COMPLETED
-- ✅ Permissions & Security (RBAC, row-level security)
-- ✅ Authentication (register, login, rate limiting)
-- ✅ Soft deletes
-- ✅ Validation & Rules (unique_together, conditional, business rules)
-- ✅ Notifications (email, webhooks)
-
-### Phase 3: Advanced Features (v2.4) - Planned
-- Versioning & Audit enhancements
-- Advanced Relationships (polymorphic, has-many-through)
-- API & Export (REST API, CSV/Excel/PDF)
-
-### Phase 4: Analytics (v2.5) - Planned
-- Analytics & Reporting (metrics, charts, dashboards)
+- **Added** - New features
+- **Changed** - Changes in existing functionality
+- **Deprecated** - Soon-to-be removed features
+- **Removed** - Removed features
+- **Fixed** - Bug fixes
+- **Security** - Security improvements
 
 ---
 

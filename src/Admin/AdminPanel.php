@@ -8,6 +8,7 @@ use DynamicCRUD\ListGenerator;
 use DynamicCRUD\SchemaAnalyzer;
 use DynamicCRUD\Metadata\TableMetadata;
 use DynamicCRUD\GlobalMetadata;
+use DynamicCRUD\UI\Components;
 
 class AdminPanel
 {
@@ -231,6 +232,9 @@ HTML;
 
     private function renderDashboard(): string
     {
+        // Set theme for Components
+        Components::setTheme(['primary' => $this->config['theme']['primary']]);
+        
         $stats = '';
         
         foreach ($this->tables as $table => $options) {
@@ -238,27 +242,22 @@ HTML;
             
             $count = $this->pdo->query("SELECT COUNT(*) FROM $table")->fetchColumn();
             
-            $stats .= sprintf(
-                '<div class="stat-card">
-                    <span class="icon">%s</span>
-                    <div class="label">%s</div>
-                    <div class="value">%s</div>
-                </div>',
-                $options['icon'],
-                $options['label'],
-                number_format($count)
-            );
+            $stats .= '<div style="margin-bottom: 20px;">' . 
+                      Components::statCard($options['label'], number_format($count)) . 
+                      '</div>';
         }
+
+        $welcomeCard = Components::card(
+            'Bienvenido al Panel de Administración',
+            '<p>Selecciona una opción del menú lateral para comenzar.</p>'
+        );
 
         return <<<HTML
 <h1 style="margin-bottom: 30px;">Dashboard</h1>
 <div class="stats-grid">
     {$stats}
 </div>
-<div class="card">
-    <h2>Bienvenido al Panel de Administración</h2>
-    <p>Selecciona una opción del menú lateral para comenzar.</p>
-</div>
+{$welcomeCard}
 HTML;
     }
 
@@ -283,14 +282,14 @@ HTML;
         $list = preg_replace('/href="\?[^"]*id=(\d+)"/', 'href="?action=form&amp;table=' . $table . '&amp;id=$1"', $list);
         $list = preg_replace('/href="\?[^"]*delete=(\d+)"/', 'href="?action=list&amp;table=' . $table . '&amp;delete=$1"', $list);
 
-        $newBtn = sprintf('<a href="?action=form&table=%s" class="btn">➕ Nuevo</a>', $table);
+        $newBtn = Components::button('➕ Nuevo', 'primary', ['href' => "?action=form&table={$table}"]);
         
         $successMsg = '';
         if (isset($_GET['success'])) {
-            $successMsg = '<div style="background: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 15px; border-radius: 6px; margin-bottom: 20px;">✅ Guardado correctamente</div>';
+            $successMsg = Components::alert('✅ Guardado correctamente', 'success', false);
         }
         if (isset($_GET['deleted'])) {
-            $successMsg = '<div style="background: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 15px; border-radius: 6px; margin-bottom: 20px;">✅ Eliminado correctamente</div>';
+            $successMsg = Components::alert('✅ Eliminado correctamente', 'success', false);
         }
 
         return <<<HTML
@@ -321,7 +320,7 @@ HTML;
             }
             
             $error = $result['error'] ?? 'Error al guardar';
-            $errorMsg = "<div style='background: #fed7d7; border: 1px solid #fc8181; color: #742a2a; padding: 15px; border-radius: 6px; margin-bottom: 20px;'>{$error}</div>";
+            $errorMsg = Components::alert($error, 'danger', false);
         }
 
         $form = $crud->renderForm($id);
