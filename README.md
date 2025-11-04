@@ -68,6 +68,84 @@ php bin/dynamiccrud generate:metadata users
 
 ---
 
+## ✨ What's New in v3.0
+
+**REST API Generator** - Automatic REST API generation with JWT authentication!
+
+```php
+use DynamicCRUD\API\RestAPIGenerator;
+
+$pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
+
+// Create API instance
+$api = new RestAPIGenerator($pdo, 'your-secret-key');
+$api->handleRequest();
+
+// That's it! All tables now have REST endpoints
+```
+
+```bash
+# Login
+curl -X POST http://localhost/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@example.com","password":"admin123"}'
+
+# Get users (with token)
+curl -X GET http://localhost/api/v1/users \
+  -H "Authorization: Bearer YOUR_TOKEN"
+
+# Create user
+curl -X POST http://localhost/api/v1/users \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"John","email":"john@example.com"}'
+```
+
+**Features:**
+- 🚀 **Auto Endpoints** - GET, POST, PUT, DELETE for every table
+- 🔐 **JWT Authentication** - Secure token-based auth
+- 📚 **OpenAPI/Swagger** - Auto-generated documentation
+- 🌐 **CORS Ready** - Cross-origin requests enabled
+- 📄 **Pagination** - Automatic list pagination
+- 🔒 **RBAC Integration** - Optional permission control
+
+👉 [See REST API Example](examples/17-rest-api/)
+
+---
+
+## ✨ What's New in v2.9
+
+**Multiple File Upload & Theme Integration** - Upload multiple files with drag & drop + white-label theming!
+
+```php
+// Multiple file upload with drag & drop UI
+$crud = new DynamicCRUD($pdo, 'properties');
+echo $crud->renderForm(); // Automatic drag & drop for multiple_files type
+
+// Enable global theme configuration
+$crud->enableGlobalConfig();
+echo $crud->renderForm(); // Applies theme from Global Config automatically
+```
+
+```sql
+-- Configure multiple file upload in column metadata
+ALTER TABLE properties 
+MODIFY COLUMN photos TEXT 
+COMMENT '{"type": "multiple_files", "accept": "image/*", "max_files": 10, "max_size": 5242880}';
+```
+
+**Features:**
+- 📸 **Multiple File Upload** - Drag & drop interface with previews
+- 🎨 **Theme Integration** - Apply global theme to forms automatically
+- 🏢 **White-label Ready** - Custom colors, fonts, logos per tenant
+- 💾 **JSON Storage** - File paths stored as JSON array
+- ✅ **Validation** - Max files, MIME types, file sizes
+
+👉 [See Multiple Files Example](examples/15-multiple-files/)  
+👉 [See Theme Integration Example](examples/16-theme-integration/)
+
+---
+
 ## ✨ What's New in v2.8
 
 **Global Config Foundation** - Centralized configuration storage for application-wide settings!
@@ -525,7 +603,21 @@ $crud->handleSubmission();
 
 ## 📚 Documentation
 
-### v2.6 Features (NEW!)
+### v3.0 Features (NEW!)
+- REST API Generator - Automatic REST API with JWT auth
+- OpenAPI/Swagger - Auto-generated API documentation
+
+### v2.9 Features
+- Multiple File Upload - Drag & drop with previews
+- Theme Integration - White-label theming from Global Config
+
+### v2.8 Features
+- [Global Metadata Guide](docs/GLOBAL_METADATA.md) - Centralized configuration
+
+### v2.7 Features
+- SQL Dump & Import - Export/import with metadata preservation
+
+### v2.6 Features
 - [Quick Start Guide](docs/QUICKSTART.md) - 5-minute tutorial
 - [Migration Guide](docs/MIGRATION.md) - Version upgrade guide
 - [Best Practices](docs/BEST_PRACTICES.md) - Production patterns
@@ -533,12 +625,6 @@ $crud->handleSubmission();
 
 ### v2.5 Features
 - Export/Import - CSV export and import with validation
-
-### v2.8 Features
-- [Global Metadata Guide](docs/GLOBAL_METADATA.md) - Centralized configuration
-
-### v2.7 Features
-- SQL Dump & Import - Export/import with metadata preservation
 
 ### v2.4 Features
 - [CLI Tool Guide](docs/CLI.md) - Enhanced CLI with 19 commands
@@ -598,6 +684,7 @@ Configure fields via JSON in `COLUMN_COMMENT`:
 | `display_column` | string | FK display field | `"full_name"` |
 | `accept` | string | File types | `"image/*"` |
 | `max_size` | int | Max file size (bytes) | `2097152` (2MB) |
+| `max_files` | int | Max files (multiple_files) | `10` |
 
 **Example:**
 ```sql
@@ -747,22 +834,49 @@ php vendor/phpunit/phpunit/phpunit tests/SoftDeletesTest.php
 - 2 new examples in 11-notifications/
 - 7 new tests (100% passing)
 
-### 🔮 Planned (v2.4+)
+### ✅ Completed (v2.9.0)
+- **Multiple File Upload**
+  - Drag & drop interface with file previews
+  - Multiple file handling with JSON storage
+  - Max files validation
+  - Existing file management
+- **Theme Integration**
+  - Global theme configuration support
+  - CSS variables injection
+  - White-label branding (logo, app name)
+  - Per-tenant theming capability
+- ThemeManager class
+- FileUploadHandler enhancements
+- 2 new examples (real estate, theme demo)
+- 9 new tests (100% passing)
+
+### ✅ Completed (v3.0.0)
+- **REST API Generator**
+  - Automatic CRUD endpoints for all tables
+  - JWT authentication with token generation
+  - OpenAPI/Swagger documentation
+  - CORS support for cross-origin requests
+  - Pagination for list endpoints
+  - RBAC integration optional
+- RestAPIGenerator class
+- 1 new example (REST API tester)
+- 7 new tests (100% passing)
+
+### 🔮 Planned (v3.1+)
+- [ ] GraphQL support
 - [ ] OAuth/LDAP authentication
 - [ ] Email verification
 - [ ] SQL Server support
-- [ ] REST API generation
-- [ ] GraphQL support
 - [ ] More languages (DE, IT, PT)
 
 ---
 
 ## 📊 Project Stats
 
-- **34 PHP classes** (~11,500 lines)
-- **32 working examples** (1 in v2.8, 1 in v2.7, 2 in v2.5, 2 in v2.3, 4 in v2.2, 6 in v2.1, 4 in v2.0)
-- **20 technical documents** (1 new in v2.8)
-- **300 automated tests** (100% passing, 90% coverage)
+- **36 PHP classes** (~12,500 lines)
+- **35 working examples** (1 in v3.0, 2 in v2.9, 1 in v2.8, 1 in v2.7, 2 in v2.5, 2 in v2.3, 4 in v2.2, 6 in v2.1, 4 in v2.0)
+- **21 technical documents**
+- **316 automated tests** (100% passing, 90% coverage)
 - **19 CLI commands**
 - **Languages supported**: 3 (English, Spanish, French)
 - **Databases supported**: 2 (MySQL, PostgreSQL)
@@ -774,6 +888,9 @@ php vendor/phpunit/phpunit/phpunit tests/SoftDeletesTest.php
 - **Validation Rules**: 3 types (unique_together, required_if, conditional)
 - **Business Rules**: 2 types (max_records_per_user, require_approval)
 - **Table metadata features**: 6 (UI/UX, Forms, Behaviors, Search, Validation, Business)
+- **File Upload**: Single + multiple with drag & drop
+- **Theming**: Global config with CSS variables
+- **REST API**: Automatic generation with JWT auth
 
 ---
 
