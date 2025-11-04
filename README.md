@@ -68,6 +68,23 @@ php bin/dynamiccrud generate:metadata users
 
 ---
 
+## ✨ What's New in v2.6
+
+**Consolidation Release** - Improved documentation and developer experience!
+
+- 📚 [Quick Start Guide](docs/QUICKSTART.md) - Get started in 5 minutes
+- 🚀 [Migration Guide](docs/MIGRATION.md) - Upgrade between versions
+- ✅ [Best Practices](docs/BEST_PRACTICES.md) - Production-ready patterns
+- 📝 [Examples Guide](examples/README.md) - 30 examples with learning path
+
+**Perfect for:**
+- New users getting started
+- Teams upgrading versions
+- Production deployments
+- Learning DynamicCRUD
+
+---
+
 ## ✨ What's New in v2.5
 
 **Export/Import** - CSV export and import with validation and preview!
@@ -455,7 +472,13 @@ $crud->handleSubmission();
 
 ## 📚 Documentation
 
-### v2.5 Features (NEW!)
+### v2.6 Features (NEW!)
+- [Quick Start Guide](docs/QUICKSTART.md) - 5-minute tutorial
+- [Migration Guide](docs/MIGRATION.md) - Version upgrade guide
+- [Best Practices](docs/BEST_PRACTICES.md) - Production patterns
+- [Examples Guide](examples/README.md) - Learning path
+
+### v2.5 Features
 - Export/Import - CSV export and import with validation
 
 ### v2.4 Features
@@ -482,6 +505,11 @@ $crud->handleSubmission();
 - [Virtual Fields Guide](docs/VIRTUAL_FIELDS.md) - Password confirmation, terms acceptance
 - [Many-to-Many Relationships](docs/MANY_TO_MANY.md) - M:N setup guide
 - [Customization Guide](docs/CUSTOMIZATION.md) - Metadata options
+
+### Getting Started
+- [Quick Start Guide](docs/QUICKSTART.md) - Get started in 5 minutes
+- [Migration Guide](docs/MIGRATION.md) - Upgrade between versions
+- [Best Practices](docs/BEST_PRACTICES.md) - Production-ready patterns
 
 ### Setup & Contributing
 - [Docker Setup](DOCKER_SETUP.md) - MySQL & PostgreSQL with Docker
@@ -674,9 +702,9 @@ php vendor/phpunit/phpunit/phpunit tests/SoftDeletesTest.php
 
 - **31 PHP classes** (~10,500 lines)
 - **30 working examples** (2 in v2.5, 2 in v2.3, 4 in v2.2, 6 in v2.1, 4 in v2.0)
-- **16 technical documents**
+- **19 technical documents** (3 new in v2.6)
 - **285 automated tests** (100% passing, 90% coverage)
-- **13 CLI commands** (3 new in v2.5)
+- **13 CLI commands**
 - **Languages supported**: 3 (English, Spanish, French)
 - **Databases supported**: 2 (MySQL, PostgreSQL)
 - **Template engine**: Blade-like syntax
