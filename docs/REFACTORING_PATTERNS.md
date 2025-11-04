@@ -548,8 +548,9 @@ See these files for refactoring examples:
 
 ## Completed Refactorings
 
-### v3.6.0 - File Handling
-1. **FileUploadHandler.php** ✅ - Extracted 15 methods for better organization (~140 to ~200 lines with clear separation)
+### v3.6.0 - File Handling & Notifications
+1. **FileUploadHandler.php** ✅ - Extracted 15 methods for better organization (~140 to ~200 lines)
+2. **NotificationManager.php** ✅ - Extracted 20 methods for email/webhook separation (~100 to ~180 lines)
 
 ### v3.5.0 - Core Classes
 1. **CRUDHandler.php** ✅ - Extracted 16 methods from handleSubmission() (~250 to ~30 lines)
