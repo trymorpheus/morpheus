@@ -398,6 +398,7 @@ class WorkflowEngine
         $transitionStats = [];
         if ($this->isHistoryEnabled()) {
             $historyTable = $this->getHistoryTableName();
+            $this->createHistoryTable($historyTable); // Ensure table exists
             $sql = "SELECT transition, COUNT(*) as count FROM {$historyTable} WHERE table_name = :table GROUP BY transition";
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute(['table' => $this->table]);
