@@ -33,7 +33,7 @@ composer install
 Run the example SQL script:
 
 ```bash
-mysql -u root -p < examples/setup.sql
+mysql -u root -p < examples\setup\mysql.sql
 ```
 
 Or manually:

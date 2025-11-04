@@ -7,6 +7,71 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.8.0] - 2025-01-XX
+
+### 🎉 Global Config Foundation Release
+
+Centralized configuration storage for application-wide settings.
+
+### ✨ Added
+
+#### Global Metadata System
+- **GlobalMetadata** class for centralized configuration
+- **JSON storage** in `_dynamiccrud_config` table
+- **Automatic caching** for performance
+- **Dot notation** for hierarchical keys
+- **Unicode support** for international characters
+
+#### CLI Commands
+- **config:get** - Get global configuration value
+- **config:set** - Set global configuration value
+- **config:list** - List all global configuration
+- **config:delete** - Delete global configuration key
+
+#### Core Features
+- get(), set(), has(), delete(), all(), clear() methods
+- Automatic table creation on first use
+- In-memory caching for repeated reads
+- JSON encoding/decoding with proper flags
+- Support for complex nested structures
+
+#### Examples
+- `examples/14-global-config/basic-usage.php` - Interactive web interface
+- `examples/14-global-config/README.md` - Complete usage guide
+
+#### Testing
+- **GlobalMetadataTest** - 11 tests (100% passing)
+  - Set and get tests (3)
+  - Has and delete tests (2)
+  - All and clear tests (2)
+  - Caching test (1)
+  - Update test (1)
+  - Unicode test (1)
+  - Complex value test (1)
+- All existing tests passing (300/300)
+
+#### Documentation
+- `docs/GLOBAL_METADATA.md` - Complete global metadata guide
+- Use cases and examples
+- CLI and PHP usage
+- Security considerations
+- Performance benchmarks
+
+### 🔧 Changed
+- CLI Application registers 19 commands (4 new)
+- Enhanced help menu with Global Config section
+
+### 📊 Statistics
+- **1 new class** (GlobalMetadata)
+- **4 new CLI commands**
+- **1 new example directory** (14-global-config/)
+- **11 new tests** (100% passing)
+- **300 total tests** (100% passing, 90% coverage)
+- **19 total CLI commands**
+- **1 new document** (GLOBAL_METADATA.md)
+
+---
+
 ## [2.7.0] - 2025-01-XX
 
 ### 🎉 SQL Dump & Import Release

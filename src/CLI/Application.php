@@ -29,6 +29,10 @@ class Application
             'generate:template' => new Commands\GenerateTemplateCommand(),
             'dump:sql' => new Commands\DumpSQLCommand(),
             'import:sql' => new Commands\ImportSQLCommand(),
+            'config:get' => new Commands\ConfigGetCommand(),
+            'config:set' => new Commands\ConfigSetCommand(),
+            'config:list' => new Commands\ConfigListCommand(),
+            'config:delete' => new Commands\ConfigDeleteCommand(),
         ];
     }
     
@@ -84,6 +88,11 @@ class Application
         echo "  generate:template      Generate CSV import template\n";
         echo "  dump:sql               Export table structure and data to SQL\n";
         echo "  import:sql             Import SQL dump file\n\n";
+        echo "Global Config Commands:\n";
+        echo "  config:get             Get global configuration value\n";
+        echo "  config:set             Set global configuration value\n";
+        echo "  config:list            List all global configuration\n";
+        echo "  config:delete          Delete global configuration key\n\n";
         echo "Examples:\n";
         echo "  php dynamiccrud init\n";
         echo "  php dynamiccrud list:tables\n";
@@ -98,6 +107,9 @@ class Application
         echo "  php dynamiccrud generate:template users --output=template.csv\n";
         echo "  php dynamiccrud dump:sql users --output=users.sql\n";
         echo "  php dynamiccrud import:sql backup.sql --force\n";
+        echo "  php dynamiccrud config:set application.name \"My App\"\n";
+        echo "  php dynamiccrud config:get application.name\n";
+        echo "  php dynamiccrud config:list\n";
         echo "  php dynamiccrud clear:cache\n\n";
     }
     

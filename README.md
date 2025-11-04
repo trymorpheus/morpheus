@@ -68,6 +68,36 @@ php bin/dynamiccrud generate:metadata users
 
 ---
 
+## ✨ What's New in v2.8
+
+**Global Config Foundation** - Centralized configuration storage for application-wide settings!
+
+```bash
+# Set configuration
+php bin/dynamiccrud config:set application.name "My App"
+php bin/dynamiccrud config:set theme '{"primary_color":"#667eea"}'
+
+# Get configuration
+php bin/dynamiccrud config:get application.name
+
+# List all configuration
+php bin/dynamiccrud config:list
+
+# Delete configuration
+php bin/dynamiccrud config:delete old.setting
+```
+
+```php
+// PHP usage
+$config = new GlobalMetadata($pdo);
+$config->set('app.name', 'My App');
+$appName = $config->get('app.name');
+```
+
+👉 [See Global Config Examples](examples/14-global-config/)
+
+---
+
 ## ✨ What's New in v2.7
 
 **SQL Dump & Import** - Export and import table structure and data with metadata preserved!
@@ -504,11 +534,14 @@ $crud->handleSubmission();
 ### v2.5 Features
 - Export/Import - CSV export and import with validation
 
+### v2.8 Features
+- [Global Metadata Guide](docs/GLOBAL_METADATA.md) - Centralized configuration
+
 ### v2.7 Features
 - SQL Dump & Import - Export/import with metadata preservation
 
 ### v2.4 Features
-- [CLI Tool Guide](docs/CLI.md) - Enhanced CLI with 15 commands
+- [CLI Tool Guide](docs/CLI.md) - Enhanced CLI with 19 commands
 
 ### v2.3 Features
 - [Notifications & Webhooks Guide](docs/NOTIFICATIONS.md) - Email notifications & webhooks
@@ -604,8 +637,8 @@ COMMENT '{"type": "email", "label": "Email", "tooltip": "Required field", "minle
 
 DynamicCRUD has comprehensive test coverage:
 
-- **289 tests** with **563+ assertions**
-- **100% passing rate** (289 passing, 0 failing)
+- **300 tests** with **582+ assertions**
+- **100% passing rate** (300 passing, 0 failing)
 - **90% code coverage**
 - Automated CI/CD with GitHub Actions
 - Tests run on PHP 8.0, 8.1, 8.2, 8.3
@@ -726,11 +759,11 @@ php vendor/phpunit/phpunit/phpunit tests/SoftDeletesTest.php
 
 ## 📊 Project Stats
 
-- **33 PHP classes** (~11,000 lines)
-- **31 working examples** (1 in v2.7, 2 in v2.5, 2 in v2.3, 4 in v2.2, 6 in v2.1, 4 in v2.0)
-- **19 technical documents** (3 new in v2.6)
-- **289 automated tests** (100% passing, 90% coverage)
-- **15 CLI commands**
+- **34 PHP classes** (~11,500 lines)
+- **32 working examples** (1 in v2.8, 1 in v2.7, 2 in v2.5, 2 in v2.3, 4 in v2.2, 6 in v2.1, 4 in v2.0)
+- **20 technical documents** (1 new in v2.8)
+- **300 automated tests** (100% passing, 90% coverage)
+- **19 CLI commands**
 - **Languages supported**: 3 (English, Spanish, French)
 - **Databases supported**: 2 (MySQL, PostgreSQL)
 - **Template engine**: Blade-like syntax

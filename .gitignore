@@ -17,6 +17,10 @@ examples/uploads/*
 # Local documents
 local_docs/
 
+# Local configuration
+dynamiccrud.json
+
+
 # IDE
 .idea/
 .vscode/
