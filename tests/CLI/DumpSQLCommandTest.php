@@ -12,7 +12,7 @@ class DumpSQLCommandTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->pdo = new \PDO('mysql:host=localhost;dbname=test', 'root', 'rootpassword');
+        $this->pdo = \DynamicCRUD\Tests\TestHelper::getPDO();
         $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
         // Create test table
