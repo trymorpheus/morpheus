@@ -395,7 +395,91 @@ private function cacheSchema(string $cacheKey, array $schema): void
 - Single source of truth for cache key
 - Easier to modify cache strategy
 
-## Pattern 10: Inline Styles for Components
+## Pattern 10: Extract Validation Methods
+
+### Before (v3.5)
+```php
+public function processFile(array $file, array $metadata = []): string
+{
+    if ($file['error'] !== UPLOAD_ERR_OK) {
+        throw new \Exception($this->getUploadErrorMessage($file['error']));
+    }
+
+    $allowedMimes = $metadata['allowed_mimes'] ?? $this->allowedMimes;
+    $maxSize = $metadata['max_size'] ?? $this->maxSize;
+
+    if ($file['size'] > $maxSize) {
+        throw new \Exception("El archivo excede el tamaño...");
+    }
+
+    if (!empty($allowedMimes)) {
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mimeType = finfo_file($finfo, $file['tmp_name']);
+        finfo_close($finfo);
+
+        if (!in_array($mimeType, $allowedMimes)) {
+            throw new \Exception("Tipo de archivo no permitido...");
+        }
+    }
+
+    // ... save file logic
+}
+```
+
+### After (v3.6)
+```php
+public function processFile(array $file, array $metadata = []): string
+{
+    $this->validateUploadError($file['error']);
+    $this->validateFileSize($file['size'], $metadata);
+    $this->validateMimeType($file['tmp_name'], $metadata);
+    
+    return $this->saveFile($file, $metadata);
+}
+
+private function validateUploadError(int $errorCode): void
+{
+    if ($errorCode !== UPLOAD_ERR_OK) {
+        throw new \Exception($this->getUploadErrorMessage($errorCode));
+    }
+}
+
+private function validateFileSize(int $size, array $metadata): void
+{
+    $maxSize = $metadata['max_size'] ?? $this->maxSize;
+    
+    if ($size > $maxSize) {
+        throw new \Exception(
+            "El archivo excede el tamaño máximo permitido de " . $this->formatBytes($maxSize)
+        );
+    }
+}
+
+private function validateMimeType(string $tmpName, array $metadata): void
+{
+    $allowedMimes = $metadata['allowed_mimes'] ?? $this->allowedMimes;
+    
+    if (empty($allowedMimes)) {
+        return;
+    }
+    
+    $mimeType = $this->detectMimeType($tmpName);
+    
+    if (!in_array($mimeType, $allowedMimes)) {
+        throw new \Exception(
+            "Tipo de archivo no permitido. Permitidos: " . implode(', ', $allowedMimes)
+        );
+    }
+}
+```
+
+**Benefits:**
+- Clear validation pipeline
+- Each validator testable in isolation
+- Easy to add new validations
+- Self-documenting code
+
+## Pattern 11: Inline Styles for Components
 
 ### Before (v3.3)
 ```php
@@ -463,6 +547,9 @@ See these files for refactoring examples:
 - `src/Admin/AdminPanel.php` - Components integration
 
 ## Completed Refactorings
+
+### v3.6.0 - File Handling
+1. **FileUploadHandler.php** ✅ - Extracted 15 methods for better organization (~140 to ~200 lines with clear separation)
 
 ### v3.5.0 - Core Classes
 1. **CRUDHandler.php** ✅ - Extracted 16 methods from handleSubmission() (~250 to ~30 lines)

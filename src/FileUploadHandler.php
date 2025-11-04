@@ -14,12 +14,21 @@ class FileUploadHandler
         $this->allowedMimes = $allowedMimes;
         $this->maxSize = $maxSize; // 5MB por defecto
         
+        $this->ensureUploadDirectoryExists();
+        $this->ensureUploadDirectoryWritable();
+    }
+
+    private function ensureUploadDirectoryExists(): void
+    {
         if (!is_dir($this->uploadDir)) {
             if (!mkdir($this->uploadDir, 0755, true)) {
                 throw new \Exception("No se pudo crear el directorio de uploads: {$this->uploadDir}");
             }
         }
-        
+    }
+
+    private function ensureUploadDirectoryWritable(): void
+    {
         if (!is_writable($this->uploadDir)) {
             throw new \Exception("El directorio de uploads no tiene permisos de escritura: {$this->uploadDir}");
         }
@@ -36,35 +45,77 @@ class FileUploadHandler
 
     public function processFile(array $file, array $metadata = []): string
     {
-        if ($file['error'] !== UPLOAD_ERR_OK) {
-            throw new \Exception($this->getUploadErrorMessage($file['error']));
-        }
+        $this->validateUploadError($file['error']);
+        $this->validateFileSize($file['size'], $metadata);
+        $this->validateMimeType($file['tmp_name'], $metadata);
+        
+        return $this->saveFile($file, $metadata);
+    }
 
-        $allowedMimes = $metadata['allowed_mimes'] ?? $this->allowedMimes;
+    private function validateUploadError(int $errorCode): void
+    {
+        if ($errorCode !== UPLOAD_ERR_OK) {
+            throw new \Exception($this->getUploadErrorMessage($errorCode));
+        }
+    }
+
+    private function validateFileSize(int $size, array $metadata): void
+    {
         $maxSize = $metadata['max_size'] ?? $this->maxSize;
-
-        if ($file['size'] > $maxSize) {
-            throw new \Exception("El archivo excede el tamaño máximo permitido de " . $this->formatBytes($maxSize));
+        
+        if ($size > $maxSize) {
+            throw new \Exception(
+                "El archivo excede el tamaño máximo permitido de " . $this->formatBytes($maxSize)
+            );
         }
+    }
 
-        if (!empty($allowedMimes)) {
-            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $mimeType = finfo_file($finfo, $file['tmp_name']);
-            finfo_close($finfo);
-
-            if (!in_array($mimeType, $allowedMimes)) {
-                throw new \Exception("Tipo de archivo no permitido. Permitidos: " . implode(', ', $allowedMimes));
-            }
+    private function validateMimeType(string $tmpName, array $metadata): void
+    {
+        $allowedMimes = $metadata['allowed_mimes'] ?? $this->allowedMimes;
+        
+        if (empty($allowedMimes)) {
+            return;
         }
+        
+        $mimeType = $this->detectMimeType($tmpName);
+        
+        if (!in_array($mimeType, $allowedMimes)) {
+            throw new \Exception(
+                "Tipo de archivo no permitido. Permitidos: " . implode(', ', $allowedMimes)
+            );
+        }
+    }
 
+    private function detectMimeType(string $filePath): string
+    {
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mimeType = finfo_file($finfo, $filePath);
+        finfo_close($finfo);
+        
+        return $mimeType;
+    }
+
+    private function saveFile(array $file, array $metadata): string
+    {
         $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
         $filename = $this->generateUniqueFilename($extension);
-        $destination = $this->uploadDir . '/' . $filename;
-
+        $destination = $this->getDestinationPath($filename);
+        
         if (!$this->moveFile($file['tmp_name'], $destination)) {
             throw new \Exception("Error al mover el archivo subido");
         }
+        
+        return $this->getPublicPath($filename);
+    }
 
+    private function getDestinationPath(string $filename): string
+    {
+        return $this->uploadDir . '/' . $filename;
+    }
+
+    private function getPublicPath(string $filename): string
+    {
         return '../uploads/' . $filename;
     }
 
@@ -80,36 +131,62 @@ class FileUploadHandler
 
     public function handleMultipleUploads(string $fieldName, array $metadata = []): array
     {
-        if (!isset($_FILES[$fieldName]) || !is_array($_FILES[$fieldName]['name'])) {
+        if (!$this->hasMultipleFiles($fieldName)) {
             return [];
         }
 
         $files = $_FILES[$fieldName];
-        $uploadedFiles = [];
+        $this->validateFileCount($files, $metadata);
+        
+        return $this->processMultipleFiles($files, $metadata);
+    }
+
+    private function hasMultipleFiles(string $fieldName): bool
+    {
+        return isset($_FILES[$fieldName]) && is_array($_FILES[$fieldName]['name']);
+    }
+
+    private function validateFileCount(array $files, array $metadata): void
+    {
         $maxFiles = $metadata['max_files'] ?? 10;
         $fileCount = count($files['name']);
-
+        
         if ($fileCount > $maxFiles) {
             throw new \Exception("Máximo {$maxFiles} archivos permitidos");
         }
+    }
 
+    private function processMultipleFiles(array $files, array $metadata): array
+    {
+        $uploadedFiles = [];
+        $fileCount = count($files['name']);
+        
         for ($i = 0; $i < $fileCount; $i++) {
-            if ($files['error'][$i] === UPLOAD_ERR_NO_FILE) {
+            if ($this->isEmptyFile($files['error'][$i])) {
                 continue;
             }
-
-            $file = [
-                'name' => $files['name'][$i],
-                'type' => $files['type'][$i],
-                'tmp_name' => $files['tmp_name'][$i],
-                'error' => $files['error'][$i],
-                'size' => $files['size'][$i],
-            ];
-
+            
+            $file = $this->extractFileData($files, $i);
             $uploadedFiles[] = $this->processFile($file, $metadata);
         }
-
+        
         return $uploadedFiles;
+    }
+
+    private function isEmptyFile(int $errorCode): bool
+    {
+        return $errorCode === UPLOAD_ERR_NO_FILE;
+    }
+
+    private function extractFileData(array $files, int $index): array
+    {
+        return [
+            'name' => $files['name'][$index],
+            'type' => $files['type'][$index],
+            'tmp_name' => $files['tmp_name'][$index],
+            'error' => $files['error'][$index],
+            'size' => $files['size'][$index],
+        ];
     }
 
     private function getUploadErrorMessage(int $errorCode): string
