@@ -94,7 +94,7 @@ class FormGenerator
         }
         
         $html = $this->renderFormOpen();
-        $html .= Components::tabs($tabsData, $tabsContent);
+        $html .= Components::tabs($tabsData, 'form-tabs', $tabsContent);
         
         if ($this->handler) {
             $html .= $this->renderVirtualFields() . "\n";
