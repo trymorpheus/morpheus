@@ -13,7 +13,7 @@ class SoftDeletesTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->pdo = new PDO('mysql:host=localhost;dbname=test', 'root', 'rootpassword');
+        $this->pdo = TestHelper::getPDO();
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         
         $this->pdo->exec("DROP TABLE IF EXISTS test_soft_posts");
