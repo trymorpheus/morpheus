@@ -926,6 +926,8 @@ php vendor/phpunit/phpunit/phpunit tests/SoftDeletesTest.php
 
 ## 🚦 Roadmap
 
+👉 **[See Complete Roadmap](ROADMAP.md)** - Detailed plan for v3.6-v6.0
+
 ### ✅ Completed (v2.1.0)
 - **Authentication System**
   - User registration with auto-login
