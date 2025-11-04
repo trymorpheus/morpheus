@@ -80,8 +80,7 @@ class FormGenerator
             return $this->renderFormOpen() . $this->renderFormFields() . $this->renderSubmitButton() . '</form>' . "\n" . $this->renderWorkflowButtons();
         }
         
-        $tabsData = array_map(fn($tab) => ['id' => $tab['name'], 'label' => $tab['label']], $tabs);
-        $tabsContent = [];
+        $tabsData = [];
         
         foreach ($tabs as $tab) {
             $content = '';
@@ -90,11 +89,15 @@ class FormGenerator
                 if (!in_array($column['name'], $tab['fields'])) continue;
                 $content .= $this->renderField($column) . "\n";
             }
-            $tabsContent[] = $content;
+            $tabsData[] = [
+                'id' => $tab['name'],
+                'title' => $tab['name'],
+                'content' => $content
+            ];
         }
         
         $html = $this->renderFormOpen();
-        $html .= Components::tabs($tabsData, 'form-tabs', $tabsContent);
+        $html .= Components::tabs($tabsData, 'form-tabs');
         
         if ($this->handler) {
             $html .= $this->renderVirtualFields() . "\n";
