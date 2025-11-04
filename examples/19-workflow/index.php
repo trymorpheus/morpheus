@@ -16,6 +16,9 @@ if (!isset($_SESSION['user_id'])) {
 
 $crud = new DynamicCRUD($pdo, 'orders');
 
+// Set current user for permission checks
+$crud->setCurrentUser($_SESSION['user_id'], $_SESSION['role']);
+
 // Enable workflow
 $crud->enableWorkflow([
     'field' => 'status',
@@ -120,6 +123,15 @@ $action = $_GET['action'] ?? 'form';
         .history-table th { background: #f7fafc; font-weight: 600; color: #2d3748; }
         .history-table tr:hover { background: #f7fafc; }
         .state-badge { padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 500; color: white; }
+        .list-table { width: 100%; border-collapse: collapse; }
+        .list-table th, .list-table td { padding: 12px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+        .list-table th { background: #f7fafc; font-weight: 600; color: #2d3748; }
+        .list-table tr:hover { background: #f7fafc; }
+        .action-edit, .action-delete { display: inline-block; padding: 6px 12px; margin-right: 5px; border-radius: 4px; text-decoration: none; font-size: 13px; }
+        .action-edit { background: #667eea; color: white; }
+        .action-edit:hover { opacity: 0.8; }
+        .action-delete { background: #e53e3e; color: white; }
+        .action-delete:hover { opacity: 0.8; }
     </style>
 </head>
 <body>
@@ -189,13 +201,31 @@ $action = $_GET['action'] ?? 'form';
             <?php if ($action === 'list'): ?>
                 <h2 style="margin-bottom: 20px;">Lista de Pedidos</h2>
                 <?php
+                // Handle delete
+                if (isset($_GET['delete'])) {
+                    $crud->delete((int)$_GET['delete']);
+                    header("Location: ?action=list&deleted=1");
+                    exit;
+                }
+                
                 $list = $crud->renderList();
+                
+                // Fix edit/delete links
+                $list = preg_replace('/href="\?[^"]*id=(\d+)"/', 'href="?id=$1"', $list);
+                $list = preg_replace('/href="\?[^"]*delete=(\d+)"/', 'href="?action=list&delete=$1"', $list);
+                
                 // Enhance state column with badges
                 $workflowEngine = $crud->getWorkflowEngine();
                 foreach (['pending', 'processing', 'shipped', 'delivered', 'cancelled'] as $state) {
                     $badge = $workflowEngine->renderStateColumn($state);
                     $list = str_replace(">$state<", ">$badge<", $list);
                 }
+                
+                // Add success message for delete
+                if (isset($_GET['deleted'])) {
+                    echo '<div class="alert alert-success">✅ Pedido eliminado correctamente</div>';
+                }
+                
                 echo $list;
                 ?>
             <?php elseif ($action === 'history' && $id): ?>

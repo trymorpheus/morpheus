@@ -207,6 +207,9 @@ class WorkflowEngine
         
         $historyTable = $this->config['history_table'] ?? '_workflow_history';
         
+        // Ensure history table exists
+        $this->createHistoryTable($historyTable);
+        
         $sql = "SELECT * FROM {$historyTable} 
                 WHERE table_name = :table AND record_id = :record_id 
                 ORDER BY created_at DESC";

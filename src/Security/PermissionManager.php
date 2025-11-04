@@ -55,6 +55,11 @@ class PermissionManager
     {
         return $this->currentUserRole ?? 'guest';
     }
+    
+    public function getCurrentRole(): string
+    {
+        return $this->getCurrentUserRole();
+    }
 
     public function can(string $action, ?array $record = null): bool
     {

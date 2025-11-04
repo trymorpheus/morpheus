@@ -10,5 +10,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['role'])) {
     }
 }
 
-header('Location: index.php' . ($_GET['id'] ?? '' ? '?id=' . $_GET['id'] : ''));
+// Conservar query string completa
+$queryString = $_SERVER['QUERY_STRING'] ?? '';
+$redirect = 'index.php' . ($queryString ? '?' . $queryString : '');
+
+header('Location: ' . $redirect);
 exit;

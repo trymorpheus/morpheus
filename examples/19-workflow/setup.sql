@@ -6,19 +6,25 @@ DROP TABLE IF EXISTS _workflow_history;
 -- Create orders table with workflow
 CREATE TABLE orders (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    customer_name VARCHAR(255) NOT NULL,
-    product VARCHAR(255) NOT NULL,
-    amount DECIMAL(10,2) NOT NULL,
-    status VARCHAR(50) NOT NULL DEFAULT 'pending',
-    notes TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    customer_name VARCHAR(255) NOT NULL COMMENT '{"label": "Cliente"}',
+    product VARCHAR(255) NOT NULL COMMENT '{"label": "Producto"}',
+    amount DECIMAL(10,2) NOT NULL COMMENT '{"label": "Monto", "type": "number", "step": "0.01", "min": 0}',
+    status VARCHAR(50) NOT NULL DEFAULT 'pending' COMMENT '{"label": "Estado", "readonly": true}',
+    notes TEXT COMMENT '{"label": "Notas"}',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '{"hidden": true}',
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '{"hidden": true}'
 ) COMMENT = '{
     "display_name": "Orders",
     "icon": "🛒",
     "list_view": {
         "searchable": ["customer_name", "product"],
         "per_page": 20
+    },
+    "behaviors": {
+        "timestamps": {
+            "created_at": "created_at",
+            "updated_at": "updated_at"
+        }
     }
 }';
 
