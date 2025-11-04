@@ -2,10 +2,11 @@
 
 namespace DynamicCRUD\CLI\Commands;
 
-class DumpSQLCommand
+class DumpSQLCommand extends Command
 {
     public function execute(array $args): void
     {
+        var_dump($args);
         if (empty($args[0])) {
             echo "❌ Error: Table name required\n";
             echo "Usage: php dynamiccrud dump:sql <table> [--output=file.sql] [--data-only] [--structure-only]\n";
@@ -18,7 +19,7 @@ class DumpSQLCommand
         $structureOnly = in_array('--structure-only', $args);
 
         try {
-            $pdo = $this->getConnection();
+            $pdo = $this->getPDO();
             $dump = $this->generateDump($pdo, $table, $dataOnly, $structureOnly);
 
             if ($output) {
@@ -81,51 +82,5 @@ class DumpSQLCommand
         }
 
         return $dump;
-    }
-
-    private function getConnection(): \PDO
-    {
-        $config = $this->loadConfig();
-        
-        $dsn = sprintf(
-            '%s:host=%s;dbname=%s',
-            $config['driver'] ?? 'mysql',
-            $config['host'] ?? 'localhost',
-            $config['database'] ?? 'test'
-        );
-
-        return new \PDO(
-            $dsn,
-            $config['username'] ?? 'root',
-            $config['password'] ?? '',
-            [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION]
-        );
-    }
-
-    private function loadConfig(): array
-    {
-        $configFile = getcwd() . '/dynamiccrud.json';
-        
-        if (!file_exists($configFile)) {
-            return [
-                'driver' => 'mysql',
-                'host' => 'localhost',
-                'database' => 'test',
-                'username' => 'root',
-                'password' => 'rootpassword'
-            ];
-        }
-
-        return json_decode(file_get_contents($configFile), true);
-    }
-
-    private function getOption(array $args, string $option): ?string
-    {
-        foreach ($args as $arg) {
-            if (strpos($arg, $option . '=') === 0) {
-                return substr($arg, strlen($option) + 1);
-            }
-        }
-        return null;
     }
 }

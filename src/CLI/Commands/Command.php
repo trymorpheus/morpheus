@@ -66,4 +66,14 @@ abstract class Command
         
         return $config;
     }
+
+    protected function getOption(array $args, string $option): ?string
+    {
+        foreach ($args as $arg) {
+            if (strpos($arg, $option . '=') === 0) {
+                return substr($arg, strlen($option) + 1);
+            }
+        }
+        return null;
+    }
 }
