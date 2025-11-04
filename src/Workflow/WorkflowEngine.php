@@ -22,14 +22,27 @@ class WorkflowEngine
 
     private function validateConfig(): void
     {
+        $this->validateField();
+        $this->validateStates();
+        $this->validateTransitions();
+    }
+
+    private function validateField(): void
+    {
         if (empty($this->config['field'])) {
             throw new \InvalidArgumentException('Workflow field is required');
         }
-        
+    }
+
+    private function validateStates(): void
+    {
         if (empty($this->config['states'])) {
             throw new \InvalidArgumentException('Workflow states are required');
         }
-        
+    }
+
+    private function validateTransitions(): void
+    {
         if (empty($this->config['transitions'])) {
             throw new \InvalidArgumentException('Workflow transitions are required');
         }
@@ -63,32 +76,58 @@ class WorkflowEngine
 
     public function canTransition(string $transition, ?string $currentState = null, ?array $user = null): bool
     {
-        if (!isset($this->config['transitions'][$transition])) {
+        if (!$this->transitionExists($transition)) {
             return false;
         }
         
-        $transitionConfig = $this->config['transitions'][$transition];
+        $transitionConfig = $this->getTransitionConfig($transition);
         
-        // Check from state
-        if ($currentState !== null) {
-            $allowedFrom = is_array($transitionConfig['from']) 
-                ? $transitionConfig['from'] 
-                : [$transitionConfig['from']];
-            
-            if (!in_array($currentState, $allowedFrom)) {
-                return false;
-            }
+        if (!$this->isValidFromState($transitionConfig, $currentState)) {
+            return false;
         }
         
-        // Check permissions
-        if ($user !== null && isset($transitionConfig['permissions'])) {
-            $userRole = $user['role'] ?? 'guest';
-            if (!in_array($userRole, $transitionConfig['permissions'])) {
-                return false;
-            }
+        if (!$this->hasPermission($transitionConfig, $user)) {
+            return false;
         }
         
         return true;
+    }
+
+    private function transitionExists(string $transition): bool
+    {
+        return isset($this->config['transitions'][$transition]);
+    }
+
+    private function getTransitionConfig(string $transition): array
+    {
+        return $this->config['transitions'][$transition];
+    }
+
+    private function isValidFromState(array $transitionConfig, ?string $currentState): bool
+    {
+        if ($currentState === null) {
+            return true;
+        }
+        
+        $allowedFrom = $this->getAllowedFromStates($transitionConfig);
+        return in_array($currentState, $allowedFrom);
+    }
+
+    private function getAllowedFromStates(array $transitionConfig): array
+    {
+        return is_array($transitionConfig['from']) 
+            ? $transitionConfig['from'] 
+            : [$transitionConfig['from']];
+    }
+
+    private function hasPermission(array $transitionConfig, ?array $user): bool
+    {
+        if ($user === null || !isset($transitionConfig['permissions'])) {
+            return true;
+        }
+        
+        $userRole = $user['role'] ?? 'guest';
+        return in_array($userRole, $transitionConfig['permissions']);
     }
 
     public function getAvailableTransitions(?string $currentState = null, ?array $user = null): array
@@ -109,55 +148,85 @@ class WorkflowEngine
         $currentState = $this->getCurrentState($id);
         
         if (!$this->canTransition($transition, $currentState, $user)) {
-            return [
-                'success' => false,
-                'error' => 'Transition not allowed'
-            ];
+            return $this->transitionNotAllowed();
         }
         
-        $transitionConfig = $this->config['transitions'][$transition];
-        $newState = $transitionConfig['to'];
+        $newState = $this->getNewState($transition);
+        $this->ensureHistoryTable();
         
-        // Create history table if needed (outside transaction)
-        if ($this->config['history'] ?? false) {
-            $this->createHistoryTable($this->config['history_table'] ?? '_workflow_history');
+        return $this->executeTransition($id, $transition, $currentState, $newState, $user);
+    }
+
+    private function transitionNotAllowed(): array
+    {
+        return ['success' => false, 'error' => 'Transition not allowed'];
+    }
+
+    private function getNewState(string $transition): string
+    {
+        return $this->config['transitions'][$transition]['to'];
+    }
+
+    private function ensureHistoryTable(): void
+    {
+        if ($this->isHistoryEnabled()) {
+            $this->createHistoryTable($this->getHistoryTableName());
         }
-        
+    }
+
+    private function isHistoryEnabled(): bool
+    {
+        return $this->config['history'] ?? false;
+    }
+
+    private function getHistoryTableName(): string
+    {
+        return $this->config['history_table'] ?? '_workflow_history';
+    }
+
+    private function executeTransition(int $id, string $transition, ?string $currentState, string $newState, ?array $user): array
+    {
         try {
             $this->pdo->beginTransaction();
             
-            // Execute before hook
             $this->executeHook('before_' . $transition, $id, $currentState, $newState, $user);
-            
-            // Update state
-            $field = $this->config['field'];
-            $sql = "UPDATE {$this->table} SET {$field} = :state WHERE id = :id";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute(['state' => $newState, 'id' => $id]);
-            
-            // Log transition if history enabled
-            if ($this->config['history'] ?? false) {
-                $this->logTransition($id, $transition, $currentState, $newState, $user);
-            }
-            
-            // Execute after hook
+            $this->updateState($id, $newState);
+            $this->logTransitionIfEnabled($id, $transition, $currentState, $newState, $user);
             $this->executeHook('after_' . $transition, $id, $currentState, $newState, $user);
             
             $this->pdo->commit();
             
-            return [
-                'success' => true,
-                'from' => $currentState,
-                'to' => $newState
-            ];
+            return $this->transitionSuccess($currentState, $newState);
             
         } catch (\Exception $e) {
             $this->pdo->rollBack();
-            return [
-                'success' => false,
-                'error' => $e->getMessage()
-            ];
+            return $this->transitionError($e->getMessage());
         }
+    }
+
+    private function updateState(int $id, string $newState): void
+    {
+        $field = $this->config['field'];
+        $sql = "UPDATE {$this->table} SET {$field} = :state WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['state' => $newState, 'id' => $id]);
+    }
+
+    private function logTransitionIfEnabled(int $id, string $transition, ?string $currentState, string $newState, ?array $user): void
+    {
+        if ($this->isHistoryEnabled()) {
+            $this->logTransition($id, $transition, $currentState, $newState, $user);
+        }
+    }
+
+    private function transitionSuccess(?string $from, string $to): array
+    {
+        return ['success' => true, 'from' => $from, 'to' => $to];
+    }
+
+    private function transitionError(string $message): array
+    {
+        return ['success' => false, 'error' => $message];
     }
 
     private function logTransition(int $recordId, string $transition, ?string $fromState, string $toState, ?array $user): void
@@ -201,15 +270,18 @@ class WorkflowEngine
 
     public function getHistory(int $recordId): array
     {
-        if (!($this->config['history'] ?? false)) {
+        if (!$this->isHistoryEnabled()) {
             return [];
         }
         
-        $historyTable = $this->config['history_table'] ?? '_workflow_history';
-        
-        // Ensure history table exists
+        $historyTable = $this->getHistoryTableName();
         $this->createHistoryTable($historyTable);
         
+        return $this->fetchHistory($historyTable, $recordId);
+    }
+
+    private function fetchHistory(string $historyTable, int $recordId): array
+    {
         $sql = "SELECT * FROM {$historyTable} 
                 WHERE table_name = :table AND record_id = :record_id 
                 ORDER BY created_at DESC";
