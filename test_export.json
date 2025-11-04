@@ -1,0 +1,19 @@
+{
+    "table": "notif_contacts",
+    "table_metadata": {
+        "display_name": "Contact Forms",
+        "icon": "?",
+        "webhooks": [
+            {
+                "event": "on_create",
+                "url": "https:\/\/webhook.site\/7ceadb9e-9150-461d-85a9-a65198512a45",
+                "method": "POST",
+                "headers": {
+                    "Authorization": "Bearer demo-token"
+                }
+            }
+        ]
+    },
+    "column_metadata": [],
+    "exported_at": "2025-11-04T01:56:47+00:00"
+}

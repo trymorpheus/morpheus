@@ -7,6 +7,116 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.4.0] - 2025-01-XX
+
+### 🎉 CLI Enhancements Release
+
+Powerful new CLI commands for webhook management, metadata operations, and database testing.
+
+### ✨ Added
+
+#### New CLI Commands
+- **test:connection** - Test database connectivity and display connection info
+- **webhook:configure** - Configure webhooks for tables from command line
+- **test:webhook** - Test webhook connectivity with real HTTP requests
+- **metadata:export** - Export table and column metadata to JSON file
+- **metadata:import** - Import metadata from JSON file for backup/migration
+
+#### CLI Improvements
+- Reorganized help menu with command categories
+- Better error messages and status indicators
+- SSL verification disabled for development webhooks
+- Support for command options (--output, --event)
+
+#### Testing
+- **CLICommandsTest** - 3 integration tests (100% passing)
+- All existing tests passing (280/280)
+
+#### Documentation
+- Updated CLI.md with 5 new commands
+- Added 2 new workflows (webhook setup, metadata migration)
+- Enhanced troubleshooting section
+
+### 🔧 Changed
+- CLI help output now organized by categories
+- Application.php registers 10 commands (5 new)
+
+### 📊 Statistics
+- **5 new CLI commands**
+- **3 new tests** (100% passing)
+- **280 total tests** (100% passing, 90% coverage)
+- **10 total CLI commands**
+
+---
+
+## [2.3.0] - 2025-01-XX
+
+### 🎉 Notifications & Webhooks Release
+
+Automatic email notifications and webhook triggers on CRUD events.
+
+### ✨ Added
+
+#### Notifications System
+- **NotificationManager** class for email and webhook handling
+- **Email notifications** with template placeholders (`{{id}}`, `{{data.field}}`)
+- **Webhook triggers** with custom headers and methods (GET, POST, PUT, DELETE)
+- **Event-based triggers** (on_create, on_update, on_delete)
+- **Field-specific notifications** - Only notify when specific fields change
+- **Multiple recipients** - Send to multiple email addresses
+- **Multiple webhooks** - Trigger multiple endpoints per event
+- **Non-blocking execution** - Errors don't prevent CRUD operations
+- **Template placeholders** - Dynamic content in subject and body
+- **JSON payload** - Structured webhook data with event, table, id, data, timestamp
+
+#### Table Metadata Extensions
+- `hasNotifications()` method in TableMetadata
+- `getNotificationConfig()` method in TableMetadata
+- Support for `notifications` and `webhooks` in table COMMENT
+
+#### Integration
+- Automatic notification triggers in CRUDHandler after CRUD events
+- Email sent via PHP `mail()` function (customizable)
+- Webhooks called via cURL with 10-second timeout
+- Graceful error handling with @ suppression
+
+#### Examples
+- `examples/11-notifications/` - Complete notifications examples
+  - `email-notifications.php` - Email notifications on order creation/update
+  - `webhooks.php` - Webhook triggers on contact form submission
+  - `setup.sql` - Database setup with notif_ prefixed tables
+
+#### Testing
+- **NotificationManagerTest** - 7 tests (100% passing)
+  - Email notification tests (3)
+  - Webhook trigger tests (2)
+  - Edge case tests (2)
+- All existing tests passing (277/277)
+
+#### Documentation
+- `docs/NOTIFICATIONS.md` - Complete notifications guide
+- Email configuration examples
+- Webhook configuration with authentication
+- Security considerations
+- Testing with webhook.site
+- Custom email handler examples
+- Performance considerations (async processing)
+
+### 🔧 Changed
+- CRUDHandler now triggers notifications after afterCreate, afterUpdate, afterDelete hooks
+- NotificationManager instantiated only when table has notification config
+
+### 📊 Statistics
+- **1 new class** (NotificationManager)
+- **2 new examples** in 11-notifications/
+- **7 new tests** (100% passing)
+- **277 total tests** (100% passing, 90% coverage)
+- **2 new TableMetadata methods**
+- **Notification features**: 2 (email, webhooks)
+- **Event types**: 3 (on_create, on_update, on_delete)
+
+---
+
 ## [2.2.0] - 2025-01-XX
 
 ### 🎉 Validation Rules & Business Logic Release
@@ -365,6 +475,8 @@ This release introduces **table-level metadata** - a revolutionary way to config
 
 | Version | Release Date | Key Features |
 |---------|--------------|--------------|
+| **2.3.0** | 2025-01-XX | Notifications & Webhooks |
+| **2.2.0** | 2025-01-XX | Validation Rules & Business Logic |
 | **2.1.0** | 2024-12-XX | Authentication & RBAC |
 | **2.0.0** | 2024-12-XX | Table Metadata System (Phase 1) |
 | 1.5.0 | 2024-11-XX | Template System |
@@ -404,19 +516,19 @@ $crud->renderList();  // Now uses metadata
 
 ## Roadmap
 
-### Phase 2: Security & Validation (v2.1-v2.2) - ✅ COMPLETED
+### Phase 2: Security & Validation (v2.1-v2.3) - ✅ COMPLETED
 - ✅ Permissions & Security (RBAC, row-level security)
 - ✅ Authentication (register, login, rate limiting)
 - ✅ Soft deletes
 - ✅ Validation & Rules (unique_together, conditional, business rules)
-- [ ] Notifications (email, webhooks)
+- ✅ Notifications (email, webhooks)
 
-### Phase 3: Advanced Features (v2.3) - Planned
+### Phase 3: Advanced Features (v2.4) - Planned
 - Versioning & Audit enhancements
 - Advanced Relationships (polymorphic, has-many-through)
 - API & Export (REST API, CSV/Excel/PDF)
 
-### Phase 4: Analytics (v2.3) - Planned
+### Phase 4: Analytics (v2.5) - Planned
 - Analytics & Reporting (metrics, charts, dashboards)
 
 ---

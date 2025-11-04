@@ -219,6 +219,140 @@ Clear schema and template cache files.
 php vendor/bin/dynamiccrud clear:cache
 ```
 
+---
+
+### 6. test:connection - Test Database Connection (NEW v2.4)
+
+Test database connectivity and display connection information.
+
+**Usage:**
+```bash
+php vendor/bin/dynamiccrud test:connection
+```
+
+**Output Example:**
+```
+ℹ️  Testing database connection...
+✅ ✓ Connection successful
+  Database: test
+  Version: 8.0.44
+  Tables: 19
+```
+
+---
+
+### 7. webhook:configure - Configure Webhook (NEW v2.4)
+
+Configure webhook for a table.
+
+**Usage:**
+```bash
+php vendor/bin/dynamiccrud webhook:configure <table> <url> [--event=on_create]
+```
+
+**Examples:**
+```bash
+# Configure webhook for on_create event
+php vendor/bin/dynamiccrud webhook:configure users https://webhook.site/abc123
+
+# Configure webhook for on_update event
+php vendor/bin/dynamiccrud webhook:configure users https://api.example.com/hook --event=on_update
+```
+
+**Output:**
+```
+✅ Webhook configured for table 'users'
+  Event: on_create
+  URL: https://webhook.site/abc123
+```
+
+---
+
+### 8. test:webhook - Test Webhook (NEW v2.4)
+
+Test webhook connectivity for a table.
+
+**Usage:**
+```bash
+php vendor/bin/dynamiccrud test:webhook <table>
+```
+
+**Example:**
+```bash
+php vendor/bin/dynamiccrud test:webhook users
+```
+
+**Output:**
+```
+ℹ️  Testing webhooks for table: users
+✅ Found 1 webhook(s)
+
+ℹ️  Webhook #1
+  URL: https://webhook.site/abc123
+  Method: POST
+  Event: on_create
+✅  ✓ Success (HTTP 200)
+```
+
+---
+
+### 9. metadata:export - Export Metadata (NEW v2.4)
+
+Export table and column metadata to JSON file.
+
+**Usage:**
+```bash
+php vendor/bin/dynamiccrud metadata:export <table> [--output=file.json]
+```
+
+**Examples:**
+```bash
+# Export to file
+php vendor/bin/dynamiccrud metadata:export users --output=users.json
+
+# Export to stdout
+php vendor/bin/dynamiccrud metadata:export users
+```
+
+**Output Format:**
+```json
+{
+    "table": "users",
+    "table_metadata": {
+        "display_name": "Users",
+        "icon": "👥"
+    },
+    "column_metadata": {
+        "email": {"type": "email", "label": "Email Address"},
+        "age": {"type": "number", "min": 18}
+    },
+    "exported_at": "2025-01-15T10:30:00+00:00"
+}
+```
+
+---
+
+### 10. metadata:import - Import Metadata (NEW v2.4)
+
+Import table and column metadata from JSON file.
+
+**Usage:**
+```bash
+php vendor/bin/dynamiccrud metadata:import <file.json>
+```
+
+**Example:**
+```bash
+php vendor/bin/dynamiccrud metadata:import users.json
+```
+
+**Output:**
+```
+✅ Table metadata imported
+✅ Column metadata imported (5 columns)
+✅ Metadata import completed for table 'users'
+```
+
 **What it does:**
 - Deletes template cache files (`cache/templates/*`)
 - Deletes schema cache files (`cache/*.cache`)
@@ -307,17 +441,49 @@ php vendor/bin/dynamiccrud clear:cache
 ### Workflow 3: Debugging
 
 ```bash
-# 1. List all tables to see overview
+# 1. Test connection
+php vendor/bin/dynamiccrud test:connection
+
+# 2. List all tables to see overview
 php vendor/bin/dynamiccrud list:tables
 
-# 2. Validate specific table
+# 3. Validate specific table
 php vendor/bin/dynamiccrud validate:metadata problematic_table
 
-# 3. Clear cache
+# 4. Clear cache
 php vendor/bin/dynamiccrud clear:cache
 
-# 4. Regenerate metadata if needed
+# 5. Regenerate metadata if needed
 php vendor/bin/dynamiccrud generate:metadata problematic_table
+```
+
+### Workflow 4: Webhook Setup (NEW v2.4)
+
+```bash
+# 1. Configure webhook
+php vendor/bin/dynamiccrud webhook:configure users https://webhook.site/abc123
+
+# 2. Test webhook
+php vendor/bin/dynamiccrud test:webhook users
+
+# 3. Check webhook.site for test payload
+```
+
+### Workflow 5: Metadata Backup & Migration (NEW v2.4)
+
+```bash
+# 1. Export metadata from source
+php vendor/bin/dynamiccrud metadata:export users --output=users.json
+php vendor/bin/dynamiccrud metadata:export posts --output=posts.json
+
+# 2. Transfer files to target environment
+
+# 3. Import metadata on target
+php vendor/bin/dynamiccrud metadata:import users.json
+php vendor/bin/dynamiccrud metadata:import posts.json
+
+# 4. Validate
+php vendor/bin/dynamiccrud validate:metadata users
 ```
 
 ---

@@ -280,4 +280,25 @@ class TableMetadata
         
         return $rules;
     }
+    
+    // Notifications & Webhooks
+    public function hasNotifications(): bool
+    {
+        return isset($this->metadata['notifications']) || isset($this->metadata['webhooks']);
+    }
+    
+    public function getNotificationConfig(): array
+    {
+        $config = [];
+        
+        if (isset($this->metadata['notifications'])) {
+            $config['notifications'] = $this->metadata['notifications'];
+        }
+        
+        if (isset($this->metadata['webhooks'])) {
+            $config['webhooks'] = $this->metadata['webhooks'];
+        }
+        
+        return $config;
+    }
 }

@@ -22,6 +22,7 @@ class CRUDHandler
     private ?Translator $translator = null;
     private $tableMetadata = null;
     private ?PermissionManager $permissionManager = null;
+    private ?NotificationManager $notificationManager = null;
 
     public function __construct(PDO $pdo, string $table, ?CacheStrategy $cache = null, ?string $uploadDir = null)
     {
@@ -37,6 +38,11 @@ class CRUDHandler
         $this->fileHandler = new FileUploadHandler($uploadDir);
         $this->schema = $this->analyzer->getTableSchema($table);
         $this->tableMetadata = new Metadata\TableMetadata($pdo, $table);
+        
+        // Initialize notifications if configured
+        if ($this->tableMetadata->hasNotifications()) {
+            $this->notificationManager = new NotificationManager();
+        }
     }
 
     public function renderForm(?int $id = null): string
@@ -203,6 +209,17 @@ class CRUDHandler
             
             // Hook: afterUpdate
             $this->executeHook('afterUpdate', $id, $data);
+            
+            // Notifications
+            if ($this->notificationManager) {
+                $config = $this->tableMetadata->getNotificationConfig();
+                if (isset($config['notifications']['on_update'])) {
+                    $this->notificationManager->sendEmailNotifications($config['notifications']['on_update'], $data, $id);
+                }
+                if (isset($config['webhooks'])) {
+                    $this->notificationManager->triggerWebhooks($config['webhooks'], 'on_update', $data, $id);
+                }
+            }
         } else {
             // Hook: beforeCreate
             $data = $this->executeHook('beforeCreate', $data);
@@ -215,6 +232,17 @@ class CRUDHandler
             
             // Hook: afterCreate
             $this->executeHook('afterCreate', $id, $data);
+            
+            // Notifications
+            if ($this->notificationManager) {
+                $config = $this->tableMetadata->getNotificationConfig();
+                if (isset($config['notifications']['on_create'])) {
+                    $this->notificationManager->sendEmailNotifications($config['notifications']['on_create'], $data, $id);
+                }
+                if (isset($config['webhooks'])) {
+                    $this->notificationManager->triggerWebhooks($config['webhooks'], 'on_create', $data, $id);
+                }
+            }
         }
         
         // Hook: afterSave
@@ -346,6 +374,17 @@ class CRUDHandler
             
             // Hook: afterDelete
             $this->executeHook('afterDelete', $id);
+            
+            // Notifications
+            if ($this->notificationManager) {
+                $config = $this->tableMetadata->getNotificationConfig();
+                if (isset($config['notifications']['on_delete'])) {
+                    $this->notificationManager->sendEmailNotifications($config['notifications']['on_delete'], $oldValues, $id);
+                }
+                if (isset($config['webhooks'])) {
+                    $this->notificationManager->triggerWebhooks($config['webhooks'], 'on_delete', $oldValues, $id);
+                }
+            }
             
             $this->pdo->commit();
             return $result;

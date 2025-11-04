@@ -68,6 +68,104 @@ php bin/dynamiccrud generate:metadata users
 
 ---
 
+## ✨ What's New in v2.4
+
+**CLI Enhancements** - Powerful new commands for webhook management and metadata operations!
+
+```bash
+# Test database connection
+php bin/dynamiccrud test:connection
+
+# Configure webhooks easily
+php bin/dynamiccrud webhook:configure users https://webhook.site/abc123
+php bin/dynamiccrud test:webhook users
+
+# Export/import metadata for backup and migration
+php bin/dynamiccrud metadata:export users --output=users.json
+php bin/dynamiccrud metadata:import users.json
+```
+
+👉 [See CLI Guide](docs/CLI.md)
+
+---
+
+## ✨ What's New in v2.3
+
+**Notifications & Webhooks** - Send email notifications and trigger webhooks automatically on CRUD events!
+
+```sql
+CREATE TABLE orders (
+    id INT PRIMARY KEY,
+    customer_name VARCHAR(255),
+    amount DECIMAL(10,2)
+) COMMENT = '{
+    "notifications": {
+        "on_create": {
+            "email": ["admin@example.com"],
+            "subject": "New Order #{{id}}",
+            "template": "Customer: {{data.customer_name}}, Amount: ${{data.amount}}"
+        }
+    },
+    "webhooks": [
+        {
+            "event": "on_create",
+            "url": "https://api.example.com/webhook",
+            "method": "POST",
+            "headers": {"Authorization": "Bearer token"}
+        }
+    ]
+}';
+```
+
+```php
+$crud = new DynamicCRUD($pdo, 'orders');
+$result = $crud->handleSubmission();
+// Email sent + webhook triggered automatically!
+```
+
+👉 [See Notifications Guide](docs/NOTIFICATIONS.md)
+
+---
+
+## ✨ What's New in v2.2
+
+**Validation Rules & Business Logic** - Advanced validation configured entirely through table metadata!
+
+```sql
+CREATE TABLE products (
+    id INT PRIMARY KEY,
+    price DECIMAL(10,2),
+    discount DECIMAL(5,2)
+) COMMENT = '{
+    "validation_rules": {
+        "unique_together": [["sku", "category"]],
+        "required_if": {
+            "min_stock": {"status": "active"}
+        },
+        "conditional": {
+            "discount": {
+                "condition": "price > 100",
+                "max": 50
+            }
+        }
+    },
+    "business_rules": {
+        "max_records_per_user": 100,
+        "require_approval": true
+    }
+}';
+```
+
+```php
+$crud = new DynamicCRUD($pdo, 'products');
+$result = $crud->handleSubmission();
+// Validates: unique combinations, conditional requirements, business limits
+```
+
+👉 [See Validation Rules Guide](docs/VALIDATION_RULES.md)
+
+---
+
 ## ✨ What's New in v2.1
 
 **Authentication, RBAC & Soft Deletes** - Complete user authentication, authorization, and soft delete support!
@@ -330,7 +428,16 @@ $crud->handleSubmission();
 
 ## 📚 Documentation
 
-### v2.1 Features (NEW!)
+### v2.4 Features (NEW!)
+- [CLI Tool Guide](docs/CLI.md) - Enhanced CLI with 10 commands
+
+### v2.3 Features
+- [Notifications & Webhooks Guide](docs/NOTIFICATIONS.md) - Email notifications & webhooks
+
+### v2.2 Features
+- [Validation Rules Guide](docs/VALIDATION_RULES.md) - Advanced validation & business logic
+
+### v2.1 Features
 - [CLI Tool Guide](docs/CLI.md) - Command-line interface documentation
 - [RBAC & Authentication Guide](docs/RBAC.md) - Complete auth & permissions guide
 
@@ -413,8 +520,8 @@ COMMENT '{"type": "email", "label": "Email", "tooltip": "Required field", "minle
 
 DynamicCRUD has comprehensive test coverage:
 
-- **231 tests** with **420+ assertions**
-- **100% passing rate** (231 passing, 0 failing)
+- **243 tests** with **450+ assertions**
+- **100% passing rate** (243 passing, 0 failing)
 - **90% code coverage**
 - Automated CI/CD with GitHub Actions
 - Tests run on PHP 8.0, 8.1, 8.2, 8.3
@@ -500,11 +607,32 @@ php vendor/phpunit/phpunit/phpunit tests/SoftDeletesTest.php
 - File caching for performance
 - 17 new tests for templates (100% passing)
 
-### 🔮 Planned (v2.2+)
+### ✅ Completed (v2.2.0)
+- **Validation Rules**
+  - unique_together - Composite unique constraints
+  - required_if - Conditional required fields
+  - conditional - Dynamic min/max validation
+- **Business Rules**
+  - max_records_per_user - Record limits per user
+  - require_approval - Approval workflows
+- ValidationRulesEngine class
+- 4 new examples in 10-validation-rules/
+- 12 new tests (100% passing)
+
+### ✅ Completed (v2.3.0)
+- **Notifications & Webhooks**
+  - Email notifications with template placeholders
+  - Webhook triggers with custom headers
+  - Field-specific update notifications
+  - Multiple recipients and webhooks
+  - Non-blocking error handling
+- NotificationManager class
+- 2 new examples in 11-notifications/
+- 7 new tests (100% passing)
+
+### 🔮 Planned (v2.4+)
 - [ ] OAuth/LDAP authentication
 - [ ] Email verification
-- [ ] Password reset
-- [ ] Soft deletes
 - [ ] SQL Server support
 - [ ] REST API generation
 - [ ] GraphQL support
@@ -514,10 +642,11 @@ php vendor/phpunit/phpunit/phpunit tests/SoftDeletesTest.php
 
 ## 📊 Project Stats
 
-- **27 PHP classes** (~9,000 lines)
-- **22 working examples** (6 in v2.1, 4 in v2.0)
-- **14 technical documents**
-- **242 automated tests** (100% passing, 90% coverage)
+- **29 PHP classes** (~10,000 lines)
+- **28 working examples** (2 in v2.3, 4 in v2.2, 6 in v2.1, 4 in v2.0)
+- **16 technical documents**
+- **280 automated tests** (100% passing, 90% coverage)
+- **10 CLI commands** (5 new in v2.4)
 - **Languages supported**: 3 (English, Spanish, French)
 - **Databases supported**: 2 (MySQL, PostgreSQL)
 - **Template engine**: Blade-like syntax
@@ -525,7 +654,9 @@ php vendor/phpunit/phpunit/phpunit tests/SoftDeletesTest.php
 - **Authentication**: Register, login, logout, password reset, rate limiting
 - **RBAC**: Table + row-level permissions
 - **Soft Deletes**: Delete, restore, force delete
-- **Table metadata features**: 4 (UI/UX, Forms, Behaviors, Search)
+- **Validation Rules**: 3 types (unique_together, required_if, conditional)
+- **Business Rules**: 2 types (max_records_per_user, require_approval)
+- **Table metadata features**: 6 (UI/UX, Forms, Behaviors, Search, Validation, Business)
 
 ---
 
