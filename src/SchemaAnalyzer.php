@@ -41,22 +41,32 @@ class SchemaAnalyzer
 
     public function getTableSchema(string $table): array
     {
-        $cacheKey = "schema_{$table}";
+        $cacheKey = $this->getCacheKey($table);
         
-        if ($this->cache) {
-            $cached = $this->cache->get($cacheKey);
-            if ($cached !== null) {
-                return $cached;
-            }
+        $cached = $this->getCachedSchema($cacheKey);
+        if ($cached !== null) {
+            return $cached;
         }
         
         $schema = $this->adapter->getTableSchema($table);
-        
-        if ($this->cache) {
-            $this->cache->set($cacheKey, $schema, $this->cacheTtl);
-        }
+        $this->cacheSchema($cacheKey, $schema);
         
         return $schema;
+    }
+
+    private function getCacheKey(string $table): string
+    {
+        return "schema_{$table}";
+    }
+
+    private function getCachedSchema(string $cacheKey): ?array
+    {
+        return $this->cache?->get($cacheKey);
+    }
+
+    private function cacheSchema(string $cacheKey, array $schema): void
+    {
+        $this->cache?->set($cacheKey, $schema, $this->cacheTtl);
     }
 
     public function invalidateCache(string $table): bool
@@ -65,7 +75,6 @@ class SchemaAnalyzer
             return false;
         }
         
-        $cacheKey = "schema_{$table}";
-        return $this->cache->invalidate($cacheKey);
+        return $this->cache->invalidate($this->getCacheKey($table));
     }
 }

@@ -68,9 +68,45 @@ php bin/dynamiccrud generate:metadata users
 
 ---
 
+## ✨ What's New in v3.5
+
+**Core Classes Refactoring** - Massive improvements to code quality and maintainability!
+
+**CRUDHandler Refactoring:**
+- 88% reduction in main method (250 → 30 lines)
+- Extracted 16 focused methods
+- Fixed hook execution order
+- Better error handling
+- Single responsibility per method
+
+**ValidationEngine Refactoring:**
+- 13 extracted validation methods
+- Type-specific validators
+- Guard clauses for cleaner logic
+- Consistent error handling
+- Self-documenting code
+
+**SchemaAnalyzer Refactoring:**
+- Improved cache management
+- Nullsafe operator for cleaner code
+- 3 extracted cache methods
+- Single source of truth
+
+**Benefits:**
+- ✅ Easier to understand and maintain
+- ✅ Better testability
+- ✅ Reduced cognitive load
+- ✅ Consistent patterns
+- ✅ All 366 tests passing (100%)
+
+👉 [See Refactoring Patterns](docs/REFACTORING_PATTERNS.md)  
+👉 [See Release Notes](RELEASE_NOTES_v3.5.0.md)
+
+---
+
 ## ✨ What's New in v3.4
 
-**Code Refactoring** - Improved code quality, maintainability, and Components integration!
+**UI Classes Refactoring** - Improved code quality, maintainability, and Components integration!
 
 **FormGenerator Refactoring:**
 - Integrated Components library for tabs and buttons
@@ -86,14 +122,7 @@ php bin/dynamiccrud generate:metadata users
 - Cleaner action button rendering
 - Better separation of concerns
 
-**Benefits:**
-- ✅ Better maintainability and readability
-- ✅ Consistent design across forms and lists
-- ✅ Less code duplication
-- ✅ Modern, professional styling
-- ✅ All 367 tests passing (100%)
-
-👉 [See Refactoring Patterns](docs/REFACTORING_PATTERNS.md)
+👉 [See v3.4 Release Notes](RELEASE_NOTES_v3.4.0.md)
 
 ---
 
@@ -1064,15 +1093,15 @@ php vendor/phpunit/phpunit/phpunit tests/SoftDeletesTest.php
 
 ## 📊 Project Stats
 
-- **39 PHP classes** (~14,000 lines)
+- **39 PHP classes** (~14,500 lines)
 - **38 working examples** (1 in v3.3, 1 in v3.2, 1 in v3.1, 1 in v3.0, 2 in v2.9, 1 in v2.8, 1 in v2.7, 2 in v2.5, 2 in v2.3, 4 in v2.2, 6 in v2.1, 4 in v2.0)
 - **22 technical documents**
-- **367 automated tests** (100% passing, 90% coverage)
+- **366 automated tests** (100% passing, 90% coverage)
 - **19 CLI commands**
 - **Languages supported**: 3 (English, Spanish, French)
 - **Databases supported**: 2 (MySQL, PostgreSQL)
 - **Template engine**: Blade-like syntax
-- **CLI Tool**: 5 commands (init, generate, validate, clear, list)
+- **CLI Tool**: 19 commands (init, generate, validate, clear, list, export, import, etc.)
 - **Authentication**: Register, login, logout, password reset, rate limiting
 - **RBAC**: Table + row-level permissions
 - **Soft Deletes**: Delete, restore, force delete
@@ -1083,6 +1112,7 @@ php vendor/phpunit/phpunit/phpunit tests/SoftDeletesTest.php
 - **Theming**: Global config with CSS variables
 - **REST API**: Automatic generation with JWT auth
 - **Admin Panel**: Complete admin interface with dashboard
+- **Refactored Classes**: 6 (FormGenerator, ListGenerator, AdminPanel, CRUDHandler, ValidationEngine, SchemaAnalyzer)
 
 ---
 

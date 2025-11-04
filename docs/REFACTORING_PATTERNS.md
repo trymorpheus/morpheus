@@ -199,7 +199,203 @@ $headers = array_map(fn($col) => ucfirst(str_replace('_', ' ', $col)), $columns)
 - Functional programming style
 - Easier to read
 
-## Pattern 7: Inline Styles for Components
+## Pattern 7: Guard Clauses and Early Returns
+
+### Before (v3.4)
+```php
+private function validateField(array $column, $value): void
+{
+    $name = $column['name'];
+    
+    if ($column['metadata']['hidden'] ?? false) {
+        return;
+    }
+    
+    if (!$column['is_nullable'] && ($value === null || $value === '')) {
+        $this->errors[$name][] = "Required";
+        return;
+    }
+    
+    if ($value === null || $value === '') {
+        return;
+    }
+    
+    // ... validation logic
+}
+```
+
+### After (v3.5)
+```php
+private function validateField(array $column, $value): void
+{
+    if ($this->isHiddenField($column)) {
+        return;
+    }
+    
+    if ($this->isRequiredAndEmpty($column, $value)) {
+        $this->addRequiredError($column['name']);
+        return;
+    }
+    
+    if ($this->isEmpty($value)) {
+        return;
+    }
+    
+    $this->validateType($column, $value);
+    $this->validateLength($column, $value);
+    $this->validateMetadata($column, $value);
+}
+
+private function isHiddenField(array $column): bool
+{
+    return $column['metadata']['hidden'] ?? false;
+}
+
+private function isRequiredAndEmpty(array $column, $value): bool
+{
+    return !$column['is_nullable'] && $this->isEmpty($value);
+}
+
+private function isEmpty($value): bool
+{
+    return $value === null || $value === '';
+}
+```
+
+**Benefits:**
+- Self-documenting code
+- Reusable validation logic
+- Easier to test
+- Reduced cognitive load
+
+## Pattern 8: Extract Type-Specific Validators
+
+### Before (v3.4)
+```php
+private function validateType(array $column, $value): void
+{
+    $name = $column['name'];
+    
+    switch ($column['sql_type']) {
+        case 'int':
+        case 'bigint':
+            if (!filter_var($value, FILTER_VALIDATE_INT)) {
+                $this->errors[$name][] = "Must be integer";
+            }
+            break;
+        case 'decimal':
+        case 'float':
+            if (!is_numeric($value)) {
+                $this->errors[$name][] = "Must be number";
+            }
+            break;
+        // ... more cases
+    }
+}
+```
+
+### After (v3.5)
+```php
+private function validateType(array $column, $value): void
+{
+    $sqlType = $column['sql_type'];
+    $fieldName = $column['name'];
+    
+    if (in_array($sqlType, ['int', 'bigint', 'smallint', 'tinyint'])) {
+        $this->validateInteger($fieldName, $value);
+    } elseif (in_array($sqlType, ['decimal', 'float', 'double'])) {
+        $this->validateNumeric($fieldName, $value);
+    } elseif (in_array($sqlType, ['date', 'datetime', 'timestamp'])) {
+        $this->validateDate($fieldName, $value);
+    }
+}
+
+private function validateInteger(string $fieldName, $value): void
+{
+    if (!filter_var($value, FILTER_VALIDATE_INT)) {
+        $this->addError($fieldName, 'validation.number', "Must be integer");
+    }
+}
+
+private function validateNumeric(string $fieldName, $value): void
+{
+    if (!is_numeric($value)) {
+        $this->addError($fieldName, 'validation.number', "Must be number");
+    }
+}
+```
+
+**Benefits:**
+- Each validator has single responsibility
+- Easy to add new types
+- Testable in isolation
+- Consistent error handling
+
+## Pattern 9: Nullsafe Operator for Cache
+
+### Before (v3.4)
+```php
+public function getTableSchema(string $table): array
+{
+    $cacheKey = "schema_{$table}";
+    
+    if ($this->cache) {
+        $cached = $this->cache->get($cacheKey);
+        if ($cached !== null) {
+            return $cached;
+        }
+    }
+    
+    $schema = $this->adapter->getTableSchema($table);
+    
+    if ($this->cache) {
+        $this->cache->set($cacheKey, $schema, $this->cacheTtl);
+    }
+    
+    return $schema;
+}
+```
+
+### After (v3.5)
+```php
+public function getTableSchema(string $table): array
+{
+    $cacheKey = $this->getCacheKey($table);
+    
+    $cached = $this->getCachedSchema($cacheKey);
+    if ($cached !== null) {
+        return $cached;
+    }
+    
+    $schema = $this->adapter->getTableSchema($table);
+    $this->cacheSchema($cacheKey, $schema);
+    
+    return $schema;
+}
+
+private function getCacheKey(string $table): string
+{
+    return "schema_{$table}";
+}
+
+private function getCachedSchema(string $cacheKey): ?array
+{
+    return $this->cache?->get($cacheKey);
+}
+
+private function cacheSchema(string $cacheKey, array $schema): void
+{
+    $this->cache?->set($cacheKey, $schema, $this->cacheTtl);
+}
+```
+
+**Benefits:**
+- Nullsafe operator (?->) eliminates if checks
+- Extracted methods clarify intent
+- Single source of truth for cache key
+- Easier to modify cache strategy
+
+## Pattern 10: Inline Styles for Components
 
 ### Before (v3.3)
 ```php
@@ -266,13 +462,25 @@ See these files for refactoring examples:
 - `src/ListGenerator.php` - Table and pagination with Components
 - `src/Admin/AdminPanel.php` - Components integration
 
+## Completed Refactorings
+
+### v3.5.0 - Core Classes
+1. **CRUDHandler.php** ✅ - Extracted 16 methods from handleSubmission() (~250 to ~30 lines)
+2. **ValidationEngine.php** ✅ - Extracted 13 validation methods (~170 to ~220 lines with better organization)
+3. **SchemaAnalyzer.php** ✅ - Improved cache management with 3 extracted methods
+
+### v3.4.0 - UI Classes
+1. **FormGenerator.php** ✅ - Extracted 8 methods, Components integration (~70 to ~15 lines)
+2. **ListGenerator.php** ✅ - Extracted 5 methods, Components integration (~350 to ~280 lines)
+3. **AdminPanel.php** ✅ - Components integration for consistent UI
+
 ## Future Refactoring Candidates
 
 Classes that could benefit from similar refactoring:
-1. **CRUDHandler.php** - Extract transaction logic, validation
-2. **SchemaAnalyzer.php** - Simplify metadata parsing
-3. **ValidationEngine.php** - Extract validation rules
-4. **FileUploadHandler.php** - Simplify upload logic
+1. **FileUploadHandler.php** - Simplify upload logic, extract validation
+2. **NotificationManager.php** - Extract email/webhook logic
+3. **WorkflowEngine.php** - Simplify transition logic
+4. **AuditLogger.php** - Extract formatting logic
 
 ## Resources
 
