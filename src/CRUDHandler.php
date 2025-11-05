@@ -779,12 +779,13 @@ class CRUDHandler
         // Timestamps
         if ($this->tableMetadata->hasTimestamps()) {
             $timestamps = $this->tableMetadata->getTimestampFields();
+            $existingColumns = array_column($this->schema['columns'], 'name');
             
-            if (!$isUpdate && isset($timestamps['created_at'])) {
+            if (!$isUpdate && isset($timestamps['created_at']) && in_array($timestamps['created_at'], $existingColumns)) {
                 $data[$timestamps['created_at']] = date('Y-m-d H:i:s');
             }
             
-            if (isset($timestamps['updated_at'])) {
+            if (isset($timestamps['updated_at']) && in_array($timestamps['updated_at'], $existingColumns)) {
                 $data[$timestamps['updated_at']] = date('Y-m-d H:i:s');
             }
         }

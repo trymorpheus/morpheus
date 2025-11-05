@@ -86,16 +86,22 @@ class SchemaAnalyzerTest extends TestCase
 
     public function testForeignKeyDetection(): void
     {
-        $schema = $this->analyzer->getTableSchema('posts');
-        
-        $this->assertIsArray($schema['foreign_keys']);
-        
-        if (!empty($schema['foreign_keys'])) {
+        // Create temporary tables with FK
+        try {
+            $this->pdo->exec("CREATE TABLE test_sa_fk_parent (id INT PRIMARY KEY)");
+            $this->pdo->exec("CREATE TABLE test_sa_fk_child (id INT PRIMARY KEY, parent_id INT, FOREIGN KEY (parent_id) REFERENCES test_sa_fk_parent(id))");
+            
+            $schema = $this->analyzer->getTableSchema('test_sa_fk_child');
+            
+            $this->assertIsArray($schema['foreign_keys']);
+            $this->assertNotEmpty($schema['foreign_keys']);
+            
             $firstFk = reset($schema['foreign_keys']);
             $this->assertArrayHasKey('table', $firstFk);
             $this->assertArrayHasKey('column', $firstFk);
-        } else {
-            $this->markTestSkipped('No foreign keys found in posts table');
+        } finally {
+            $this->pdo->exec("DROP TABLE IF EXISTS test_sa_fk_child");
+            $this->pdo->exec("DROP TABLE IF EXISTS test_sa_fk_parent");
         }
     }
 

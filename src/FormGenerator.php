@@ -412,16 +412,46 @@ class FormGenerator
             return [];
         }
         
-        $sql = sprintf(
-            "SELECT %s as value, %s as label FROM %s ORDER BY %s",
-            $valueColumn,
-            $displayColumn,
-            $table,
-            $displayColumn
-        );
-        
-        $stmt = $this->pdo->query($sql);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        // Try with specified display column first
+        try {
+            $sql = sprintf(
+                "SELECT %s as value, %s as label FROM %s ORDER BY %s",
+                $valueColumn,
+                $displayColumn,
+                $table,
+                $displayColumn
+            );
+            $stmt = $this->pdo->query($sql);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            // Try common column names
+            $possibleColumns = ['title', 'author_name', 'slug', 'email', $valueColumn];
+            foreach ($possibleColumns as $column) {
+                try {
+                    $sql = sprintf(
+                        "SELECT %s as value, %s as label FROM %s ORDER BY %s",
+                        $valueColumn,
+                        $column,
+                        $table,
+                        $column
+                    );
+                    $stmt = $this->pdo->query($sql);
+                    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+                } catch (\PDOException $e) {
+                    continue;
+                }
+            }
+            // Last resort: use ID as label
+            $sql = sprintf(
+                "SELECT %s as value, CONCAT('ID: ', %s) as label FROM %s ORDER BY %s",
+                $valueColumn,
+                $valueColumn,
+                $table,
+                $valueColumn
+            );
+            $stmt = $this->pdo->query($sql);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
     }
 
     private function renderStyles(): string
@@ -699,6 +729,10 @@ class FormGenerator
         $html = '';
         $relations = $this->handler->getManyToManyRelations();
         
+        if (empty($relations)) {
+            return '';
+        }
+        
         foreach ($relations as $fieldName => $relation) {
             $pk = $this->schema['primary_key'];
             $recordId = $this->data[$pk] ?? null;
@@ -795,21 +829,25 @@ class FormGenerator
         }
         
         // Intentar detectar columna de nombre
-        $nameColumn = 'name';
-        $sql = sprintf("SELECT id as value, %s as label FROM %s ORDER BY %s", $nameColumn, $table, $nameColumn);
+        $possibleColumns = ['name', 'title', 'author_name', 'slug', 'email'];
         
-        try {
-            $stmt = $this->pdo->query($sql);
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (\PDOException $e) {
-            // Si falla, intentar con 'title'
+        foreach ($possibleColumns as $column) {
             try {
-                $sql = sprintf("SELECT id as value, title as label FROM %s ORDER BY title", $table);
+                $sql = sprintf("SELECT id as value, %s as label FROM %s ORDER BY %s", $column, $table, $column);
                 $stmt = $this->pdo->query($sql);
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);
             } catch (\PDOException $e) {
-                return [];
+                continue;
             }
+        }
+        
+        // Si ninguna columna funciona, usar solo id
+        try {
+            $sql = sprintf("SELECT id as value, CONCAT('ID: ', id) as label FROM %s ORDER BY id", $table);
+            $stmt = $this->pdo->query($sql);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            return [];
         }
     }
     

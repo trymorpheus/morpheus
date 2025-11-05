@@ -143,7 +143,15 @@ class TableMetadata
 
     public function getTimestampFields(): array
     {
-        return $this->metadata['behaviors']['timestamps'] ?? [];
+        $timestamps = $this->metadata['behaviors']['timestamps'] ?? [];
+        
+        // If timestamps is just true, return default field names
+        if ($timestamps === true) {
+            return ['created_at' => 'created_at', 'updated_at' => 'updated_at'];
+        }
+        
+        // If it's already an array, return it
+        return is_array($timestamps) ? $timestamps : [];
     }
 
     public function isSluggable(): bool

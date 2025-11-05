@@ -12,12 +12,14 @@ class SEOManager
     private \PDO $pdo;
     private string $siteUrl;
     private string $siteName;
+    private string $prefix;
     
-    public function __construct(\PDO $pdo, string $siteUrl, string $siteName = 'My Site')
+    public function __construct(\PDO $pdo, string $siteUrl, string $siteName = 'My Site', string $prefix = '')
     {
         $this->pdo = $pdo;
         $this->siteUrl = rtrim($siteUrl, '/');
         $this->siteName = $siteName;
+        $this->prefix = $prefix;
     }
     
     /**
@@ -182,7 +184,7 @@ class SEOManager
     private function getPublishedPosts(int $limit = 1000): array
     {
         $stmt = $this->pdo->prepare("
-            SELECT * FROM posts 
+            SELECT * FROM {$this->prefix}posts 
             WHERE status = 'published' AND deleted_at IS NULL 
             ORDER BY published_at DESC 
             LIMIT :limit
@@ -198,7 +200,7 @@ class SEOManager
      */
     private function getCategories(): array
     {
-        $stmt = $this->pdo->query("SELECT * FROM categories ORDER BY name");
+        $stmt = $this->pdo->query("SELECT * FROM {$this->prefix}categories ORDER BY name");
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
     
@@ -207,7 +209,7 @@ class SEOManager
      */
     private function getTags(): array
     {
-        $stmt = $this->pdo->query("SELECT * FROM tags ORDER BY name");
+        $stmt = $this->pdo->query("SELECT * FROM {$this->prefix}tags ORDER BY name");
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

@@ -2,73 +2,73 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>http://localhost/examples/24-blog-cms</loc>
-    <lastmod>2025-11-05T10:54:26+00:00</lastmod>
+    <lastmod>2025-11-05T13:42:11+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>http://localhost/examples/24-blog-cms/blog/welcome-to-dynamiccrud</loc>
-    <lastmod>2025-11-05 10:54:26</lastmod>
+    <loc>http://localhost/examples/24-blog-cms/blog/10-reasons-switch-wordpress</loc>
+    <lastmod>2025-11-05 11:23:35</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/examples/24-blog-cms/blog/getting-started</loc>
-    <lastmod>2025-11-05 10:54:26</lastmod>
+    <lastmod>2025-11-05 11:23:35</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>http://localhost/examples/24-blog-cms/blog/10-reasons-switch-wordpress</loc>
-    <lastmod>2025-11-05 10:54:26</lastmod>
+    <loc>http://localhost/examples/24-blog-cms/blog/welcome-to-dynamiccrud</loc>
+    <lastmod>2025-11-05 11:23:35</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>http://localhost/examples/24-blog-cms/blog/category/business</loc>
-    <lastmod>2025-11-05T10:54:26+00:00</lastmod>
+    <lastmod>2025-11-05T13:42:11+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>http://localhost/examples/24-blog-cms/blog/category/lifestyle</loc>
-    <lastmod>2025-11-05T10:54:26+00:00</lastmod>
+    <lastmod>2025-11-05T13:42:11+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>http://localhost/examples/24-blog-cms/blog/category/technology</loc>
-    <lastmod>2025-11-05T10:54:26+00:00</lastmod>
+    <lastmod>2025-11-05T13:42:11+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>http://localhost/examples/24-blog-cms/blog/tag/javascript</loc>
-    <lastmod>2025-11-05T10:54:26+00:00</lastmod>
+    <lastmod>2025-11-05T13:42:11+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://localhost/examples/24-blog-cms/blog/tag/news</loc>
-    <lastmod>2025-11-05T10:54:26+00:00</lastmod>
+    <lastmod>2025-11-05T13:42:11+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://localhost/examples/24-blog-cms/blog/tag/php</loc>
-    <lastmod>2025-11-05T10:54:26+00:00</lastmod>
+    <lastmod>2025-11-05T13:42:11+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://localhost/examples/24-blog-cms/blog/tag/tips</loc>
-    <lastmod>2025-11-05T10:54:26+00:00</lastmod>
+    <lastmod>2025-11-05T13:42:11+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>http://localhost/examples/24-blog-cms/blog/tag/tutorial</loc>
-    <lastmod>2025-11-05T10:54:26+00:00</lastmod>
+    <lastmod>2025-11-05T13:42:11+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>

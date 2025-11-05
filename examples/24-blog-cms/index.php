@@ -16,8 +16,8 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 // Initialize components
 $router = new FrontendRouter();
-$seo = new SEOManager($pdo, 'http://localhost/examples/24-blog-cms', 'My Blog');
-$renderer = new FrontendRenderer($pdo, 'blog', null, $seo);
+$seo = new SEOManager($pdo, 'http://localhost/examples/24-blog-cms', 'My Blog', '24_');
+$renderer = new FrontendRenderer($pdo, 'blog', null, $seo, '24_');
 
 // Get request URI
 $uri = $_SERVER['REQUEST_URI'] ?? '/';

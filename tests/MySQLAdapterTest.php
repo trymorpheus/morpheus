@@ -65,15 +65,23 @@ class MySQLAdapterTest extends TestCase
 
     public function testForeignKeyDetection()
     {
-        $schema = $this->adapter->getTableSchema('posts');
-        
-        $this->assertArrayHasKey('foreign_keys', $schema);
-        $this->assertIsArray($schema['foreign_keys']);
-        
-        if (!empty($schema['foreign_keys'])) {
+        // Create temporary tables with FK
+        try {
+            $this->pdo->exec("CREATE TABLE test_fk_parent (id INT PRIMARY KEY)");
+            $this->pdo->exec("CREATE TABLE test_fk_child (id INT PRIMARY KEY, parent_id INT, FOREIGN KEY (parent_id) REFERENCES test_fk_parent(id))");
+            
+            $schema = $this->adapter->getTableSchema('test_fk_child');
+            
+            $this->assertArrayHasKey('foreign_keys', $schema);
+            $this->assertIsArray($schema['foreign_keys']);
+            $this->assertNotEmpty($schema['foreign_keys']);
+            
             $firstFk = reset($schema['foreign_keys']);
             $this->assertArrayHasKey('table', $firstFk);
             $this->assertArrayHasKey('column', $firstFk);
+        } finally {
+            $this->pdo->exec("DROP TABLE IF EXISTS test_fk_child");
+            $this->pdo->exec("DROP TABLE IF EXISTS test_fk_parent");
         }
     }
 
@@ -119,16 +127,18 @@ class MySQLAdapterTest extends TestCase
 
     public function testGetLastInsertId()
     {
-        // Insertar en categories que tiene menos campos requeridos
-        $this->pdo->exec("INSERT INTO categories (name, description) VALUES ('Test Category', 'Test')");
-        
-        $id = $this->adapter->getLastInsertId();
-        
-        $this->assertIsInt($id);
-        $this->assertGreaterThan(0, $id);
-        
-        // Cleanup
-        $this->pdo->exec("DELETE FROM categories WHERE name = 'Test Category'");
+        // Create temporary table
+        try {
+            $this->pdo->exec("CREATE TABLE test_insert_id (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50))");
+            $this->pdo->exec("INSERT INTO test_insert_id (name) VALUES ('Test')");
+            
+            $id = $this->adapter->getLastInsertId();
+            
+            $this->assertIsInt($id);
+            $this->assertGreaterThan(0, $id);
+        } finally {
+            $this->pdo->exec("DROP TABLE IF EXISTS test_insert_id");
+        }
     }
 
     public function testEmptyTableReturnsEmptyArray()

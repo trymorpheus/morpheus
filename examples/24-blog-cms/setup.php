@@ -19,28 +19,29 @@ echo "🚀 Installing Blog CMS...\n\n";
 echo "🧹 Cleaning up existing data...\n";
 try {
     $pdo->exec("SET FOREIGN_KEY_CHECKS = 0");
-    $pdo->exec("DROP TABLE IF EXISTS comments");
-    $pdo->exec("DROP TABLE IF EXISTS post_tags");
-    $pdo->exec("DROP TABLE IF EXISTS tags");
-    $pdo->exec("DROP TABLE IF EXISTS posts");
-    $pdo->exec("DROP TABLE IF EXISTS categories");
+    $pdo->exec("DROP TABLE IF EXISTS 24_comments");
+    $pdo->exec("DROP TABLE IF EXISTS 24_post_tags");
+    $pdo->exec("DROP TABLE IF EXISTS 24_tags");
+    $pdo->exec("DROP TABLE IF EXISTS 24_posts");
+    $pdo->exec("DROP TABLE IF EXISTS 24_categories");
     $pdo->exec("SET FOREIGN_KEY_CHECKS = 1");
     echo "✅ Cleanup complete\n\n";
 } catch (Exception $e) {
     echo "⚠️  Cleanup warning: " . $e->getMessage() . "\n\n";
 }
 
-// Install blog content type
-$manager = new ContentTypeManager($pdo);
+// Install blog content type with prefix
+use DynamicCRUD\ContentTypes\BlogContentType;
+$blog = new BlogContentType('24_');
 echo "📦 Installing blog content type...\n";
-$manager->install('blog');
+$blog->install($pdo);
 echo "✅ Blog content type installed!\n\n";
 
 // Create sample data
 echo "📝 Creating sample data...\n";
 
 // Categories
-$pdo->exec("INSERT INTO categories (name, slug, description) VALUES 
+$pdo->exec("INSERT INTO 24_categories (name, slug, description) VALUES 
     ('Technology', 'technology', 'Tech news and tutorials'),
     ('Lifestyle', 'lifestyle', 'Life, travel, and culture'),
     ('Business', 'business', 'Business and entrepreneurship')
@@ -48,7 +49,7 @@ $pdo->exec("INSERT INTO categories (name, slug, description) VALUES
 echo "✅ Created 3 categories\n";
 
 // Tags
-$pdo->exec("INSERT INTO tags (name, slug) VALUES 
+$pdo->exec("INSERT INTO 24_tags (name, slug) VALUES 
     ('PHP', 'php'),
     ('JavaScript', 'javascript'),
     ('Tutorial', 'tutorial'),
@@ -59,7 +60,7 @@ echo "✅ Created 5 tags\n";
 
 // Posts
 $pdo->exec("
-    INSERT INTO posts (title, slug, content, excerpt, status, category_id, published_at) VALUES 
+    INSERT INTO 24_posts (title, slug, content, excerpt, status, category_id, published_at) VALUES 
     (
         'Welcome to DynamicCRUD Universal CMS',
         'welcome-to-dynamiccrud',
@@ -92,7 +93,7 @@ echo "✅ Created 3 posts\n";
 
 // Link posts to tags
 $pdo->exec("
-    INSERT INTO post_tags (post_id, tag_id) VALUES 
+    INSERT INTO 24_post_tags (post_id, tag_id) VALUES 
     (1, 1), (1, 3),
     (2, 1), (2, 3),
     (3, 4), (3, 5)

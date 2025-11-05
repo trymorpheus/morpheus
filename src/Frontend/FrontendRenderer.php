@@ -15,13 +15,15 @@ class FrontendRenderer
     private ?TemplateEngine $engine;
     private string $contentType;
     private ?SEOManager $seo;
+    private string $prefix;
     
-    public function __construct(\PDO $pdo, string $contentType = 'blog', ?TemplateEngine $engine = null, ?SEOManager $seo = null)
+    public function __construct(\PDO $pdo, string $contentType = 'blog', ?TemplateEngine $engine = null, ?SEOManager $seo = null, string $prefix = '')
     {
         $this->pdo = $pdo;
         $this->contentType = $contentType;
         $this->engine = $engine;
         $this->seo = $seo;
+        $this->prefix = $prefix;
     }
     
     /**
@@ -196,22 +198,71 @@ class FrontendRenderer
         $html .= '<meta charset="UTF-8">';
         $html .= '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
         $html .= '<title>' . htmlspecialchars($title ?? 'Blog') . '</title>';
-        $html .= '<style>body{font-family:sans-serif;max-width:800px;margin:0 auto;padding:20px;}</style>';
+        $html .= isset($data['seo_meta']) ? $data['seo_meta'] : '';
+        $html .= '<style>';
+        $html .= 'body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;margin:0;background:#f5f7fa;}';
+        $html .= '.container{max-width:1200px;margin:0 auto;padding:20px;}';
+        $html .= 'header{background:white;box-shadow:0 2px 4px rgba(0,0,0,0.1);margin-bottom:30px;}';
+        $html .= 'nav{display:flex;justify-content:space-between;align-items:center;padding:20px;max-width:1200px;margin:0 auto;}';
+        $html .= 'nav h1{margin:0;color:#667eea;}';
+        $html .= 'nav a{margin-left:20px;color:#667eea;text-decoration:none;}';
+        $html .= 'nav a:hover{text-decoration:underline;}';
+        $html .= '.search-form{margin-bottom:30px;}';
+        $html .= '.search-form input{padding:10px;width:300px;border:1px solid #ddd;border-radius:4px;}';
+        $html .= '.search-form button{padding:10px 20px;background:#667eea;color:white;border:none;border-radius:4px;cursor:pointer;}';
+        $html .= 'article{background:white;padding:30px;margin-bottom:20px;border-radius:8px;box-shadow:0 2px 4px rgba(0,0,0,0.1);}';
+        $html .= 'article h2{margin-top:0;}';
+        $html .= 'article h2 a{color:#333;text-decoration:none;}';
+        $html .= 'article h2 a:hover{color:#667eea;}';
+        $html .= '.meta{color:#666;font-size:14px;margin-bottom:15px;}';
+        $html .= '</style>';
         $html .= '</head><body>';
         
+        // Header with navigation
+        $html .= '<header><nav>';
+        $html .= '<h1>My Blog</h1>';
+        $html .= '<div>';
+        $html .= '<a href="/examples/24-blog-cms/">Home</a>';
+        $html .= '<a href="/examples/24-blog-cms/blog">Blog</a>';
+        $html .= '<a href="/examples/24-blog-cms/admin.php">Admin</a>';
+        $html .= '</div>';
+        $html .= '</nav></header>';
+        
+        $html .= '<div class="container">';
+        
+        // Search form
+        if ($template !== 'single') {
+            $html .= '<form class="search-form" method="GET" action="/examples/24-blog-cms/search">';
+            $html .= '<input type="text" name="q" placeholder="Search posts..." value="' . htmlspecialchars($_GET['q'] ?? '') . '">';
+            $html .= '<button type="submit">Search</button>';
+            $html .= '</form>';
+        }
+        
         if ($template === 'single' && isset($post)) {
+            $html .= '<article>';
             $html .= '<h1>' . htmlspecialchars($post['title']) . '</h1>';
+            $html .= '<div class="meta">Published: ' . htmlspecialchars($post['published_at'] ?? '') . '</div>';
             $html .= '<div>' . $post['content'] . '</div>';
+            $html .= '<p><a href="/examples/24-blog-cms/blog">← Back to blog</a></p>';
+            $html .= '</article>';
         } elseif (isset($posts)) {
             $html .= '<h1>' . htmlspecialchars($title) . '</h1>';
-            foreach ($posts as $post) {
-                $html .= '<article>';
-                $html .= '<h2><a href="/blog/' . htmlspecialchars($post['slug']) . '">' . htmlspecialchars($post['title']) . '</a></h2>';
-                $html .= '<p>' . htmlspecialchars($post['excerpt'] ?? '') . '</p>';
-                $html .= '</article>';
+            if (empty($posts)) {
+                $html .= '<p>No posts found.</p>';
+            } else {
+                foreach ($posts as $post) {
+                    $html .= '<article>';
+                    $html .= '<h2><a href="/examples/24-blog-cms/blog/' . htmlspecialchars($post['slug']) . '">' . htmlspecialchars($post['title']) . '</a></h2>';
+                    $html .= '<div class="meta">Published: ' . htmlspecialchars($post['published_at'] ?? '') . '</div>';
+                    $html .= '<p>' . htmlspecialchars($post['excerpt'] ?? substr(strip_tags($post['content'] ?? ''), 0, 200)) . '...</p>';
+                    $html .= '<a href="/examples/24-blog-cms/blog/' . htmlspecialchars($post['slug']) . '">Read more →</a>';
+                    $html .= '</article>';
+                }
             }
         }
         
+        $html .= '</div>';
+        $html .= isset($data['seo_schema']) ? $data['seo_schema'] : '';
         $html .= '</body></html>';
         return $html;
     }
@@ -220,14 +271,14 @@ class FrontendRenderer
     
     private function getPostBySlug(string $slug): ?array
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM posts WHERE slug = :slug AND status = 'published' AND deleted_at IS NULL LIMIT 1");
+        $stmt = $this->pdo->prepare("SELECT * FROM {$this->prefix}posts WHERE slug = :slug AND status = 'published' AND deleted_at IS NULL LIMIT 1");
         $stmt->execute(['slug' => $slug]);
         return $stmt->fetch(\PDO::FETCH_ASSOC) ?: null;
     }
     
     private function getPosts(int $limit = 10, int $offset = 0): array
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM posts WHERE status = 'published' AND deleted_at IS NULL ORDER BY published_at DESC LIMIT :limit OFFSET :offset");
+        $stmt = $this->pdo->prepare("SELECT * FROM {$this->prefix}posts WHERE status = 'published' AND deleted_at IS NULL ORDER BY published_at DESC LIMIT :limit OFFSET :offset");
         $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
         $stmt->bindValue(':offset', $offset, \PDO::PARAM_INT);
         $stmt->execute();
@@ -236,20 +287,20 @@ class FrontendRenderer
     
     private function getTotalPosts(): int
     {
-        $stmt = $this->pdo->query("SELECT COUNT(*) FROM posts WHERE status = 'published' AND deleted_at IS NULL");
+        $stmt = $this->pdo->query("SELECT COUNT(*) FROM {$this->prefix}posts WHERE status = 'published' AND deleted_at IS NULL");
         return (int) $stmt->fetchColumn();
     }
     
     private function getCategoryBySlug(string $slug): ?array
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM categories WHERE slug = :slug LIMIT 1");
+        $stmt = $this->pdo->prepare("SELECT * FROM {$this->prefix}categories WHERE slug = :slug LIMIT 1");
         $stmt->execute(['slug' => $slug]);
         return $stmt->fetch(\PDO::FETCH_ASSOC) ?: null;
     }
     
     private function getPostsByCategory(int $categoryId, int $limit = 10, int $offset = 0): array
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM posts WHERE category_id = :category_id AND status = 'published' AND deleted_at IS NULL ORDER BY published_at DESC LIMIT :limit OFFSET :offset");
+        $stmt = $this->pdo->prepare("SELECT * FROM {$this->prefix}posts WHERE category_id = :category_id AND status = 'published' AND deleted_at IS NULL ORDER BY published_at DESC LIMIT :limit OFFSET :offset");
         $stmt->bindValue(':category_id', $categoryId, \PDO::PARAM_INT);
         $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
         $stmt->bindValue(':offset', $offset, \PDO::PARAM_INT);
@@ -259,14 +310,14 @@ class FrontendRenderer
     
     private function getTotalPostsByCategory(int $categoryId): int
     {
-        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM posts WHERE category_id = :category_id AND status = 'published' AND deleted_at IS NULL");
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM {$this->prefix}posts WHERE category_id = :category_id AND status = 'published' AND deleted_at IS NULL");
         $stmt->execute(['category_id' => $categoryId]);
         return (int) $stmt->fetchColumn();
     }
     
     private function getTagBySlug(string $slug): ?array
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM tags WHERE slug = :slug LIMIT 1");
+        $stmt = $this->pdo->prepare("SELECT * FROM {$this->prefix}tags WHERE slug = :slug LIMIT 1");
         $stmt->execute(['slug' => $slug]);
         return $stmt->fetch(\PDO::FETCH_ASSOC) ?: null;
     }
@@ -274,8 +325,8 @@ class FrontendRenderer
     private function getPostsByTag(int $tagId, int $limit = 10, int $offset = 0): array
     {
         $stmt = $this->pdo->prepare("
-            SELECT p.* FROM posts p
-            INNER JOIN post_tags pt ON p.id = pt.post_id
+            SELECT p.* FROM {$this->prefix}posts p
+            INNER JOIN {$this->prefix}post_tags pt ON p.id = pt.post_id
             WHERE pt.tag_id = :tag_id AND p.status = 'published' AND p.deleted_at IS NULL
             ORDER BY p.published_at DESC
             LIMIT :limit OFFSET :offset
@@ -290,8 +341,8 @@ class FrontendRenderer
     private function getTotalPostsByTag(int $tagId): int
     {
         $stmt = $this->pdo->prepare("
-            SELECT COUNT(*) FROM posts p
-            INNER JOIN post_tags pt ON p.id = pt.post_id
+            SELECT COUNT(*) FROM {$this->prefix}posts p
+            INNER JOIN {$this->prefix}post_tags pt ON p.id = pt.post_id
             WHERE pt.tag_id = :tag_id AND p.status = 'published' AND p.deleted_at IS NULL
         ");
         $stmt->execute(['tag_id' => $tagId]);
@@ -301,7 +352,7 @@ class FrontendRenderer
     private function searchPosts(string $query, int $limit = 10, int $offset = 0): array
     {
         $stmt = $this->pdo->prepare("
-            SELECT * FROM posts 
+            SELECT * FROM {$this->prefix}posts 
             WHERE (title LIKE :query OR content LIKE :query) 
             AND status = 'published' AND deleted_at IS NULL
             ORDER BY published_at DESC
@@ -318,7 +369,7 @@ class FrontendRenderer
     private function getTotalSearchResults(string $query): int
     {
         $stmt = $this->pdo->prepare("
-            SELECT COUNT(*) FROM posts 
+            SELECT COUNT(*) FROM {$this->prefix}posts 
             WHERE (title LIKE :query OR content LIKE :query) 
             AND status = 'published' AND deleted_at IS NULL
         ");
