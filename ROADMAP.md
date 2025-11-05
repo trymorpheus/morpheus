@@ -8,9 +8,11 @@
 
 ## 🎯 Vision
 
-**"Database as Single Source of Truth"**
+**"The CMS That Grows With You"**
 
-Transform DynamicCRUD from a form generator into a complete **database-driven application platform** where all configuration, business logic, and UI behavior is defined in database metadata.
+Transform DynamicCRUD into a **Universal CMS** - start as a simple blog (WordPress alternative), grow into any application (CRM, e-commerce, custom apps) without migrations or plugins. All powered by database metadata as single source of truth.
+
+**Market Opportunity:** 810M WordPress sites + 10M internal apps = 820M potential users
 
 ---
 
@@ -163,117 +165,183 @@ Transform DynamicCRUD from a form generator into a complete **database-driven ap
 
 ---
 
-## 🎯 Medium-Term Roadmap (2025-2026)
+## 🌟 STRATEGIC PIVOT: Universal CMS (2025-2026)
 
-### v4.0.0 - Multi-Tenant Platform (Q3 2025)
-**Duration:** 2-3 months  
-**Focus:** SaaS multi-tenant capabilities
+**New Vision:** Position DynamicCRUD as WordPress alternative that grows into anything.
 
-**Features:**
-- [ ] Tenant isolation (database/schema/row-level)
-- [ ] Tenant management UI
-- [ ] Per-tenant configuration
-- [ ] Subdomain routing
-- [ ] Tenant onboarding wizard
-- [ ] Usage tracking & billing integration
-- [ ] Tenant-specific themes
-- [ ] Resource limits per tenant
+**Why Now:**
+- WordPress: 43% of all websites (810M sites)
+- WordPress problems: Slow, vulnerable, complex, expensive
+- DynamicCRUD advantages: Fast, secure, simple, flexible
+- Unique value: CMS + App Generator in ONE tool
 
-**Benefits:**
-- SaaS-ready architecture
-- Revenue model enabled
-- Scalable multi-customer support
+**Target Markets:**
+1. **CMS Users** (WordPress refugees) - 810M sites
+2. **App Developers** (current target) - 10M apps
+3. **No-code Users** (AI-powered) - Emerging market
 
-**Technical Architecture:**
-```sql
-CREATE TABLE tenants (
-    id VARCHAR(50) PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    domain VARCHAR(255),
-    settings JSON,
-    status ENUM('active', 'suspended', 'trial'),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- All tables include tenant_id
-ALTER TABLE users ADD COLUMN tenant_id VARCHAR(50);
-ALTER TABLE products ADD COLUMN tenant_id VARCHAR(50);
-```
+👉 **[See UNIVERSAL_CMS.md for complete strategy](UNIVERSAL_CMS.md)**
 
 ---
 
-### v4.1.0 - Advanced Business Rules (Q4 2025)
+## 🎯 Medium-Term Roadmap (2025-2026)
+
+### v4.0.0 - Universal CMS Foundation (Q3 2025) 🌟
+**Duration:** 3-4 months  
+**Focus:** WordPress alternative with growth potential  
+**Priority:** ⭐⭐⭐⭐⭐ (Strategic Pivot)
+
+**Core Features:**
+- [ ] Content type system (blog, portfolio, ecommerce, directory)
+- [ ] Frontend rendering engine (public pages)
+- [ ] Public routing system (SEO-friendly URLs)
+- [ ] One-click installer (WordPress-style wizard)
+- [ ] Theme system (5 pre-built themes)
+- [ ] Media library (upload, organize, galleries)
+- [ ] Comment system (with moderation)
+- [ ] RSS/Sitemap generation (automatic)
+
+**Content Types Included:**
+```php
+// Pre-built content types
+$cms->install('blog');      // Posts, categories, tags, comments
+$cms->install('portfolio'); // Projects, galleries, testimonials
+$cms->install('ecommerce'); // Products, orders, cart, checkout
+$cms->install('directory'); // Listings, reviews, ratings
+```
+
+**Benefits:**
+- 810M WordPress users as potential market
+- Differentiation: "CMS that grows with you"
+- Viral potential: "Migrated from WordPress in 10 minutes"
+- Monetization: Themes, hosting, premium features
+
+**Success Metrics:**
+- 1,000 installations in first month
+- 10,000 installations in first year
+- 5% conversion to paid plans
+
+---
+
+### v4.1.0 - CMS Advanced Features (Q4 2025)
 **Duration:** 2-3 months  
-**Focus:** Complex business logic automation
+**Focus:** Professional CMS capabilities
+
+**Features:**
+- [ ] Theme marketplace (buy/sell themes)
+- [ ] Widget system (sidebar, footer widgets)
+- [ ] Menu builder (drag-and-drop navigation)
+- [ ] Custom post types UI (visual builder)
+- [ ] Revision history (undo/redo changes)
+- [ ] Scheduled publishing (future dates)
+- [ ] Multi-language content (WPML alternative)
+- [ ] Page builder (drag-and-drop layouts)
+
+**Benefits:**
+- Feature parity with WordPress
+- Better UX than WordPress
+- Monetization via marketplace
+- Professional appearance
+
+**Marketplace Revenue:**
+- 70/30 split (creator/platform)
+- Themes: $29-$99
+- Plugins: $19-$199
+- Target: $10K MRR in 6 months
+
+---
+
+### v4.2.0 - CMS SEO & Performance (Q1 2026)
+**Duration:** 2-3 months  
+**Focus:** Best-in-class SEO and speed
+
+**Features:**
+- [ ] Built-in SEO optimization (meta tags, schema.org)
+- [ ] Image optimization (WebP, lazy loading)
+- [ ] CDN integration (Cloudflare, AWS)
+- [ ] Multi-layer caching (page, object, query)
+- [ ] AMP support (mobile-first)
+- [ ] PWA capabilities (offline mode)
+- [ ] Performance monitoring (Core Web Vitals)
+- [ ] Security hardening (firewall, malware scan)
+
+**Benefits:**
+- Faster than WordPress (10x speed improvement)
+- Better SEO rankings (Google loves speed)
+- Lower hosting costs (efficient caching)
+- Higher conversion rates (fast = sales)
+
+**Competitive Advantage:**
+- WordPress: 2-3s load time
+- DynamicCRUD: <500ms load time
+- Result: Better rankings, more traffic
+
+---
+
+### v4.3.0 - Multi-Tenant & SaaS (Q2 2026)
+**Duration:** 3-4 months  
+**Focus:** SaaS platform capabilities
+
+**Features:**
+- [ ] Tenant isolation (database/schema/row-level)
+- [ ] Subdomain routing (tenant1.myapp.com)
+- [ ] Per-tenant themes and branding
+- [ ] Usage tracking & billing integration
+- [ ] Tenant onboarding wizard
+- [ ] Resource limits per tenant
+- [ ] Tenant management dashboard
+- [ ] White-label capabilities
+
+**Benefits:**
+- SaaS-ready architecture
+- Recurring revenue model
+- Scalable to millions of tenants
+- Enterprise-ready
+
+**Business Model:**
+- Free: 1 site, basic features
+- Pro ($9/mo): 5 sites, premium themes
+- Business ($29/mo): Unlimited sites, white-label
+- Enterprise ($299/mo): Multi-tenant, priority support
+
+### v4.4.0 - Visual Builders (Q3 2026)
+**Duration:** 3-4 months  
+**Focus:** No-code visual tools
+
+**Features:**
+- [ ] Visual schema designer (drag-and-drop tables)
+- [ ] Page builder (Elementor-like)
+- [ ] Form builder (visual field editor)
+- [ ] Workflow visual editor (flowchart)
+- [ ] Theme customizer (live preview)
+- [ ] Menu builder (drag-and-drop)
+- [ ] Widget builder (custom widgets)
+
+**Benefits:**
+- Zero code required
+- Faster than WordPress page builders
+- Lower barrier to entry
+- Visual debugging
+
+**Priority:** ⭐⭐⭐⭐⭐ (Killer Feature)
+
+### v4.5.0 - Advanced Business Rules (Q4 2026)
+**Duration:** 2-3 months  
+**Focus:** Complex business logic
 
 **Features:**
 - [ ] Formula engine (calculated fields)
 - [ ] Cross-table validations
 - [ ] Conditional requirements
-- [ ] Automated calculations
 - [ ] Business rule templates
-- [ ] Rule testing framework
-- [ ] Rule versioning
-
-**Benefits:**
-- Complex business logic without code
-- Automated calculations
-- Better data integrity
-
-**Example:**
-```json
-{
-  "calculations": {
-    "order_total": {
-      "formula": "subtotal + tax - discount + shipping",
-      "dependencies": ["order_items", "tax_rates"]
-    }
-  }
-}
-```
-
----
-
-### v4.2.0 - Analytics & Reporting (Q1 2026)
-**Duration:** 2-3 months  
-**Focus:** Built-in analytics and dashboards
-
-**Features:**
-- [ ] Automatic metrics (total, active, new)
-- [ ] Custom metrics configuration
-- [ ] Chart generation (line, bar, pie)
-- [ ] Dashboard builder
+- [ ] Analytics & reporting (charts, dashboards)
 - [ ] Scheduled reports (PDF, Excel)
-- [ ] Export to BI tools
 - [ ] Real-time analytics
 
 **Benefits:**
+- Complex logic without code
 - Business intelligence built-in
 - Data-driven decisions
-- No external BI tool needed
-
----
-
-### v4.3.0 - Visual Metadata Builder (Q2 2026)
-**Duration:** 3-4 months  
-**Focus:** GUI for metadata configuration
-
-**Features:**
-- [ ] Visual schema designer
-- [ ] Drag-and-drop form builder
-- [ ] Workflow visual editor
-- [ ] Permission matrix UI
-- [ ] Theme customizer
-- [ ] Metadata import/export
-- [ ] Version control for metadata
-
-**Benefits:**
-- No JSON editing required
-- Faster configuration
-- Lower barrier to entry
-- Visual debugging
-
-**Priority:** ⭐⭐⭐⭐⭐ (Killer Feature)
 
 ---
 

@@ -7,11 +7,17 @@
 [![License](https://img.shields.io/github/license/mcarbonell/DynamicCRUD)](https://github.com/mcarbonell/DynamicCRUD/blob/main/LICENSE)
 [![Downloads](https://img.shields.io/packagist/dt/dynamiccrud/dynamiccrud)](https://packagist.org/packages/dynamiccrud/dynamiccrud)
 
-**A powerful PHP library that automatically generates CRUD forms with validation based on your database structure.**
+**The Universal CMS - Start as a blog, grow into anything.**
 
-Stop writing repetitive CRUD code. DynamicCRUD analyzes your MySQL schema and creates fully functional forms with validation, security, and advanced features out of the box.
+DynamicCRUD is the world's first **Universal CMS** that combines the simplicity of WordPress with the power of a custom application generator. Start with a blog in 60 seconds, then grow into e-commerce, CRM, or any custom application - all without migrations, plugins, or code.
 
-[🇪🇸 Documentación en Español](README.es.md)
+**🎯 Perfect for:**
+- 📝 Bloggers seeking a faster WordPress alternative
+- 🏢 Businesses needing a website that grows with them
+- 👨‍💻 Developers building client sites rapidly
+- 🚀 Startups prototyping MVPs in minutes
+
+[🇪🇸 Documentación en Español](README.es.md) | [📖 Universal CMS Vision](UNIVERSAL_CMS.md) | [🗺️ Complete Roadmap](ROADMAP.md)
 
 ---
 
@@ -927,7 +933,29 @@ php vendor/phpunit/phpunit/phpunit tests/SoftDeletesTest.php
 
 ## 🚦 Roadmap
 
-👉 **[See Complete Roadmap](ROADMAP.md)** - Detailed plan for v3.6-v6.0
+👉 **[See Complete Roadmap](ROADMAP.md)** - Detailed plan for v3.6-v6.0  
+👉 **[Universal CMS Strategy](UNIVERSAL_CMS.md)** - WordPress alternative vision  
+👉 **[v4.0 Implementation Plan](docs/V4.0_PLAN.md)** - Technical details for v4.0
+
+### 🌟 Coming in v4.0 - Universal CMS Foundation (Q3 2025)
+
+**The Game-Changing Release** - Transform DynamicCRUD into a WordPress alternative!
+
+**Core Features:**
+- ✨ **One-Click Installer** - Working site in 60 seconds
+- 📦 **4 Content Types** - Blog, Portfolio, E-commerce, Directory
+- 🎨 **5 Professional Themes** - Ready-to-use designs
+- 🌐 **Frontend Rendering** - Public-facing pages with SEO
+- 🔄 **WordPress Migrator** - Import your WP site in minutes
+- 🚀 **10x Faster** - <500ms load time vs 2-3s for WordPress
+
+**Why v4.0 Matters:**
+- 🎯 **Market:** 810M WordPress sites (potential users)
+- 💰 **Revenue:** $2.1M ARR target in Year 1
+- 🏆 **Position:** First CMS that grows into any app
+- 🔥 **Viral:** "Migrated from WordPress in 10 minutes"
+
+**Timeline:** 12-16 weeks | **Launch:** September 2025
 
 ### ✅ Completed (v2.1.0)
 - **Authentication System**
@@ -1085,12 +1113,37 @@ php vendor/phpunit/phpunit/phpunit tests/SoftDeletesTest.php
 - 1 new example (UI components showcase)
 - 26 new tests (100% passing)
 
-### 🔮 Planned (v3.4+)
-- [ ] GraphQL support
-- [ ] OAuth/LDAP authentication
-- [ ] Email verification
-- [ ] SQL Server support
-- [ ] More languages (DE, IT, PT)
+### 🔮 Planned (v4.0+) - Universal CMS Era
+
+**v4.0 - Universal CMS Foundation (Q3 2025)**
+- [ ] Content type system (blog, portfolio, ecommerce, directory)
+- [ ] Frontend rendering engine with SEO
+- [ ] One-click installer (WordPress-style)
+- [ ] 5 professional themes
+- [ ] WordPress migration tool
+- [ ] Media library
+- [ ] Comment system
+
+**v4.1 - CMS Advanced Features (Q4 2025)**
+- [ ] Theme marketplace
+- [ ] Page builder (drag & drop)
+- [ ] Widget system
+- [ ] Menu builder
+- [ ] Revision history
+- [ ] Scheduled publishing
+
+**v4.2 - CMS SEO & Performance (Q1 2026)**
+- [ ] Built-in SEO optimization
+- [ ] Image optimization (WebP)
+- [ ] CDN integration
+- [ ] Multi-layer caching
+- [ ] PWA capabilities
+
+**v4.3 - Multi-Tenant & SaaS (Q2 2026)**
+- [ ] Tenant isolation
+- [ ] White-label capabilities
+- [ ] Usage tracking & billing
+- [ ] Subdomain routing
 
 ---
 
