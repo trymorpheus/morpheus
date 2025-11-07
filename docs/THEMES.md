@@ -657,20 +657,24 @@ $themeManager->activate('mytheme');
 
 ---
 
-## Database Schema
+## Storage
 
-Themes are stored in the `_themes` table:
+Themes use the **Global Metadata** system (`_dynamiccrud_config` table):
 
 ```sql
-CREATE TABLE _themes (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) UNIQUE NOT NULL,
-    active BOOLEAN DEFAULT FALSE,
-    config JSON,
-    installed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) COMMENT '{"display_name":"Themes","icon":"🎨"}';
+-- Active theme
+SELECT config_value FROM _dynamiccrud_config WHERE config_key = 'theme.active';
+-- Returns: "modern"
+
+-- Theme configuration
+SELECT * FROM _dynamiccrud_config WHERE config_key LIKE 'theme.config.%';
 ```
+
+**Benefits:**
+- Centralized configuration storage
+- No additional tables needed
+- Consistent with other global settings
+- Automatic caching via GlobalMetadata
 
 ---
 

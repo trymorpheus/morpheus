@@ -3,6 +3,7 @@
 namespace DynamicCRUD\Theme;
 
 use PDO;
+use DynamicCRUD\GlobalMetadata;
 
 class ThemeManager
 {
@@ -10,35 +11,21 @@ class ThemeManager
     private string $themesDir;
     private array $themes = [];
     private ?Theme $activeTheme = null;
+    private GlobalMetadata $config;
     
     public function __construct(PDO $pdo, string $themesDir)
     {
         $this->pdo = $pdo;
         $this->themesDir = $themesDir;
-        $this->ensureThemesTable();
-    }
-    
-    private function ensureThemesTable(): void
-    {
-        $this->pdo->exec("
-            CREATE TABLE IF NOT EXISTS _themes (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                name VARCHAR(100) UNIQUE NOT NULL,
-                active BOOLEAN DEFAULT FALSE,
-                config JSON,
-                installed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-            ) COMMENT '{\"display_name\":\"Themes\",\"icon\":\"🎨\"}'
-        ");
+        $this->config = new GlobalMetadata($pdo);
     }
     
     private function loadActiveTheme(): void
     {
-        $stmt = $this->pdo->query("SELECT name FROM _themes WHERE active = 1 LIMIT 1");
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $activeThemeName = $this->config->get('theme.active');
         
-        if ($row && isset($this->themes[$row['name']])) {
-            $this->activeTheme = $this->themes[$row['name']];
+        if ($activeThemeName && isset($this->themes[$activeThemeName])) {
+            $this->activeTheme = $this->themes[$activeThemeName];
         }
     }
     
@@ -76,31 +63,10 @@ class ThemeManager
         }
         
         try {
-            $this->pdo->beginTransaction();
-            
-            // Deactivate all themes
-            $this->pdo->exec("UPDATE _themes SET active = 0");
-            
-            // Check if theme exists in database
-            $stmt = $this->pdo->prepare("SELECT id FROM _themes WHERE name = :name");
-            $stmt->execute(['name' => $name]);
-            
-            if ($stmt->fetch()) {
-                // Update existing
-                $stmt = $this->pdo->prepare("UPDATE _themes SET active = 1 WHERE name = :name");
-                $stmt->execute(['name' => $name]);
-            } else {
-                // Insert new
-                $stmt = $this->pdo->prepare("INSERT INTO _themes (name, active) VALUES (:name, 1)");
-                $stmt->execute(['name' => $name]);
-            }
-            
-            $this->pdo->commit();
+            $this->config->set('theme.active', $name);
             $this->activeTheme = $this->themes[$name];
             return true;
-            
         } catch (\Exception $e) {
-            $this->pdo->rollBack();
             return false;
         }
     }
@@ -108,7 +74,7 @@ class ThemeManager
     public function deactivate(): bool
     {
         try {
-            $this->pdo->exec("UPDATE _themes SET active = 0");
+            $this->config->delete('theme.active');
             $this->activeTheme = null;
             return true;
         } catch (\Exception $e) {
@@ -137,9 +103,7 @@ class ThemeManager
     
     public function isInstalled(string $name): bool
     {
-        $stmt = $this->pdo->prepare("SELECT id FROM _themes WHERE name = :name");
-        $stmt->execute(['name' => $name]);
-        return $stmt->fetch() !== false;
+        return isset($this->themes[$name]);
     }
     
     public function render(string $template, array $data): string
@@ -191,39 +155,10 @@ class ThemeManager
         }
         
         try {
-            $name = $this->activeTheme->getName();
-            
-            // Get current config
-            $stmt = $this->pdo->prepare("SELECT config FROM _themes WHERE name = :name");
-            $stmt->execute(['name' => $name]);
-            $row = $stmt->fetch(PDO::FETCH_ASSOC);
-            
-            $config = $row && $row['config'] ? json_decode($row['config'], true) ?? [] : [];
-            
-            // Set value with dot notation support
-            $keys = explode('.', $key);
-            $current = &$config;
-            
-            foreach ($keys as $i => $k) {
-                if ($i === count($keys) - 1) {
-                    $current[$k] = $value;
-                } else {
-                    if (!isset($current[$k]) || !is_array($current[$k])) {
-                        $current[$k] = [];
-                    }
-                    $current = &$current[$k];
-                }
-            }
-            
-            // Save to database
-            $stmt = $this->pdo->prepare("UPDATE _themes SET config = :config WHERE name = :name");
-            $stmt->execute([
-                'name' => $name,
-                'config' => json_encode($config)
-            ]);
-            
+            $themeName = $this->activeTheme->getName();
+            $configKey = "theme.config.{$themeName}.{$key}";
+            $this->config->set($configKey, $value);
             return true;
-            
         } catch (\Exception $e) {
             return false;
         }

@@ -25,7 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `ClassicTheme` - Traditional blog design with sidebar
   - Hot theme switching without data loss
   - Inline CSS injection for portability
-  - Database-persisted active theme in `_themes` table
+  - Uses GlobalMetadata for storage (`_dynamiccrud_config` table)
 - **Blog Content Type** - Complete blogging platform
   - 5 tables with full metadata (posts, categories, tags, post_tags, comments)
   - SEO-optimized (meta tags, Open Graph, Twitter Cards, Schema.org)
