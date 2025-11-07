@@ -26,22 +26,56 @@ Parse WordPress eXtended RSS (WXR) export files.
 php test-parser.php
 ```
 
+### Step 2: Content Mapper ✅
+
+Map WordPress structure to DynamicCRUD format.
+
+**Features:**
+- Map categories (name, slug)
+- Map tags (name, slug)
+- Map posts with all fields
+- Convert post status (publish → published, draft → draft)
+- Convert dates to MySQL format
+- Remove WordPress shortcodes ([caption], [gallery])
+- Convert WordPress image classes to inline styles
+- Extract image URLs from content
+- Replace image URLs after download
+
+**Test:**
+```bash
+php test-mapper.php
+```
+
+### Step 3: Media Downloader ✅
+
+Download media files from WordPress URLs.
+
+**Features:**
+- Download images from URLs
+- Sanitize filenames
+- Handle duplicates with unique suffixes
+- Batch download support
+- Download caching (avoid re-downloading)
+- Statistics tracking
+
+**Test:**
+```bash
+php test-downloader.php
+```
+
 ## 🚧 In Progress
 
-### Step 2: Content Mapper (Next)
-- Map WordPress posts to DynamicCRUD structure
-- Convert post status (publish, draft, pending)
-- Extract featured images
-- Convert HTML content
-
-### Step 3: Media Downloader
-- Download images from URLs
-- Store in uploads directory
-- Update image URLs in content
-
-### Step 4: Main Migrator
+### Step 4: Main Migrator (Next)
 - Orchestrate full migration
 - Import categories, tags, posts
+- Download and link media
+- Generate URL mapping
+- Track statistics
+
+### Step 4: Main Migrator (In Progress)
+- Orchestrate full migration
+- Import categories, tags, posts
+- Download and link media
 - Generate URL mapping
 - Track statistics
 
@@ -59,6 +93,9 @@ php test-parser.php
 
 - `sample.xml` - Sample WordPress export (3 posts, 2 categories, 2 tags)
 - `test-parser.php` - Test script for WXR parser
+- `test-mapper.php` - Test script for Content Mapper
+- `test-downloader.php` - Test script for Media Downloader
+- `uploads/` - Directory for downloaded media
 - `README.md` - This file
 
 ## 🎯 Sample Data
