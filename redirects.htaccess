@@ -1,0 +1,8 @@
+# WordPress to DynamicCRUD Redirects
+# Generated: 2025-11-07 17:45:17
+
+RewriteEngine On
+
+RewriteRule ^2024/01/getting-started-with-php/$ /blog/getting-started-with-php [R=301,L]
+RewriteRule ^2024/01/mysql-database-basics/$ /blog/mysql-database-basics [R=301,L]
+RewriteRule ^$ /blog/advanced-php-techniques [R=301,L]

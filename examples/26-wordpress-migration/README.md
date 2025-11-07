@@ -85,13 +85,34 @@ php setup.php    # Create tables
 php migrate.php  # Run migration
 ```
 
+### Step 5: CLI Command ✅
+
+Command-line interface for WordPress migration.
+
+**Features:**
+- Professional CLI with help system
+- Multiple options (--prefix, --host, --database, etc.)
+- Progress reporting
+- Statistics display
+- URL mapping display (--verbose)
+- Generate redirects (--generate-redirects)
+- Dry run mode (--dry-run)
+- Skip media download (--no-media)
+- Custom redirect format (htaccess/nginx)
+- Error handling with exit codes
+
+**Usage:**
+```bash
+php bin/dynamiccrud migrate:wordpress export.xml --prefix=wp_ --generate-redirects
+```
+
 ## 🚧 In Progress
 
-### Step 5: CLI Command (Next)
-- Command-line interface
-- Progress reporting
-- Options (--prefix, --download-media, --dry-run)
-- Error handling
+### Step 6: Documentation (Next)
+- Complete migration guide
+- Troubleshooting section
+- Best practices
+- Examples
 
 ### Step 4: Main Migrator (In Progress)
 - Orchestrate full migration
