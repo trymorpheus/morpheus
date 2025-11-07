@@ -102,6 +102,22 @@ php bin/dynamiccrud generate:metadata users
 - Theme selection with previews
 - Automatic config file generation
 
+**Media Library:**
+- Complete file management system
+- Multiple file upload with drag & drop
+- Folder organization and navigation
+- Grid view with thumbnails
+- Image editing (resize, crop, thumbnails)
+- Search and filter functionality
+- File statistics and storage tracking
+
+**Comment System:**
+- Nested replies (up to 3 levels)
+- Moderation (approve/reject/delete)
+- Spam detection (keywords and links)
+- Gravatar integration
+- Beautiful responsive UI
+
 ```php
 use DynamicCRUD\ContentTypes\ContentTypeManager;
 
@@ -134,6 +150,11 @@ echo $admin->render(); // Full admin panel
 - `DatabaseSetup` - Database connection and table creation
 - `ConfigGenerator` - Generates config.php file
 - `InstallerWizard` - Main installation orchestrator
+- `MediaLibrary` - File upload and management
+- `ImageEditor` - Image manipulation (resize, crop, thumbnails)
+- `MediaBrowser` - Visual file browsing interface
+- `CommentManager` - Comment CRUD and moderation
+- `CommentRenderer` - Comment UI rendering
 
 **Features:**
 - 🎨 **Modern Design** - Professional frontend with navigation and search
@@ -145,7 +166,9 @@ echo $admin->render(); // Full admin panel
 
 👉 [See Blog CMS Example](examples/24-blog-cms/)  
 👉 [See Theme Showcase Example](examples/25-themes/)  
-👉 [See One-Click Installer Example](examples/27-installer/)
+👉 [See One-Click Installer Example](examples/27-installer/)  
+👉 [See Media Library Example](examples/28-media-library/)  
+👉 [See Comment System Example](examples/29-comments/)
 
 ---
 
@@ -1202,8 +1225,8 @@ php vendor/phpunit/phpunit/phpunit tests/SoftDeletesTest.php
 - [x] One-click installer (WordPress-style) ✅
 - [x] 3 professional themes (Minimal, Modern, Classic)
 - [x] WordPress migration tool ✅
-- [ ] Media library
-- [ ] Comment system
+- [x] Media library ✅
+- [x] Comment system ✅
 
 **v4.1 - CMS Advanced Features (Q4 2025)**
 - [ ] Theme marketplace
@@ -1230,8 +1253,8 @@ php vendor/phpunit/phpunit/phpunit tests/SoftDeletesTest.php
 
 ## 📊 Project Stats
 
-- **53 PHP classes** (~18,000 lines)
-- **41 working examples** (1 in v4.0, 1 in v3.3, 1 in v3.2, 1 in v3.1, 1 in v3.0, 2 in v2.9, 1 in v2.8, 1 in v2.7, 2 in v2.5, 2 in v2.3, 4 in v2.2, 6 in v2.1, 4 in v2.0)
+- **58 PHP classes** (~19,500 lines)
+- **43 working examples** (1 in v4.0, 1 in v3.3, 1 in v3.2, 1 in v3.1, 1 in v3.0, 2 in v2.9, 1 in v2.8, 1 in v2.7, 2 in v2.5, 2 in v2.3, 4 in v2.2, 6 in v2.1, 4 in v2.0)
 - **23 technical documents**
 - **421 automated tests** (418 passing, 99.3% pass rate, 90% coverage) (1 in v3.3, 1 in v3.2, 1 in v3.1, 1 in v3.0, 2 in v2.9, 1 in v2.8, 1 in v2.7, 2 in v2.5, 2 in v2.3, 4 in v2.2, 6 in v2.1, 4 in v2.0)
 - **22 technical documents**
@@ -1270,7 +1293,7 @@ Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for gu
 ## 👥 Credits
 
 **Creator & Project Lead**: [Mario Raúl Carbonell Martínez](https://github.com/mcarbonell)  
-**Development**: Amazon Q, Gemini 2.5 Pro
+**Development**: Amazon Q (Claude Sonnet 4.5)
 
 ---
 

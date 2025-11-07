@@ -36,7 +36,7 @@ class ThemeIntegrationTest extends TestCase
     {
         try {
             $this->pdo->exec("SET FOREIGN_KEY_CHECKS = 0");
-            $this->pdo->exec("DROP TABLE IF EXISTS _themes");
+            $this->pdo->exec("DELETE FROM _dynamiccrud_config WHERE config_key LIKE 'theme.%'");
             $this->pdo->exec("DROP TABLE IF EXISTS comments");
             $this->pdo->exec("DROP TABLE IF EXISTS post_tags");
             $this->pdo->exec("DROP TABLE IF EXISTS tags");
@@ -108,13 +108,13 @@ class ThemeIntegrationTest extends TestCase
         $result = $themeManager->setConfig('custom.value', 'test');
         $this->assertTrue($result);
         
-        // Verify it's saved in database
-        $stmt = $this->pdo->prepare("SELECT config FROM _themes WHERE name = :name");
-        $stmt->execute(['name' => 'minimal']);
-        $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+        // Verify it's saved in GlobalMetadata
+        $stmt = $this->pdo->prepare("SELECT config_value FROM _dynamiccrud_config WHERE config_key = :key");
+        $stmt->execute(['key' => 'theme.config.minimal.custom.value']);
+        $value = $stmt->fetchColumn();
         
-        $config = json_decode($row['config'], true);
-        $this->assertEquals('test', $config['custom']['value']);
+        // GlobalMetadata stores values as JSON
+        $this->assertEquals('test', json_decode($value));
     }
     
     public function testMultipleThemesRegistered(): void

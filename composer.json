@@ -1,7 +1,7 @@
 {
     "name": "dynamiccrud/dynamiccrud",
     "description": "PHP library for generating dynamic CRUD forms with automatic validation based on database structure",
-    "version": "3.5.0",
+    "version": "4.0.0",
     "type": "library",
     "keywords": ["crud", "forms", "mysql", "validation", "pdo", "dynamic", "generator", "ui-components", "workflow", "admin-panel"],
     "homepage": "https://github.com/mcarbonell/DynamicCRUD",

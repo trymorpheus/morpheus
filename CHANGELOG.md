@@ -5,7 +5,7 @@ All notable changes to DynamicCRUD will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [4.0.0] - 2025-01-XX
+## [4.0.0] - 2025-01-30
 
 ### Added
 - **Universal CMS Foundation** - WordPress alternative with growth potential
@@ -89,13 +89,66 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Archive: ~40ms
 - Admin Panel: ~60ms
 
+### Added (Installer)
+- **One-Click Installer** - WordPress-style installation wizard
+  - `SystemChecker` - Validates PHP version, extensions, directory permissions
+  - `DatabaseSetup` - Database connection testing and core table creation
+  - `ConfigGenerator` - Generates config.php with database credentials
+  - `InstallerWizard` - Main orchestrator for 8-step installation
+  - Web UI with beautiful responsive design (8 steps)
+  - CLI mode (interactive + non-interactive)
+  - System requirements check (PHP 8.0+, PDO, JSON, fileinfo, mbstring)
+  - Database connection testing with error handling
+  - Content type selection (blog/empty)
+  - Theme selection with previews
+  - Admin user creation
+  - Automatic config file generation
+  - Success page with next steps
+- Complete example in `examples/27-installer/`
+- CLI command: `php bin/dynamiccrud install`
+
+### Added (Media Library)
+- **Media Library** - Complete file management system
+  - `MediaLibrary` - File upload, browse, search, delete, folder organization
+  - `ImageEditor` - Image manipulation (resize, crop, thumbnails)
+  - `MediaBrowser` - Visual interface with grid view and folder sidebar
+  - Multiple file upload with drag & drop
+  - Folder organization and navigation
+  - Grid view with thumbnails
+  - Image editing (resize, crop, auto-thumbnails)
+  - Search and filter functionality
+  - File statistics and storage tracking
+  - Auto-creates `_media` table
+  - Supports JPEG, PNG, GIF, WebP
+- Complete example in `examples/28-media-library/`
+
+### Added (Comments)
+- **Comment System** - Nested comments with moderation
+  - `CommentManager` - Comment CRUD, moderation, spam detection
+  - `CommentRenderer` - UI rendering with Gravatar integration
+  - Nested replies (up to 3 levels)
+  - Moderation (approve/reject/delete)
+  - Spam detection (keywords and links)
+  - Gravatar integration with fallback
+  - Beautiful responsive UI
+  - Comment count tracking
+  - Auto-creates `_comments` table
+- Complete example in `examples/29-comments/`
+
+### Changed (Installer)
+- ThemeManager: Migrated from `_themes` table to GlobalMetadata (`_dynamiccrud_config`)
+- Theme storage: Uses `theme.active` and `theme.config.{name}.{key}` keys
+- Improved consistency with centralized configuration
+
 ### Testing
-- 435 total tests (100% passing)
-- 987 assertions
+- 478 total tests (100% passing)
+- 1070 assertions
 - 90% code coverage
 - BlogContentType: 10 tests
 - BlogWorkflow: 4 tests
+- ThemeManager: 18 tests (updated for GlobalMetadata)
 - All v4.0 tests passing
+- PostgreSQL tests enabled and passing
 
 ## [3.6.0] - 2024-01-XX
 

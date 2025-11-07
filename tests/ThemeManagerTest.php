@@ -35,7 +35,7 @@ class ThemeManagerTest extends TestCase
     private function cleanup(): void
     {
         try {
-            $this->pdo->exec("DROP TABLE IF EXISTS _themes");
+            $this->pdo->exec("DELETE FROM _dynamiccrud_config WHERE config_key LIKE 'theme.%'");
         } catch (\Exception $e) {
             // Ignore
         }
@@ -43,7 +43,8 @@ class ThemeManagerTest extends TestCase
     
     public function testThemesTableCreated(): void
     {
-        $stmt = $this->pdo->query("SHOW TABLES LIKE '_themes'");
+        // GlobalMetadata table should exist
+        $stmt = $this->pdo->query("SHOW TABLES LIKE '_dynamiccrud_config'");
         $this->assertEquals(1, $stmt->rowCount());
     }
     
@@ -100,7 +101,8 @@ class ThemeManagerTest extends TestCase
         $this->manager->activate('theme1');
         $this->manager->activate('theme2');
         
-        $stmt = $this->pdo->query("SELECT COUNT(*) FROM _themes WHERE active = 1");
+        // Check GlobalMetadata has only one active theme
+        $stmt = $this->pdo->query("SELECT COUNT(*) FROM _dynamiccrud_config WHERE config_key = 'theme.active'");
         $count = $stmt->fetchColumn();
         $this->assertEquals(1, $count);
     }
@@ -122,11 +124,10 @@ class ThemeManagerTest extends TestCase
     public function testIsInstalled(): void
     {
         $theme = $this->createMockTheme('Test Theme');
-        $this->manager->register('test', $theme);
         
         $this->assertFalse($this->manager->isInstalled('test'));
         
-        $this->manager->activate('test');
+        $this->manager->register('test', $theme);
         $this->assertTrue($this->manager->isInstalled('test'));
     }
     
@@ -180,14 +181,13 @@ class ThemeManagerTest extends TestCase
         $result = $this->manager->setConfig('custom.setting', 'value');
         $this->assertTrue($result);
         
-        // Verify in database
-        $stmt = $this->pdo->prepare("SELECT config FROM _themes WHERE name = :name");
-        $stmt->execute(['name' => 'test']);
-        $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+        // Verify in GlobalMetadata
+        $stmt = $this->pdo->prepare("SELECT config_value FROM _dynamiccrud_config WHERE config_key = :key");
+        $stmt->execute(['key' => 'theme.config.test.custom.setting']);
+        $value = $stmt->fetchColumn();
         
-        $this->assertNotEmpty($row);
-        $config = json_decode($row['config'] ?? '{}', true);
-        $this->assertEquals('value', $config['custom']['setting']);
+        // GlobalMetadata stores values as JSON
+        $this->assertEquals('value', json_decode($value));
     }
     
     public function testSetConfigWithoutActiveTheme(): void
