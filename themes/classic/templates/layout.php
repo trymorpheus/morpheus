@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($title ?? 'Blog') ?></title>
-    <link rel="stylesheet" href="/themes/classic/assets/style.css">
+    <?php if (isset($theme_styles) && $theme_styles): ?>
+    <style><?= $theme_styles ?></style>
+    <?php endif; ?>
 </head>
 <body>
     <header>

@@ -84,6 +84,7 @@ abstract class AbstractTheme implements Theme
         $layoutFile = $this->getThemeDir() . '/templates/layout.php';
         if (file_exists($layoutFile)) {
             $data['content'] = $content;
+            $data['theme_styles'] = $this->getInlineStyles();
             extract($data);
             ob_start();
             include $layoutFile;
@@ -91,6 +92,15 @@ abstract class AbstractTheme implements Theme
         }
         
         return $content;
+    }
+    
+    protected function getInlineStyles(): string
+    {
+        $styleFile = $this->getThemeDir() . '/assets/style.css';
+        if (file_exists($styleFile)) {
+            return file_get_contents($styleFile);
+        }
+        return '';
     }
     
     protected function renderFallback(string $template, array $data): string

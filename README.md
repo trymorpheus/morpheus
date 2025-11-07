@@ -85,6 +85,13 @@ php bin/dynamiccrud generate:metadata users
 - Automatic sitemap.xml and RSS feed generation
 - Table prefixes for example isolation (e.g., `24_posts`, `24_categories`)
 
+**Theme System:**
+- 3 built-in themes (Minimal, Modern, Classic)
+- Hot theme switching without data loss
+- Self-contained themes with templates and styles
+- Pluggable architecture for custom themes
+- Database-persisted active theme
+
 ```php
 use DynamicCRUD\ContentTypes\ContentTypeManager;
 
@@ -109,6 +116,10 @@ echo $admin->render(); // Full admin panel
 - `FrontendRouter` - Routes public URLs to content
 - `FrontendRenderer` - Renders public-facing pages
 - `SEOManager` - Meta tags, Open Graph, Schema.org, sitemap, RSS
+- `Theme` interface - Contract for all themes
+- `ThemeManager` - Manages theme lifecycle
+- `AbstractTheme` - Base class for themes
+- `MinimalTheme`, `ModernTheme`, `ClassicTheme` - Built-in themes
 
 **Features:**
 - 🎨 **Modern Design** - Professional frontend with navigation and search
@@ -118,7 +129,8 @@ echo $admin->render(); // Full admin panel
 - 🚀 **Fast** - 20-30x faster than WordPress
 - 🔐 **Secure** - No plugins = no vulnerabilities
 
-👉 [See Blog CMS Example](examples/24-blog-cms/)
+👉 [See Blog CMS Example](examples/24-blog-cms/)  
+👉 [See Theme Showcase Example](examples/25-themes/)
 
 ---
 
@@ -842,6 +854,12 @@ $crud->handleSubmission();
 ### v3.0 Features
 - REST API Generator - Automatic REST API with JWT auth
 - OpenAPI/Swagger - Auto-generated API documentation
+
+### v4.0 Features (NEW!)
+- [Theme System Guide](docs/THEMES.md) - Complete theme system documentation
+- [Content Types Guide](docs/CONTENT_TYPES.md) - Content type system
+- [Frontend Rendering Guide](docs/FRONTEND_RENDERING.md) - Public pages
+- [SEO Guide](docs/SEO.md) - SEO optimization
 
 ### v2.9 Features
 - Multiple File Upload - Drag & drop with previews

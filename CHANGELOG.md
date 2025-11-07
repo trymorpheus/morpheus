@@ -16,6 +16,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `FrontendRenderer` - Renders public-facing pages (7 methods)
   - `SEOManager` - Comprehensive SEO functionality
   - `Route` - Value object for route data
+- **Theme System** - Pluggable theme architecture
+  - `Theme` interface - Contract for all themes
+  - `ThemeManager` - Theme lifecycle management (register, activate, deactivate)
+  - `AbstractTheme` - Base class with common functionality
+  - `MinimalTheme` - Clean, simple design focused on content
+  - `ModernTheme` - Modern design with gradients and animations
+  - `ClassicTheme` - Traditional blog design with sidebar
+  - Hot theme switching without data loss
+  - Inline CSS injection for portability
+  - Database-persisted active theme in `_themes` table
 - **Blog Content Type** - Complete blogging platform
   - 5 tables with full metadata (posts, categories, tags, post_tags, comments)
   - SEO-optimized (meta tags, Open Graph, Twitter Cards, Schema.org)
@@ -50,9 +60,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Prevents conflicts between examples
   - Numeric prefixes (e.g., `24_posts`, `24_categories`)
 - Complete example in `examples/24-blog-cms/`
+- Complete example in `examples/25-themes/` - Theme showcase
 - Documentation in `docs/CONTENT_TYPES.md`
 - Documentation in `docs/FRONTEND_RENDERING.md`
 - Documentation in `docs/SEO.md`
+- Documentation in `docs/THEMES.md` - Complete theme system guide
 - 14 new tests (435 total, 100% passing)
 
 ### Changed
@@ -60,6 +72,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CRUDHandler: Added timestamp validation (check if columns exist)
 - TableMetadata: Fixed `getTimestampFields()` to handle boolean `true` value
 - Multiple classes: Added table prefix support throughout
+- AbstractTheme: Added `getInlineStyles()` method for CSS injection
+- Theme layouts: Changed from external CSS links to inline styles
 
 ### Fixed
 - Foreign key display columns now try multiple names (name, title, author_name, slug, email)
