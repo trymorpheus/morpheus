@@ -39,7 +39,7 @@ Write-Host ""
 
 # 4. Run tests
 Write-Host "4. Running test suite..." -ForegroundColor Yellow
-php vendor/phpunit/phpunit/phpunit --testdox
+.\vendor\bin\phpunit --testdox
 if ($LASTEXITCODE -ne 0) {
     Write-Host "❌ Error: Tests failed" -ForegroundColor Red
     exit 1
@@ -60,7 +60,7 @@ Write-Host ""
 
 # 6. Create git tag
 Write-Host "6. Creating git tag v4.0.0..." -ForegroundColor Yellow
-& git tag -a v4.0.0 -m "Release v4.0.0 - Universal CMS Foundation. Major Features: Blog CMS, Theme System, One-Click Installer, Media Library, Comment System, WordPress Migration. Performance: 40-60x faster than WordPress. Statistics: 58 classes, 478 tests passing, 90% coverage. See RELEASE_NOTES_v4.0.0.md for details."
+git tag -a v4.0.0 -m "Release v4.0.0 - Universal CMS Foundation. Major Features: Blog CMS, Theme System, One-Click Installer, Media Library, Comment System, WordPress Migration. Performance: 40-60x faster than WordPress. Statistics: 58 classes, 478 tests passing, 90% coverage. See RELEASE_NOTES_v4.0.0.md for details."
 Write-Host "✓ Tag v4.0.0 created" -ForegroundColor Green
 Write-Host ""
 
