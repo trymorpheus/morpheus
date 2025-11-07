@@ -92,6 +92,16 @@ php bin/dynamiccrud generate:metadata users
 - Pluggable architecture for custom themes
 - Database-persisted active theme
 
+**One-Click Installer:**
+- WordPress-style installation wizard (8 steps)
+- Beautiful responsive web UI
+- CLI mode (interactive + non-interactive)
+- System requirements check
+- Database connection testing
+- Content type selection (blog/empty)
+- Theme selection with previews
+- Automatic config file generation
+
 ```php
 use DynamicCRUD\ContentTypes\ContentTypeManager;
 
@@ -120,6 +130,10 @@ echo $admin->render(); // Full admin panel
 - `ThemeManager` - Manages theme lifecycle
 - `AbstractTheme` - Base class for themes
 - `MinimalTheme`, `ModernTheme`, `ClassicTheme` - Built-in themes
+- `SystemChecker` - Validates system requirements
+- `DatabaseSetup` - Database connection and table creation
+- `ConfigGenerator` - Generates config.php file
+- `InstallerWizard` - Main installation orchestrator
 
 **Features:**
 - 🎨 **Modern Design** - Professional frontend with navigation and search
@@ -130,7 +144,8 @@ echo $admin->render(); // Full admin panel
 - 🔐 **Secure** - No plugins = no vulnerabilities
 
 👉 [See Blog CMS Example](examples/24-blog-cms/)  
-👉 [See Theme Showcase Example](examples/25-themes/)
+👉 [See Theme Showcase Example](examples/25-themes/)  
+👉 [See One-Click Installer Example](examples/27-installer/)
 
 ---
 
@@ -1182,11 +1197,11 @@ php vendor/phpunit/phpunit/phpunit tests/SoftDeletesTest.php
 ### 🔮 Planned (v4.0+) - Universal CMS Era
 
 **v4.0 - Universal CMS Foundation (Q3 2025)**
-- [ ] Content type system (blog, portfolio, ecommerce, directory)
-- [ ] Frontend rendering engine with SEO
-- [ ] One-click installer (WordPress-style)
-- [ ] 5 professional themes
-- [ ] WordPress migration tool
+- [x] Content type system (blog implemented)
+- [x] Frontend rendering engine with SEO
+- [x] One-click installer (WordPress-style) ✅
+- [x] 3 professional themes (Minimal, Modern, Classic)
+- [x] WordPress migration tool ✅
 - [ ] Media library
 - [ ] Comment system
 
@@ -1215,8 +1230,8 @@ php vendor/phpunit/phpunit/phpunit tests/SoftDeletesTest.php
 
 ## 📊 Project Stats
 
-- **45 PHP classes** (~16,000 lines)
-- **39 working examples** (1 in v4.0, 1 in v3.3, 1 in v3.2, 1 in v3.1, 1 in v3.0, 2 in v2.9, 1 in v2.8, 1 in v2.7, 2 in v2.5, 2 in v2.3, 4 in v2.2, 6 in v2.1, 4 in v2.0)
+- **53 PHP classes** (~18,000 lines)
+- **41 working examples** (1 in v4.0, 1 in v3.3, 1 in v3.2, 1 in v3.1, 1 in v3.0, 2 in v2.9, 1 in v2.8, 1 in v2.7, 2 in v2.5, 2 in v2.3, 4 in v2.2, 6 in v2.1, 4 in v2.0)
 - **23 technical documents**
 - **421 automated tests** (418 passing, 99.3% pass rate, 90% coverage) (1 in v3.3, 1 in v3.2, 1 in v3.1, 1 in v3.0, 2 in v2.9, 1 in v2.8, 1 in v2.7, 2 in v2.5, 2 in v2.3, 4 in v2.2, 6 in v2.1, 4 in v2.0)
 - **22 technical documents**
@@ -1225,7 +1240,7 @@ php vendor/phpunit/phpunit/phpunit tests/SoftDeletesTest.php
 - **Languages supported**: 3 (English, Spanish, French)
 - **Databases supported**: 2 (MySQL, PostgreSQL)
 - **Template engine**: Blade-like syntax
-- **CLI Tool**: 19 commands (init, generate, validate, clear, list, export, import, etc.)
+- **CLI Tool**: 20 commands (init, install, generate, validate, clear, list, export, import, etc.)
 - **Authentication**: Register, login, logout, password reset, rate limiting
 - **RBAC**: Table + row-level permissions
 - **Soft Deletes**: Delete, restore, force delete

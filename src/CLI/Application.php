@@ -36,6 +36,7 @@ class Application
             'branding:set' => new Commands\BrandingSetCommand(),
             'branding:show' => new Commands\BrandingShowCommand(),
             'migrate:wordpress' => new Commands\MigrateWordPressCommand(),
+            'install' => new Commands\InstallCommand(),
         ];
     }
     
@@ -101,6 +102,8 @@ class Application
         echo "  branding:show          Show current branding configuration\n\n";
         echo "Migration Commands:\n";
         echo "  migrate:wordpress      Migrate WordPress site to DynamicCRUD\n\n";
+        echo "Installation Commands:\n";
+        echo "  install                Install DynamicCRUD (interactive wizard)\n\n";
         echo "Examples:\n";
         echo "  php dynamiccrud init\n";
         echo "  php dynamiccrud list:tables\n";
@@ -122,6 +125,8 @@ class Application
         echo "  php dynamiccrud branding:set primary_color \"#667eea\"\n";
         echo "  php dynamiccrud branding:show\n";
         echo "  php dynamiccrud migrate:wordpress export.xml --prefix=wp_\n";
+        echo "  php dynamiccrud install --interactive\n";
+        echo "  php dynamiccrud install --host=localhost --database=mydb --username=root --admin-email=admin@example.com --admin-password=secret\n";
         echo "  php dynamiccrud clear:cache\n\n";
     }
     
