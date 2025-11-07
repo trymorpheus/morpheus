@@ -63,14 +63,35 @@ Download media files from WordPress URLs.
 php test-downloader.php
 ```
 
+### Step 4: Main Migrator ✅
+
+Orchestrate complete WordPress migration.
+
+**Features:**
+- Full migration orchestration
+- Import categories with slug mapping
+- Import tags with slug mapping
+- Import posts with content conversion
+- Download and replace media URLs (optional)
+- Generate URL mappings (old → new)
+- Track statistics (categories, tags, posts, media, errors)
+- Transaction support (rollback on error)
+- Generate .htaccess redirects
+- Generate nginx redirects
+
+**Test:**
+```bash
+php setup.php    # Create tables
+php migrate.php  # Run migration
+```
+
 ## 🚧 In Progress
 
-### Step 4: Main Migrator (Next)
-- Orchestrate full migration
-- Import categories, tags, posts
-- Download and link media
-- Generate URL mapping
-- Track statistics
+### Step 5: CLI Command (Next)
+- Command-line interface
+- Progress reporting
+- Options (--prefix, --download-media, --dry-run)
+- Error handling
 
 ### Step 4: Main Migrator (In Progress)
 - Orchestrate full migration
@@ -92,9 +113,12 @@ php test-downloader.php
 ## 📁 Files
 
 - `sample.xml` - Sample WordPress export (3 posts, 2 categories, 2 tags)
+- `setup.php` - Create database tables with wp_ prefix
+- `migrate.php` - Complete migration script
 - `test-parser.php` - Test script for WXR parser
 - `test-mapper.php` - Test script for Content Mapper
 - `test-downloader.php` - Test script for Media Downloader
+- `redirects.htaccess` - Generated redirect rules
 - `uploads/` - Directory for downloaded media
 - `README.md` - This file
 
@@ -110,34 +134,46 @@ The `sample.xml` file contains:
   - MySQL Database Basics (published)
   - Advanced PHP Techniques (draft)
 
-## 🚀 Quick Test
+## 🚀 Quick Start
 
 ```bash
-# Test the parser
-php test-parser.php
+# 1. Create database tables
+php setup.php
+
+# 2. Run migration
+php migrate.php
 
 # Expected output:
-# 🔍 Testing WordPress XML Parser
+# ✅ Migration completed successfully!
 # 
-# Site Information:
-#   Title: My WordPress Blog
-#   Link: https://example.com
-#   Language: en-US
+# 📊 Statistics:
+#   Categories imported: 2
+#   Tags imported: 2
+#   Posts imported: 3
+#   Media downloaded: 0
+#   Errors: 0
+#   Duration: 0.02s
 # 
-# Categories: 2
-#   - Technology (slug: technology)
-#   - Programming (slug: programming)
+# 🔗 URL Mappings:
+#   https://example.com/2024/01/getting-started-with-php/
+#   → /blog/getting-started-with-php
+#   ...
 # 
-# Tags: 2
-#   - PHP (slug: php)
-#   - MySQL (slug: mysql)
-# 
-# Posts: 3
-#   - Getting Started with PHP (publish)
-#   - MySQL Database Basics (publish)
-#   - Advanced PHP Techniques (draft)
-# 
-# ✅ Parser test completed!
+# 📄 Generating redirects...
+#   ✅ Saved to: redirects.htaccess
+```
+
+## 🧪 Individual Tests
+
+```bash
+# Test parser only
+php test-parser.php
+
+# Test mapper only
+php test-mapper.php
+
+# Test downloader only
+php test-downloader.php
 ```
 
 ## 📚 Documentation
