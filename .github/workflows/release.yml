@@ -24,7 +24,7 @@ jobs:
       run: composer install --no-dev --prefer-dist --optimize-autoloader
     
     - name: Create Release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
         body: |
           ## Changes in this Release
