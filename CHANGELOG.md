@@ -5,7 +5,7 @@ All notable changes to DynamicCRUD will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [4.0.0] - 2025-01-30
+## [4.0.0] - 2025-10-30
 
 ### Added
 - **Universal CMS Foundation** - WordPress alternative with growth potential
@@ -150,7 +150,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - All v4.0 tests passing
 - PostgreSQL tests enabled and passing
 
-## [3.6.0] - 2024-01-XX
+## [3.6.0] - 2025-10-XX
 
 ### Changed
 - **FileUploadHandler Refactoring** - Improved file upload organization
@@ -199,7 +199,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Documented all 4 refactored classes
 - Marked all major classes as refactored
 
-## [3.5.0] - 2024-01-XX
+## [3.5.0] - 2025-10-XX
 
 ### Changed
 - **CRUDHandler Refactoring** - 88% reduction in main method complexity
@@ -236,7 +236,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added examples for guard clauses, type-specific validators, nullsafe operator
 - Documented completed refactorings (v3.4.0 + v3.5.0)
 
-## [3.4.0] - 2024-01-XX
+## [3.4.0] - 2025-10-XX
 
 ### Changed
 - **FormGenerator Refactoring** - Complete code refactoring for better maintainability
@@ -266,7 +266,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 13 ListGenerator tests updated and passing
 - 90% code coverage maintained
 
-## [3.3.0] - 2024-01-XX
+## [3.3.0] - 2025-10-XX
 
 ### Added
 - **UI Components Library** - 15 reusable, accessible components
@@ -297,7 +297,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - AdminPanel refactored to use Components library
 - Improved code maintainability and consistency
 
-## [3.2.0] - 2024-01-XX
+## [3.2.0] - 2025-10-XX
 
 ### Added
 - **Workflow Engine** - State management with transitions
@@ -317,7 +317,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Documentation in `docs/WORKFLOW.md`
 - 13 new tests (341 total)
 
-## [3.1.0] - 2024-01-XX
+## [3.1.0] - 2025-10-XX
 
 ### Added
 - **Admin Panel Generator** - Complete admin interface
@@ -331,7 +331,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Complete example in `examples/18-admin-panel/`
 - 12 new tests (328 total)
 
-## [3.0.0] - 2024-01-XX
+## [3.0.0] - 2025-10-XX
 
 ### Added
 - **REST API Generator** - Automatic REST API generation
@@ -345,7 +345,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Complete example in `examples/17-rest-api/`
 - 7 new tests (315 total)
 
-## [2.9.0] - 2024-01-XX
+## [2.9.0] - 2025-10-XX
 
 ### Added
 - **Multiple File Upload** - Drag & drop interface
@@ -364,7 +364,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 2 new examples (real estate, theme demo)
 - 9 new tests (308 total)
 
-## [2.8.0] - 2024-01-XX
+## [2.8.0] - 2025-10-XX
 
 ### Added
 - **Global Config Foundation** - Centralized configuration
@@ -378,7 +378,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 4 CLI commands
 - 8 new tests (299 total)
 
-## [2.7.0] - 2024-01-XX
+## [2.7.0] - 2025-10-XX
 
 ### Added
 - **SQL Dump & Import** - Export/import with metadata
@@ -391,7 +391,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 2 CLI commands
 - 6 new tests (291 total)
 
-## [2.6.0] - 2024-01-XX
+## [2.6.0] - 2025-10-XX
 
 ### Added
 - **Consolidation Release** - Improved documentation
@@ -401,7 +401,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Examples Guide (`examples/README.md`)
   - Learning path for new users
 
-## [2.5.0] - 2024-01-XX
+## [2.5.0] - 2025-10-XX
 
 ### Added
 - **Export/Import** - CSV export and import
@@ -414,7 +414,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 3 CLI commands
 - 10 new tests (285 total)
 
-## [2.4.0] - 2024-01-XX
+## [2.4.0] - 2025-10-XX
 
 ### Added
 - **CLI Enhancements** - New commands
@@ -427,7 +427,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 5 new CLI commands (19 total)
 - 8 new tests (275 total)
 
-## [2.3.0] - 2024-01-XX
+## [2.3.0] - 2025-10-XX
 
 ### Added
 - **Notifications & Webhooks** - Automatic notifications
@@ -443,7 +443,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Documentation in `docs/NOTIFICATIONS.md`
 - 7 new tests (267 total)
 
-## [2.2.0] - 2024-01-XX
+## [2.2.0] - 2025-10-XX
 
 ### Added
 - **Validation Rules** - Advanced validation
@@ -459,7 +459,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Documentation in `docs/VALIDATION_RULES.md`
 - 12 new tests (260 total)
 
-## [2.1.0] - 2024-01-XX
+## [2.1.0] - 2025-10-XX
 
 ### Added
 - **Authentication System** - User authentication
@@ -483,7 +483,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Documentation in `docs/RBAC.md`
 - 52 new tests (248 total)
 
-## [2.0.0] - 2024-01-XX
+## [2.0.0] - 2025-10-XX
 
 ### Added
 - **Table Metadata System** - Configuration via table comments
@@ -497,7 +497,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Documentation in `docs/TABLE_METADATA.md`
 - 40 new tests (196 total)
 
-## [1.5.0] - 2024-01-XX
+## [1.5.0] - 2025-10-XX
 
 ### Added
 - **Template System** - Blade-like syntax
@@ -509,7 +509,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Template examples
 - 17 new tests (156 total)
 
-## [1.4.0] - 2024-01-XX
+## [1.4.0] - 2025-10-XX
 
 ### Added
 - **Internationalization (i18n)** - Multi-language support
@@ -522,7 +522,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Documentation in `docs/I18N.md`
 - 31 new tests (139 total)
 
-## [1.3.0] - 2024-01-XX
+## [1.3.0] - 2025-10-XX
 
 ### Added
 - **PostgreSQL Support** - Multi-database support
@@ -532,7 +532,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Database adapter examples
 - 15 new tests (108 total)
 
-## [1.2.0] - 2024-01-XX
+## [1.2.0] - 2025-10-XX
 
 ### Added
 - **Virtual Fields** - Non-database fields
@@ -544,7 +544,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CI/CD pipeline (GitHub Actions)
 - 20 new tests (93 total)
 
-## [1.1.0] - 2024-01-XX
+## [1.1.0] - 2025-10-XX
 
 ### Added
 - **Many-to-Many Relationships** - M:N support
@@ -555,7 +555,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Documentation in `docs/MANY_TO_MANY.md`
 - 15 new tests (73 total)
 
-## [1.0.0] - 2024-01-XX
+## [1.0.0] - 2025-10-XX
 
 ### Added
 - Initial release

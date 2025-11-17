@@ -1,88 +1,212 @@
 # Product Overview
 
-## Purpose
-DynamicCRUD is a powerful PHP library that automatically generates CRUD (Create, Read, Update, Delete) forms with validation based on database structure. It eliminates repetitive CRUD code by analyzing MySQL/PostgreSQL schemas and creating fully functional forms with validation, security, and advanced features out of the box.
+## Project Identity
+
+**Name:** DynamicCRUD  
+**Version:** 4.0.0  
+**Tagline:** The Universal CMS - Start as a blog, grow into anything  
+**Creator:** Mario Raúl Carbonell Martínez  
+**License:** MIT
+
+## What is DynamicCRUD?
+
+DynamicCRUD is the world's first **Universal CMS** that combines the simplicity of WordPress with the power of a custom application generator. It's a PHP library that automatically generates dynamic CRUD (Create, Read, Update, Delete) forms with validation based on database structure.
+
+**Core Philosophy:** Start with a blog in 60 seconds, then grow into e-commerce, CRM, or any custom application - all without migrations, plugins, or code.
 
 ## Value Proposition
-- **Zero-config form generation** - Analyzes database schema and generates forms automatically
-- **Metadata-driven configuration** - Configure everything via JSON in database table/column comments
-- **Enterprise-ready security** - Built-in CSRF protection, SQL injection prevention, XSS protection
-- **Production-ready features** - Authentication, RBAC, soft deletes, audit logging, i18n, templates
-- **Developer-friendly** - 3 lines of code for basic CRUD, extensive hooks for customization
+
+### Primary Benefits
+- **Zero-config form generation** - Automatically creates forms from SQL schema
+- **20-30x faster than WordPress** - Homepage loads in ~50ms vs 2-3s
+- **No plugins needed** - Everything built-in, no security vulnerabilities
+- **Grows with you** - Start simple, expand to complex applications
+- **Developer-friendly** - Minimal code, maximum functionality
+
+### Target Users
+- 📝 **Bloggers** - Seeking a faster WordPress alternative
+- 🏢 **Businesses** - Needing a website that grows with them
+- 👨💻 **Developers** - Building client sites rapidly
+- 🚀 **Startups** - Prototyping MVPs in minutes
 
 ## Key Features
 
-### Core CRUD
-- Automatic form generation from SQL schema
-- Full CRUD operations (Create, Read, Update, Delete)
+### Core CRUD Operations
+- Automatic form generation from database schema
+- Server + client-side validation
+- CSRF protection built-in
+- SQL injection prevention with prepared statements
 - Smart NULL handling for nullable fields
-- ENUM field support with auto-generated selects
 - File uploads with MIME type validation
-- Automatic validation (server + client-side JavaScript)
 
 ### Relationships
 - Foreign keys auto-detection with dropdown selects
-- Many-to-many relationships with multi-select UI
+- Many-to-many relationships with multi-select
 - Custom display columns for related data
-- Automatic JOIN queries for related data
 
-### Security & Authentication (v2.1)
-- **Authentication System** - Register, login, logout with rate limiting
-- **RBAC** - Role-based access control with row-level security
-- **Soft Deletes** - Mark records as deleted, restore or permanently delete
-- CSRF protection built-in
-- SQL injection prevention with prepared statements
-- XSS protection with automatic escaping
-- Password hashing (bcrypt)
-- Session management with remember me
-
-### Table Metadata System (v2.0)
-- **UI/UX Customization** - Display names, icons, colors, list views
-- **Dynamic Forms** - Tabbed layouts, fieldsets, organized field groups
-- **Automatic Behaviors** - Auto-timestamps, auto-slug generation
-- **Search & Filters** - Full-text search, dropdown filters, date ranges
+### Universal CMS Features (v4.0)
+- **Blog Content Type** - Complete WordPress-style blog with posts, categories, tags, comments
+- **Theme System** - 3 built-in themes (Minimal, Modern, Classic) with hot-swapping
+- **One-Click Installer** - WordPress-style installation wizard (8 steps)
+- **Media Library** - Complete file management with drag & drop, image editing
+- **Comment System** - Nested replies (3 levels), moderation, spam detection
+- **WordPress Migration** - Import entire WP sites in minutes
+- **Frontend Rendering** - Public-facing pages with clean URLs
+- **SEO Built-in** - Meta tags, Open Graph, Twitter Cards, Schema.org, sitemap, RSS
 
 ### Advanced Features
-- **CLI Tool** - Command-line interface for project management
-- **Multi-database support** - MySQL 5.7+, PostgreSQL 12+
-- **Internationalization (i18n)** - 3 languages (EN, ES, FR)
+- **CLI Tool** - 20+ commands for project management
+- **Authentication** - Register, login, logout with rate limiting
+- **RBAC** - Role-based access control with row-level security
+- **Soft Deletes** - Mark as deleted, restore, or permanently delete
+- **Multi-database** - MySQL and PostgreSQL support
+- **i18n** - 3 languages (English, Spanish, French)
 - **Template System** - Blade-like syntax for custom layouts
-- **Hooks/Events system** - 10 lifecycle hooks for custom logic
-- **Virtual fields** - Password confirmation, terms acceptance
-- **Automatic transactions** - Rollback on error
-- **Audit logging** - Change tracking with user/IP/timestamp
-- **Caching system** - Schema metadata caching for performance
-- **Accessibility** - ARIA labels, keyboard navigation
+- **Hooks/Events** - 10 lifecycle hooks for custom logic
+- **Virtual Fields** - Password confirmation, terms acceptance
+- **Audit Logging** - Complete change tracking
+- **Caching System** - Schema metadata caching
+- **REST API Generator** - Automatic API with JWT authentication
+- **Admin Panel** - Complete admin interface with dashboard
+- **Workflow Engine** - State management with transitions
+- **UI Components** - 15 reusable, accessible components
+- **Validation Rules** - Advanced validation and business logic
+- **Notifications** - Email notifications and webhooks
 
-## Target Users
+## Use Cases
 
-### Primary Users
-- **PHP Developers** building web applications with database-driven forms
-- **Full-stack Developers** needing rapid CRUD interface generation
-- **Backend Developers** creating admin panels and data management interfaces
+### 1. Blog/Content Site
+Start with the blog content type, choose a theme, and you're live in 60 seconds. Perfect for bloggers, news sites, and content creators.
 
-### Use Cases
-1. **Admin Panels** - Quickly build admin interfaces for managing database records
-2. **Data Entry Forms** - Generate forms for data collection and management
-3. **Content Management** - Create CMS-like interfaces for content editing
-4. **User Management** - Build user registration, login, and profile management
-5. **Rapid Prototyping** - Quickly prototype database-driven applications
-6. **Internal Tools** - Create internal tools for data management and reporting
+### 2. Business Website
+Use the installer to set up a professional site, then add custom tables for services, testimonials, or portfolios as you grow.
 
-### Ideal For
-- Projects requiring rapid development of CRUD interfaces
-- Applications with complex database relationships
-- Multi-language applications (i18n support)
-- Projects requiring role-based access control
-- Applications needing audit trails and change tracking
-- Teams wanting to reduce boilerplate code
+### 3. E-commerce Platform
+Start with products and categories, add cart functionality, integrate payment processing - all without migrations.
+
+### 4. CRM System
+Create tables for contacts, deals, activities. Add workflows for sales processes. Build custom dashboards.
+
+### 5. Custom Applications
+Any database-driven application - inventory management, booking systems, project management, etc.
+
+## Performance Benchmarks
+
+### Blog CMS (vs WordPress)
+- **Homepage:** ~50ms (vs 2-3s) - **40-60x faster**
+- **Single Post:** ~30ms
+- **Archive:** ~40ms
+- **Admin Panel:** ~60ms
+- **Search:** ~45ms
+
+### Why So Fast?
+- No plugin overhead
+- Optimized database queries
+- Efficient caching
+- Minimal dependencies
+- Clean, focused codebase
+
+## Technical Highlights
+
+### Code Quality
+- **58 PHP classes** (~19,500 lines)
+- **478 automated tests** (100% passing)
+- **90% code coverage**
+- **PSR-4 autoloading**
+- **Comprehensive documentation**
+
+### Security
+- CSRF protection automatic
+- SQL injection prevention (prepared statements)
+- XSS protection (automatic sanitization)
+- File upload security (real MIME validation)
+- Transaction safety (automatic rollback)
+
+### Developer Experience
+- 3 lines of code for basic CRUD
+- JSON metadata for customization
+- Extensive documentation (25+ guides)
+- 29 working examples
+- Active development and support
+
+## Market Position
+
+### Competitive Advantages
+1. **Only Universal CMS** - Grows from blog to any application
+2. **Performance Leader** - 20-30x faster than WordPress
+3. **Zero Plugins** - Everything built-in, no security risks
+4. **Developer-First** - Minimal code, maximum power
+5. **Open Source** - MIT license, free forever
+
+### WordPress Alternative
+- **810M WordPress sites** - Massive potential market
+- **Migration Tool** - Import WP sites in minutes
+- **Familiar Workflow** - Similar admin experience
+- **Better Performance** - Dramatically faster
+- **More Flexible** - Grows beyond blogging
 
 ## Project Statistics
-- **27 PHP classes** (~9,000 lines of code)
-- **22 working examples** across 9 categories
-- **14 technical documents**
-- **242 automated tests** (100% passing, 90% coverage)
-- **3 languages supported** (English, Spanish, French)
-- **2 databases supported** (MySQL, PostgreSQL)
-- **10 lifecycle hooks** for customization
-- **16+ metadata options** for field customization
+
+- **43 working examples**
+- **25 technical documents**
+- **19 CLI commands**
+- **3 languages supported**
+- **2 databases supported**
+- **15 UI components**
+- **10 lifecycle hooks**
+- **8 installer steps**
+- **3 built-in themes**
+
+## Future Vision
+
+### v4.1 - CMS Advanced Features (Q4 2025)
+- Theme marketplace
+- Page builder (drag & drop)
+- Widget system
+- Menu builder
+- Revision history
+- Scheduled publishing
+
+### v4.2 - CMS SEO & Performance (Q1 2026)
+- Built-in SEO optimization
+- Image optimization (WebP)
+- CDN integration
+- Multi-layer caching
+- PWA capabilities
+
+### v4.3 - Multi-Tenant & SaaS (Q2 2026)
+- Tenant isolation
+- White-label capabilities
+- Usage tracking & billing
+- Subdomain routing
+
+## Getting Started
+
+### Installation
+```bash
+composer require dynamiccrud/dynamiccrud
+```
+
+### Basic Usage (3 lines!)
+```php
+$pdo = new PDO('mysql:host=localhost;dbname=mydb', 'user', 'pass');
+$crud = new DynamicCRUD($pdo, 'users');
+echo $crud->renderForm($_GET['id'] ?? null);
+```
+
+### One-Click Installer
+```bash
+# Navigate to install directory
+http://localhost/install/
+
+# Or use CLI
+php bin/dynamiccrud install
+```
+
+## Support & Resources
+
+- **GitHub:** https://github.com/mcarbonell/DynamicCRUD
+- **Packagist:** https://packagist.org/packages/dynamiccrud/dynamiccrud
+- **Documentation:** 25+ comprehensive guides
+- **Examples:** 29 working examples with code
+- **Tests:** 478 automated tests for reliability

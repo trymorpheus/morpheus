@@ -1,7 +1,7 @@
 # DynamicCRUD - Product Roadmap
 
 **Current Version:** v3.5.0  
-**Last Updated:** January 2025  
+**Last Updated:** November 2025  
 **Status:** Active Development
 
 ---
@@ -228,6 +228,7 @@ $cms->install('directory'); // Listings, reviews, ratings
 **Focus:** Professional CMS capabilities
 
 **Features:**
+- [ ] **Database Routing** - Routes stored in `_routes` table 🌟
 - [ ] Theme marketplace (buy/sell themes)
 - [ ] Widget system (sidebar, footer widgets)
 - [ ] Menu builder (drag-and-drop navigation)
@@ -238,10 +239,14 @@ $cms->install('directory'); // Listings, reviews, ratings
 - [ ] Page builder (drag-and-drop layouts)
 
 **Benefits:**
+- **Dynamic routing without code deployments**
+- **Multi-tenant routing support**
 - Feature parity with WordPress
 - Better UX than WordPress
 - Monetization via marketplace
 - Professional appearance
+
+👉 **[See Database Routing Concept](docs/DATABASE_ROUTING.md)**
 
 **Marketplace Revenue:**
 - 70/30 split (creator/platform)

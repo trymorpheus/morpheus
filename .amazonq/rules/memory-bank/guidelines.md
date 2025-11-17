@@ -2,146 +2,195 @@
 
 ## Code Quality Standards
 
-### PHP Version and Features
-- **Target PHP 8.0+** - Use modern PHP features consistently
-- **Named arguments** - Used in constructors and method calls for clarity
-- **Arrow functions** - Preferred for simple callbacks: `fn($col) => $col['name']`
-- **Match expressions** - Used for type mapping (e.g., SQL type to input type)
-- **Nullsafe operator** - Used for optional chaining: `$this->translator?->t('key')`
-- **Type declarations** - All parameters and return types must be typed
-- **Property types** - All class properties must have type declarations
+### Formatting and Structure
+- **PSR-4 Autoloading** - All classes follow PSR-4 namespace structure matching directory layout
+- **Strict Types** - PHP 8.0+ features used throughout (named arguments, union types, nullsafe operator)
+- **One Class Per File** - Each class in its own file matching the class name
+- **Consistent Indentation** - 4 spaces for indentation, no tabs
+- **Line Length** - Keep lines under 120 characters when practical
+- **Blank Lines** - Single blank line between methods, two blank lines between classes
 
 ### Naming Conventions
-- **Classes**: PascalCase (e.g., `FormGenerator`, `CRUDHandler`, `AuthenticationManager`)
-- **Methods**: camelCase (e.g., `renderForm`, `handleSubmission`, `getCurrentUser`)
-- **Properties**: camelCase with visibility prefix (e.g., `private PDO $pdo`, `private array $schema`)
-- **Constants**: UPPER_SNAKE_CASE (when used)
-- **Database tables**: snake_case (e.g., `users`, `post_tags`, `password_resets`)
-- **Database columns**: snake_case (e.g., `user_id`, `created_at`, `deleted_at`)
+- **Classes** - PascalCase (e.g., `FormGenerator`, `CRUDHandler`, `ValidationEngine`)
+- **Methods** - camelCase (e.g., `renderForm()`, `handleSubmission()`, `validateData()`)
+- **Private Methods** - camelCase with descriptive names (e.g., `validateField()`, `renderFormOpen()`)
+- **Variables** - camelCase (e.g., `$csrfToken`, `$uploadDir`, `$tableMetadata`)
+- **Constants** - UPPER_SNAKE_CASE (when used)
+- **Database Tables** - lowercase_snake_case (e.g., `user_roles`, `post_tags`)
+- **Database Columns** - lowercase_snake_case (e.g., `created_at`, `user_id`)
 
-### File Organization
-- **One class per file** - File name matches class name exactly
-- **Namespace structure** - Mirrors directory structure: `DynamicCRUD\Security\AuthenticationManager`
-- **Imports at top** - All `use` statements grouped at file start
-- **No closing PHP tag** - Files end without `?>`
+### Documentation Standards
+- **Class Docblocks** - Not heavily used; code is self-documenting
+- **Method Visibility** - Explicit public/private/protected keywords always used
+- **Type Hints** - Strict type hints for parameters and return types
+- **Nullable Types** - Use `?Type` syntax for nullable parameters/returns
+- **Array Types** - Use `array` type hint with descriptive variable names
 
-### Code Formatting
-- **Indentation**: 4 spaces (no tabs)
-- **Line length**: Aim for 120 characters max, break long lines logically
-- **Braces**: Opening brace on same line for methods/classes, new line for control structures
-- **Spacing**: Space after keywords (`if (`, `foreach (`, `function (`), no space for function calls
-- **String concatenation**: Use `.` with spaces: `$html .= '<div>' . "\n";`
-- **Array syntax**: Short array syntax `[]` instead of `array()`
-
-### Documentation
-- **PHPDoc blocks** - Not heavily used in this codebase (minimal approach)
-- **Inline comments** - Spanish comments in code (e.g., `// Renderizar campos virtuales`)
-- **README files** - English for public documentation, Spanish for internal notes
-- **Method names** - Self-documenting, clear intent without excessive comments
+### Code Organization
+- **Dependency Injection** - Constructor injection for dependencies (PDO, cache, etc.)
+- **Fluent Interface** - Methods return `$this` for method chaining where appropriate
+- **Single Responsibility** - Each method does one thing well
+- **Small Methods** - Methods typically 5-30 lines, extracted when longer
+- **Guard Clauses** - Early returns for validation/edge cases
 
 ## Architectural Patterns
 
-### Dependency Injection
+### 1. Facade Pattern (Main API)
+**Example: DynamicCRUD class**
 ```php
-// Constructor injection is standard
-public function __construct(PDO $pdo, string $table, ?CacheStrategy $cache = null)
+class DynamicCRUD
 {
-    $this->pdo = $pdo;
-    $this->table = $table;
-    $this->cache = $cache;
-}
-```
-
-### Fluent Interface Pattern
-```php
-// All configuration methods return $this for chaining
-public function setTranslator(Translator $translator): self
-{
-    $this->translator = $translator;
-    return $this;
-}
-
-// Usage:
-$crud->addHook('beforeSave', $callback)
-     ->enableAudit($userId)
-     ->setLocale('es');
-```
-
-### Facade Pattern
-```php
-// DynamicCRUD acts as facade, delegating to specialized classes
-public function renderForm(?int $id = null): string
-{
-    // Delegates to FormGenerator
-    $generator = new FormGenerator($this->schema, $data, $csrfToken, $this->pdo, $this->handler);
-    return $generator->render();
-}
-```
-
-### Hook/Event System
-```php
-// Hooks are stored in array and executed in sequence
-private function executeHook(string $event, ...$args)
-{
-    if (!isset($this->hooks[$event])) {
-        return $args[0] ?? null;
+    private PDO $pdo;
+    private CRUDHandler $handler;
+    private SchemaAnalyzer $analyzer;
+    
+    public function renderForm(?int $id = null): string
+    {
+        // Orchestrates FormGenerator, SecurityModule, etc.
     }
     
-    $result = $args[0] ?? null;
-    
-    foreach ($this->hooks[$event] as $callback) {
-        $result = $callback(...$args) ?? $result;
+    public function handleSubmission(): array
+    {
+        return $this->handler->handleSubmission($_POST, $_FILES);
     }
-    
-    return $result;
 }
 ```
+- Provides simple interface to complex subsystems
+- Hides internal complexity from users
+- Delegates to specialized components
 
-### Adapter Pattern
+### 2. Adapter Pattern (Database Abstraction)
+**Example: DatabaseAdapter interface**
 ```php
-// DatabaseAdapter abstracts MySQL/PostgreSQL differences
 interface DatabaseAdapter
 {
     public function getTableSchema(string $table): array;
     public function getForeignKeys(string $table): array;
+    public function quote(string $identifier): string;
+}
+
+class MySQLAdapter implements DatabaseAdapter { }
+class PostgreSQLAdapter implements DatabaseAdapter { }
+```
+- Abstracts database-specific operations
+- Allows easy addition of new databases
+- Normalizes differences between databases
+
+### 3. Strategy Pattern (Caching)
+**Example: CacheStrategy interface**
+```php
+interface CacheStrategy
+{
+    public function get(string $key);
+    public function set(string $key, $value, int $ttl = 3600): bool;
+    public function delete(string $key): bool;
+}
+
+class FileCacheStrategy implements CacheStrategy { }
+```
+- Pluggable cache backends
+- Easy to swap implementations
+- Testable in isolation
+
+### 4. Template Method Pattern (Themes)
+**Example: AbstractTheme base class**
+```php
+abstract class AbstractTheme implements Theme
+{
+    abstract public function getName(): string;
+    abstract public function getTemplates(): array;
+    
+    public function render(string $template, array $data): string
+    {
+        // Common rendering logic
+    }
 }
 ```
+- Defines algorithm skeleton
+- Subclasses override specific steps
+- Promotes code reuse
+
+### 5. Observer Pattern (Hooks/Events)
+**Example: Hook system in CRUDHandler**
+```php
+private array $hooks = [];
+
+public function on(string $event, callable $callback): self
+{
+    $this->hooks[$event][] = $callback;
+    return $this;
+}
+
+private function executeHook(string $event, ...$args)
+{
+    foreach ($this->hooks[$event] as $callback) {
+        $result = $callback(...$args) ?? $result;
+    }
+    return $result;
+}
+```
+- Decouples event producers from consumers
+- Allows custom logic injection
+- 10 lifecycle hooks available
+
+### 6. Builder Pattern (Fluent Interface)
+**Example: Method chaining**
+```php
+$crud = new DynamicCRUD($pdo, 'users');
+$crud->addManyToMany('tags', 'user_tags', 'user_id', 'tag_id', 'tags')
+     ->addHook('beforeSave', fn($data) => $data)
+     ->enableAudit($userId)
+     ->setLocale('es');
+```
+- Readable configuration
+- Methods return `$this`
+- Progressive enhancement
 
 ## Common Implementation Patterns
 
-### HTML Generation Pattern
-```php
-// Build HTML strings with concatenation, always escape output
-$html = '<div class="form-group">' . "\n";
-$html .= sprintf('  <label for="%s">%s</label>', $name, htmlspecialchars($label)) . "\n";
-$html .= sprintf('  <input type="%s" name="%s" value="%s">', $type, $name, htmlspecialchars($value)) . "\n";
-$html .= '</div>';
-return $html;
-```
+### 1. Metadata-Driven Configuration
+**Pattern: JSON in database comments**
+```sql
+-- Table metadata
+CREATE TABLE posts (...) COMMENT = '{
+    "display_name": "Blog Posts",
+    "icon": "📝",
+    "list_view": {"searchable": ["title"], "per_page": 20}
+}';
 
-### Database Query Pattern
+-- Column metadata
+ALTER TABLE users MODIFY COLUMN email VARCHAR(255) 
+COMMENT '{"type": "email", "label": "Email Address", "required": true}';
+```
+**Usage in code:**
 ```php
-// Always use prepared statements with named parameters
+$metadata = $column['metadata']['type'] ?? null;
+if ($metadata === 'email') return 'email';
+```
+- Configuration stored with data structure
+- No separate config files needed
+- Self-documenting schema
+
+### 2. Prepared Statements (Always)
+**Pattern: SQL injection prevention**
+```php
 $sql = sprintf("SELECT * FROM %s WHERE %s = :id", $this->table, $pk);
 $stmt = $this->pdo->prepare($sql);
 $stmt->execute(['id' => $id]);
-return $stmt->fetch(PDO::FETCH_ASSOC);
 ```
+- Never concatenate user input into SQL
+- Always use named parameters (`:param`)
+- Bind values with appropriate types
 
-### Transaction Pattern
+### 3. Transaction Safety
+**Pattern: Automatic rollback on error**
 ```php
-// Wrap operations in try-catch with rollback
 try {
     $this->pdo->beginTransaction();
     
-    // Execute hooks
-    $data = $this->executeHook('beforeSave', $data);
-    
-    // Perform operations
+    // Multiple operations
     $id = $this->save($data);
-    
-    // Execute more hooks
-    $this->executeHook('afterSave', $id, $data);
+    $this->syncManyToManyRelations($id);
     
     $this->pdo->commit();
     return ['success' => true, 'id' => $id];
@@ -151,353 +200,487 @@ try {
     return ['success' => false, 'error' => $e->getMessage()];
 }
 ```
+- Wrap multi-step operations in transactions
+- Always rollback on exception
+- Return structured results
 
-### Metadata Parsing Pattern
+### 4. Guard Clauses for Validation
+**Pattern: Early returns**
 ```php
-// Parse JSON from database comments, handle errors gracefully
-$metadata = [];
-if (!empty($column['COLUMN_COMMENT'])) {
-    $decoded = json_decode($column['COLUMN_COMMENT'], true);
-    if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
-        $metadata = $decoded;
-    }
-}
-```
-
-### Null Coalescing Pattern
-```php
-// Extensive use of null coalescing for defaults
-$label = $column['metadata']['label'] ?? ucfirst($column['name']);
-$type = $column['metadata']['type'] ?? 'text';
-$tooltip = $column['metadata']['tooltip'] ?? null;
-```
-
-### Session Management Pattern
-```php
-// Always check session status before starting
-if (session_status() === PHP_SESSION_NONE) {
-    @session_start();
-}
-
-// Use @ to suppress warnings if session already started
-```
-
-### Array Mapping Pattern
-```php
-// Use array_map with arrow functions for transformations
-$columns = array_map(fn($col) => $col['name'], $this->schema['columns']);
-$placeholders = array_map(fn($col) => ":{$col}", $columns);
-$sets = array_map(fn($col) => "{$col} = :{$col}", array_keys($data));
-```
-
-## Security Practices
-
-### Input Sanitization
-```php
-// Always sanitize user input through SecurityModule
-$data = $this->security->sanitizeInput($_POST, $allowedColumns, $this->schema);
-```
-
-### Output Escaping
-```php
-// Always escape HTML output with htmlspecialchars()
-echo sprintf('<div>%s</div>', htmlspecialchars($userInput));
-```
-
-### CSRF Protection
-```php
-// Generate token on form render
-$csrfToken = $this->security->generateCsrfToken();
-
-// Validate on submission
-if (!$this->security->validateCsrfToken($csrfToken)) {
-    return ['success' => false, 'error' => 'Token CSRF inválido'];
-}
-```
-
-### Password Hashing
-```php
-// Always use PASSWORD_DEFAULT for bcrypt
-$data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
-
-// Verify with password_verify()
-if (!password_verify($password, $user['password'])) {
-    return ['success' => false, 'error' => 'Invalid credentials'];
-}
-```
-
-### SQL Injection Prevention
-```php
-// NEVER concatenate user input into SQL
-// ALWAYS use prepared statements with bound parameters
-$stmt = $this->pdo->prepare($sql);
-$stmt->bindValue(':key', $value, $value === null ? \PDO::PARAM_NULL : \PDO::PARAM_STR);
-$stmt->execute();
-```
-
-## Testing Standards
-
-### Test Structure
-```php
-/**
- * @runTestsInSeparateProcesses
- * @preserveGlobalState disabled
- */
-class CRUDHandlerTest extends TestCase
+private function validateField(array $column, $value): void
 {
-    private PDO $pdo;
-    private CRUDHandler $handler;
-    
-    protected function setUp(): void
-    {
-        // Initialize test database connection
-        // Create handler instance
-        // Clean up test data
+    if ($this->isHiddenField($column)) {
+        return; // Guard clause
     }
     
-    protected function tearDown(): void
-    {
-        // Clean up test data after each test
+    if ($this->isRequiredAndEmpty($column, $value)) {
+        $this->addRequiredError($column['name']);
+        return; // Guard clause
     }
+    
+    if ($this->isEmpty($value)) {
+        return; // Guard clause
+    }
+    
+    // Main validation logic
+    $this->validateType($column, $value);
+    $this->validateLength($column, $value);
 }
 ```
+- Check edge cases first
+- Return early to reduce nesting
+- Main logic at bottom
 
-### Test Naming
-- **Pattern**: `test{MethodName}` or `test{Behavior}`
-- **Examples**: `testCreateRecord`, `testBeforeValidateHook`, `testInvalidCsrfToken`
-- **Descriptive**: Test name should clearly indicate what is being tested
-
-### Test Data Management
+### 5. Method Extraction for Clarity
+**Pattern: Small, focused methods**
 ```php
-// Always clean up test data in setUp() and tearDown()
-private function cleanupTestData(): void
+// Before refactoring (250 lines)
+public function handleSubmission(): array
 {
-    $this->pdo->exec("DELETE FROM users WHERE email LIKE 'test_%@example.com'");
+    // Massive method with everything
 }
 
-// Use consistent test data patterns
-private function createTestUser(string $email): int
+// After refactoring (30 lines)
+public function handleSubmission(): array
 {
-    $stmt = $this->pdo->prepare("INSERT INTO users (name, email, password) VALUES (:name, :email, :password)");
-    $stmt->execute(['name' => 'Test User', 'email' => $email, 'password' => 'test12345']);
-    return (int) $this->pdo->lastInsertId();
-}
-```
-
-### Assertions
-```php
-// Use specific assertions for clarity
-$this->assertTrue($result['success']);
-$this->assertArrayHasKey('id', $result);
-$this->assertEquals('JOHN', $record['name']);
-$this->assertInstanceOf(CRUDHandler::class, $result);
-$this->assertStringContainsString('CSRF', $result['error']);
-```
-
-## Internationalization Patterns
-
-### Translation Keys
-```php
-// Use dot notation for hierarchical keys
-$this->translator->t('form.submit');
-$this->translator->t('validation.required');
-$this->translator->t('error.csrf_invalid');
-$this->translator->t('m2n.select_all');
-```
-
-### Parameter Substitution
-```php
-// Use {field} format for parameters (NOT :field)
-$this->translator->t('validation.required', ['field' => 'Email']);
-// Translation: "El campo {field} es obligatorio"
-```
-
-### Fallback Strategy
-```php
-// Always provide fallback for missing translations
-$submitLabel = 'Guardar';
-if ($this->handler && $this->handler->getTranslator()) {
-    $submitLabel = $this->handler->getTranslator()->t('form.submit');
-}
-```
-
-## Database Conventions
-
-### Table Metadata
-```php
-// Store configuration in table COMMENT as JSON
-ALTER TABLE users COMMENT = '{
-    "display_name": "Users",
-    "icon": "👥",
-    "permissions": {
-        "create": ["guest"],
-        "read": ["owner", "admin"],
-        "update": ["owner", "admin"],
-        "delete": ["admin"]
-    }
-}';
-```
-
-### Column Metadata
-```php
-// Store field configuration in column COMMENT as JSON
-ALTER TABLE users 
-MODIFY COLUMN email VARCHAR(255) 
-COMMENT '{"type": "email", "label": "Email Address", "tooltip": "Required field"}';
-```
-
-### Soft Deletes
-```php
-// Use deleted_at column (nullable timestamp)
-// NULL = active record, timestamp = soft deleted
-if ($this->tableMetadata && $this->tableMetadata->hasSoftDeletes()) {
-    $column = $this->tableMetadata->getSoftDeleteColumn();
-    $sql .= sprintf(" AND %s IS NULL", $column);
-}
-```
-
-### Timestamps
-```php
-// Use created_at and updated_at columns
-if ($this->tableMetadata->hasTimestamps()) {
-    $timestamps = $this->tableMetadata->getTimestampFields();
-    if (!$isUpdate && isset($timestamps['created_at'])) {
-        $data[$timestamps['created_at']] = date('Y-m-d H:i:s');
-    }
-    if (isset($timestamps['updated_at'])) {
-        $data[$timestamps['updated_at']] = date('Y-m-d H:i:s');
+    if ($workflowResult = $this->handleWorkflowTransition()) return $workflowResult;
+    if ($error = $this->validateCsrfToken()) return $error;
+    if ($error = $this->checkPermissions($isUpdate)) return $error;
+    
+    try {
+        $this->pdo->beginTransaction();
+        $data = $this->prepareData();
+        // ... more extracted methods
+        $this->pdo->commit();
+        return ['success' => true, 'id' => $id];
+    } catch (\Exception $e) {
+        $this->pdo->rollBack();
+        return ['success' => false, 'error' => $e->getMessage()];
     }
 }
 ```
+- Extract complex logic into named methods
+- Each method has single responsibility
+- Self-documenting code
 
-## Error Handling
-
-### Return Array Pattern
+### 6. Nullsafe Operator Usage
+**Pattern: Clean null handling**
 ```php
-// Always return consistent array structure
-return ['success' => true, 'id' => $id];
-return ['success' => false, 'error' => 'Error message'];
-return ['success' => false, 'errors' => ['field' => 'Error']];
-```
-
-### Exception Handling
-```php
-// Catch exceptions and convert to error arrays
-try {
-    // Operations
-    return ['success' => true, 'id' => $id];
-} catch (\Exception $e) {
-    return ['success' => false, 'error' => $e->getMessage()];
+// Instead of:
+if ($this->translator !== null) {
+    $message = $this->translator->t('error.message');
 }
+
+// Use nullsafe operator:
+$message = $this->translator?->t('error.message') ?? 'Default message';
 ```
+- Reduces null checks
+- Cleaner code
+- PHP 8.0+ feature
 
-### Validation Errors
+### 7. Match Expressions
+**Pattern: Type mapping**
 ```php
-// Return errors array for field-specific validation failures
-if (!$validator->validate($data)) {
-    return ['success' => false, 'errors' => $validator->getErrors()];
-}
+return match($column['sql_type']) {
+    'int', 'bigint', 'smallint', 'tinyint' => 'number',
+    'date' => 'date',
+    'datetime', 'timestamp' => 'datetime-local',
+    'text', 'longtext', 'mediumtext' => 'textarea',
+    default => 'text'
+};
 ```
+- Cleaner than switch statements
+- Returns value directly
+- Exhaustive checking
 
-## Performance Considerations
-
-### Lazy Loading
+### 8. Array Filtering and Mapping
+**Pattern: Functional array operations**
 ```php
-// Only instantiate when needed
-private ?Translator $translator = null;
-
-public function getTranslator(): ?Translator
-{
-    return $this->translator;
-}
-```
-
-### Caching Strategy
-```php
-// Use cache for expensive operations (schema analysis)
-$this->analyzer = new SchemaAnalyzer($pdo, $cache);
-$this->schema = $this->analyzer->getTableSchema($table);
-```
-
-### Query Optimization
-```php
-// Always add LIMIT 1 for single record queries
-$sql = sprintf("SELECT * FROM %s WHERE %s = :id LIMIT 1", $this->table, $pk);
-```
-
-## Code Style Preferences
-
-### String Concatenation
-```php
-// Use .= for building strings, add \n for readability
-$html = '<form>' . "\n";
-$html .= '  <input type="text">' . "\n";
-$html .= '</form>';
-```
-
-### Conditional Assignment
-```php
-// Use ternary for simple conditionals
-$selected = $value == $option['value'] ? ' selected' : '';
-$active = $index === 0 ? ' active' : '';
-```
-
-### Sprintf for HTML
-```php
-// Use sprintf for complex HTML with multiple variables
-$html .= sprintf(
-    '<input type="%s" name="%s" value="%s">',
-    $type,
-    $name,
-    htmlspecialchars($value)
-);
-```
-
-### Array Filtering
-```php
-// Use array_filter with arrow functions
+// Filter non-primary columns
 $allowedColumns = array_map(
     fn($col) => $col['name'],
     array_filter($this->schema['columns'], fn($col) => !$col['is_primary'])
 );
-```
 
-## Project-Specific Idioms
-
-### FormGenerator Instantiation
-```php
-// FormGenerator is instantiated dynamically in renderForm(), not stored as property
-$generator = new FormGenerator($this->schema, $data, $csrfToken, $this->pdo, $this->handler);
-$generator->setTranslator($this->translator);
-return $generator->render();
-```
-
-### Handler Delegation
-```php
-// DynamicCRUD delegates to CRUDHandler for operations
-public function delete(int $id): bool
+// Get non-primary columns
+private function getNonPrimaryColumns(): array
 {
-    return $this->handler->delete($id);
+    return array_filter(
+        $this->schema['columns'],
+        fn($col) => !$col['is_primary']
+    );
+}
+```
+- Use arrow functions for simple operations
+- Prefer functional style over loops
+- Readable and concise
+
+### 9. Structured Return Values
+**Pattern: Consistent result format**
+```php
+// Success
+return ['success' => true, 'id' => $id];
+
+// Error
+return ['success' => false, 'error' => 'Error message'];
+
+// Validation errors
+return ['success' => false, 'errors' => ['field' => ['error1', 'error2']]];
+```
+- Always return arrays with 'success' key
+- Include relevant data (id, errors, etc.)
+- Consistent across all methods
+
+### 10. Dependency Injection
+**Pattern: Constructor injection**
+```php
+public function __construct(
+    PDO $pdo,
+    string $table,
+    ?CacheStrategy $cache = null,
+    ?string $uploadDir = null
+) {
+    $this->pdo = $pdo;
+    $this->table = $table;
+    $this->cache = $cache;
+    $this->uploadDir = $uploadDir ?? __DIR__ . '/../examples/uploads';
+}
+```
+- Required dependencies in constructor
+- Optional dependencies with defaults
+- No service locator pattern
+
+## Internal API Usage
+
+### SchemaAnalyzer - Database Schema Inspection
+```php
+$analyzer = new SchemaAnalyzer($pdo, $cache);
+$schema = $analyzer->getTableSchema('users');
+
+// Returns:
+[
+    'table' => 'users',
+    'primary_key' => 'id',
+    'columns' => [
+        ['name' => 'id', 'sql_type' => 'int', 'is_primary' => true, ...],
+        ['name' => 'email', 'sql_type' => 'varchar', 'metadata' => [...], ...]
+    ],
+    'foreign_keys' => ['user_id' => ['table' => 'users', 'column' => 'id']]
+]
+```
+
+### FormGenerator - HTML Form Generation
+```php
+$generator = new FormGenerator($schema, $data, $csrfToken, $pdo, $handler);
+$generator->setTranslator($translator);
+$generator->setTableMetadata($metadata);
+$html = $generator->render();
+```
+
+### ValidationEngine - Data Validation
+```php
+$validator = new ValidationEngine($schema, $translator);
+if (!$validator->validate($data)) {
+    $errors = $validator->getErrors();
+    // ['field' => ['Error message 1', 'Error message 2']]
 }
 ```
 
-### Metadata Access
+### CRUDHandler - Data Operations
 ```php
-// TableMetadata is instantiated in constructor and accessed via getter
-$this->tableMetadata = new TableMetadata($pdo, $table);
+$handler = new CRUDHandler($pdo, 'users', $cache, $uploadDir);
+$handler->setTranslator($translator);
+$handler->on('beforeSave', fn($data) => $data);
+$result = $handler->handleSubmission();
+```
 
-public function getTableMetadata(): TableMetadata
-{
-    return $this->tableMetadata;
+### TableMetadata - Metadata Access
+```php
+$metadata = new TableMetadata($pdo, 'users');
+$metadata->hasTimestamps(); // bool
+$metadata->isSluggable(); // bool
+$metadata->getPermissions(); // array
+$metadata->getNotificationConfig(); // array
+```
+
+## Frequently Used Code Idioms
+
+### 1. Null Coalescing with Default
+```php
+$uploadDir = $uploadDir ?? __DIR__ . '/../examples/uploads';
+$locale = $locale ?? 'en';
+$type = $column['metadata']['type'] ?? null;
+```
+
+### 2. Ternary for Simple Conditionals
+```php
+$selected = $value == $option['value'] ? ' selected' : '';
+$required = !$column['is_nullable'] ? ' required' : '';
+$enctype = $this->hasFileFields() ? ' enctype="multipart/form-data"' : '';
+```
+
+### 3. Sprintf for SQL/HTML Generation
+```php
+$sql = sprintf("SELECT * FROM %s WHERE %s = :id", $this->table, $pk);
+$html = sprintf('<input type="%s" name="%s" value="%s">', $type, $name, htmlspecialchars($value));
+```
+
+### 4. Array Destructuring in Loops
+```php
+foreach ($this->schema['columns'] as $column) {
+    $name = $column['name'];
+    $type = $column['sql_type'];
 }
 ```
 
-### Permission Checks
+### 5. Conditional Assignment
 ```php
-// Permission checks integrated into CRUD operations
-if ($this->permissionManager) {
-    if (!$this->permissionManager->canCreate()) {
-        return ['success' => false, 'error' => 'Permission denied'];
+if ($workflowResult = $this->handleWorkflowTransition()) {
+    return $workflowResult;
+}
+```
+
+### 6. String Concatenation with Newlines
+```php
+$html = '<form>' . "\n";
+$html .= '  <input type="text">' . "\n";
+$html .= '</form>' . "\n";
+```
+
+### 7. Empty Array Initialization
+```php
+private array $hooks = [];
+private array $errors = [];
+private array $manyToManyRelations = [];
+```
+
+### 8. Method Chaining Return
+```php
+public function setTranslator(Translator $translator): self
+{
+    $this->translator = $translator;
+    return $this;
+}
+```
+
+## Security Best Practices
+
+### 1. CSRF Protection
+```php
+// Generate token
+$csrfToken = $this->security->generateCsrfToken();
+
+// Validate token
+if (!$this->security->validateCsrfToken($_POST['csrf_token'] ?? '')) {
+    return ['success' => false, 'error' => 'Invalid CSRF token'];
+}
+```
+
+### 2. XSS Prevention
+```php
+// Always escape output
+echo htmlspecialchars($value);
+echo htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+```
+
+### 3. SQL Injection Prevention
+```php
+// Always use prepared statements
+$stmt = $this->pdo->prepare($sql);
+$stmt->bindValue(':id', $id, PDO::PARAM_INT);
+$stmt->execute();
+```
+
+### 4. File Upload Security
+```php
+// Real MIME type validation
+$finfo = finfo_open(FILEINFO_MIME_TYPE);
+$mimeType = finfo_file($finfo, $tmpPath);
+finfo_close($finfo);
+
+// Whitelist allowed types
+$allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+if (!in_array($mimeType, $allowedTypes)) {
+    throw new \Exception('Invalid file type');
+}
+```
+
+### 5. Password Hashing
+```php
+// Hash password
+$hash = password_hash($password, PASSWORD_DEFAULT);
+
+// Verify password
+if (password_verify($password, $hash)) {
+    // Valid
+}
+```
+
+## Testing Patterns
+
+### 1. Test Structure
+```php
+class DynamicCRUDTest extends TestCase
+{
+    private PDO $pdo;
+    
+    protected function setUp(): void
+    {
+        $this->pdo = TestHelper::createTestDatabase();
+    }
+    
+    public function testBasicCRUD(): void
+    {
+        // Arrange
+        $crud = new DynamicCRUD($this->pdo, 'users');
+        
+        // Act
+        $result = $crud->handleSubmission();
+        
+        // Assert
+        $this->assertTrue($result['success']);
     }
 }
 ```
+
+### 2. Test Helpers
+```php
+class TestHelper
+{
+    public static function createTestDatabase(): PDO
+    {
+        $pdo = new PDO('sqlite::memory:');
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        return $pdo;
+    }
+}
+```
+
+## Performance Optimization
+
+### 1. Caching Strategy
+```php
+// Check cache first
+if ($cached = $this->cache?->get($cacheKey)) {
+    return $cached;
+}
+
+// Compute and cache
+$result = $this->computeExpensiveOperation();
+$this->cache?->set($cacheKey, $result, 3600);
+return $result;
+```
+
+### 2. Lazy Loading
+```php
+// Only load when needed
+private ?Translator $translator = null;
+
+public function getTranslator(): Translator
+{
+    if ($this->translator === null) {
+        $this->translator = new Translator();
+    }
+    return $this->translator;
+}
+```
+
+### 3. Batch Operations
+```php
+// Insert multiple records in one transaction
+$this->pdo->beginTransaction();
+foreach ($records as $record) {
+    $stmt->execute($record);
+}
+$this->pdo->commit();
+```
+
+## Error Handling
+
+### 1. Try-Catch with Rollback
+```php
+try {
+    $this->pdo->beginTransaction();
+    // Operations
+    $this->pdo->commit();
+} catch (\Exception $e) {
+    $this->pdo->rollBack();
+    throw $e;
+}
+```
+
+### 2. Graceful Degradation
+```php
+// Try preferred method, fallback to alternatives
+try {
+    return $this->getForeignKeyOptions($table, $displayColumn);
+} catch (\PDOException $e) {
+    // Try alternative columns
+    foreach ($possibleColumns as $column) {
+        try {
+            return $this->getForeignKeyOptions($table, $column);
+        } catch (\PDOException $e) {
+            continue;
+        }
+    }
+    // Last resort
+    return $this->getForeignKeyOptionsById($table);
+}
+```
+
+### 3. Validation Error Collection
+```php
+private array $errors = [];
+
+private function validateField(array $column, $value): void
+{
+    if ($error = $this->checkRequired($column, $value)) {
+        $this->errors[$column['name']][] = $error;
+    }
+    if ($error = $this->checkType($column, $value)) {
+        $this->errors[$column['name']][] = $error;
+    }
+}
+```
+
+## Minimal Code Philosophy
+
+### Core Principle
+Write only the absolute minimal amount of code needed to address requirements correctly. Avoid verbose implementations and any code that doesn't directly contribute to the solution.
+
+### Examples
+```php
+// ❌ Verbose
+public function isActive(): bool
+{
+    if ($this->status === 'active') {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+// ✅ Minimal
+public function isActive(): bool
+{
+    return $this->status === 'active';
+}
+
+// ❌ Verbose
+if ($user !== null) {
+    if ($user->hasPermission('admin')) {
+        return true;
+    }
+}
+return false;
+
+// ✅ Minimal
+return $user?->hasPermission('admin') ?? false;
+```
+
+### Guidelines
+- Use modern PHP features (nullsafe, match, arrow functions)
+- Prefer functional style over imperative loops
+- Extract methods only when it improves clarity
+- Avoid unnecessary abstractions
+- No code comments unless absolutely necessary (code should be self-documenting)
