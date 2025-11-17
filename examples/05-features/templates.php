@@ -11,8 +11,8 @@
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-use DynamicCRUD\DynamicCRUD;
-use DynamicCRUD\Template\BladeTemplate;
+use Morpheus\DynamicCRUD;
+use Morpheus\Template\BladeTemplate;
 
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'root', 'rootpassword');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -31,7 +31,7 @@ if (!is_dir($cacheDir)) {
 $engine = new BladeTemplate($templateDir, $cacheDir);
 
 // Create CRUD with template engine
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 $crud->setTemplateEngine($engine);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

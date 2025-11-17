@@ -1,14 +1,14 @@
 <?php
 
-namespace DynamicCRUD\Admin;
+namespace Morpheus\Admin;
 
 use PDO;
-use DynamicCRUD\DynamicCRUD;
-use DynamicCRUD\ListGenerator;
-use DynamicCRUD\SchemaAnalyzer;
-use DynamicCRUD\Metadata\TableMetadata;
-use DynamicCRUD\GlobalMetadata;
-use DynamicCRUD\UI\Components;
+use Morpheus\DynamicCRUD;
+use Morpheus\ListGenerator;
+use Morpheus\SchemaAnalyzer;
+use Morpheus\Metadata\TableMetadata;
+use Morpheus\GlobalMetadata;
+use Morpheus\UI\Components;
 
 class AdminPanel
 {
@@ -266,7 +266,7 @@ HTML;
         $label = $this->tables[$table]['label'] ?? ucfirst($table);
         
         if (isset($_GET['delete'])) {
-            $crud = new DynamicCRUD($this->pdo, $table);
+            $crud = new Morpheus($this->pdo, $table);
             $crud->delete((int)$_GET['delete']);
             header("Location: ?action=list&table={$table}&deleted=1");
             exit;
@@ -309,7 +309,7 @@ HTML;
         $label = $this->tables[$table]['label'] ?? ucfirst($table);
         $title = $id ? "Editar {$label}" : "Nuevo {$label}";
 
-        $crud = new DynamicCRUD($this->pdo, $table);
+        $crud = new Morpheus($this->pdo, $table);
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $result = $crud->handleSubmission();
@@ -341,7 +341,7 @@ HTML;
 
     private function handleDelete(string $table, string $id): void
     {
-        $crud = new DynamicCRUD($this->pdo, $table);
+        $crud = new Morpheus($this->pdo, $table);
         $crud->delete((int)$id);
         
         header("Location: ?action=list&table={$table}&deleted=1");

@@ -1,9 +1,9 @@
 <?php
 
-namespace DynamicCRUD\Tests;
+namespace Morpheus\Tests;
 
-use DynamicCRUD\SchemaAnalyzer;
-use DynamicCRUD\Cache\FileCacheStrategy;
+use Morpheus\SchemaAnalyzer;
+use Morpheus\Cache\FileCacheStrategy;
 use PHPUnit\Framework\TestCase;
 use PDO;
 

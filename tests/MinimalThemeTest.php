@@ -1,9 +1,9 @@
 <?php
 
-namespace DynamicCRUD\Tests;
+namespace Morpheus\Tests;
 
 use PHPUnit\Framework\TestCase;
-use DynamicCRUD\Theme\Themes\MinimalTheme;
+use Morpheus\Theme\Themes\MinimalTheme;
 
 class MinimalThemeTest extends TestCase
 {

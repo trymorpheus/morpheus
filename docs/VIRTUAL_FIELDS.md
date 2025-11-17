@@ -23,10 +23,10 @@
 ### Basic Example: Password Confirmation
 
 ```php
-use DynamicCRUD\DynamicCRUD;
-use DynamicCRUD\VirtualField;
+use Morpheus\DynamicCRUD;
+use Morpheus\VirtualField;
 
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 
 // Add password_confirmation virtual field
 $passwordConfirmation = new VirtualField(
@@ -155,7 +155,7 @@ validator: function($value, $allData) {
 ### Example 1: User Registration with Password Confirmation
 
 ```php
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 
 // Password confirmation
 $crud->addVirtualField(new VirtualField(
@@ -193,7 +193,7 @@ $crud->beforeSave(function($data) {
 ### Example 2: Email Confirmation
 
 ```php
-$crud = new DynamicCRUD($pdo, 'contacts');
+$crud = new Morpheus($pdo, 'contacts');
 
 $crud->addVirtualField(new VirtualField(
     name: 'email_confirmation',
@@ -215,7 +215,7 @@ $crud->addVirtualField(new VirtualField(
 ### Example 3: Age Verification Checkbox
 
 ```php
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 
 $crud->addVirtualField(new VirtualField(
     name: 'age_verified',
@@ -232,7 +232,7 @@ $crud->addVirtualField(new VirtualField(
 ### Example 4: Captcha Validation
 
 ```php
-$crud = new DynamicCRUD($pdo, 'contacts');
+$crud = new Morpheus($pdo, 'contacts');
 
 $crud->addVirtualField(new VirtualField(
     name: 'captcha',
@@ -254,7 +254,7 @@ $crud->addVirtualField(new VirtualField(
 Virtual fields work seamlessly with the hooks system:
 
 ```php
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 
 // Add virtual field
 $crud->addVirtualField(new VirtualField(

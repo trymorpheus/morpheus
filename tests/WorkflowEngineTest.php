@@ -1,9 +1,9 @@
 <?php
 
-namespace DynamicCRUD\Tests;
+namespace Morpheus\Tests;
 
 use PHPUnit\Framework\TestCase;
-use DynamicCRUD\Workflow\WorkflowEngine;
+use Morpheus\Workflow\WorkflowEngine;
 use PDO;
 
 class WorkflowEngineTest extends TestCase

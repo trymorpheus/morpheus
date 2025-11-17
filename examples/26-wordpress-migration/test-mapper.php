@@ -2,8 +2,8 @@
 
 require __DIR__ . '/../../vendor/autoload.php';
 
-use DynamicCRUD\Migration\WXRParser;
-use DynamicCRUD\Migration\ContentMapper;
+use Morpheus\Migration\WXRParser;
+use Morpheus\Migration\ContentMapper;
 
 echo "🔄 Testing Content Mapper\n\n";
 

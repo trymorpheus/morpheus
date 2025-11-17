@@ -39,7 +39,7 @@ CREATE TABLE posts_tags (
 ## Basic Usage
 
 ```php
-$crud = new DynamicCRUD($pdo, 'posts');
+$crud = new Morpheus($pdo, 'posts');
 
 // Define M:N relationship
 $crud->addManyToMany(
@@ -89,7 +89,7 @@ INSERT INTO posts_tags (post_id, tag_id) VALUES (?, ?);
 You can define multiple M:N relationships on the same table:
 
 ```php
-$crud = new DynamicCRUD($pdo, 'posts');
+$crud = new Morpheus($pdo, 'posts');
 
 // Relationship with tags
 $crud->addManyToMany('tags', 'posts_tags', 'post_id', 'tag_id', 'tags');
@@ -195,28 +195,28 @@ $crud->afterSave(function($id, $data) {
 ### 1. Blog: Posts with Tags
 
 ```php
-$crud = new DynamicCRUD($pdo, 'posts');
+$crud = new Morpheus($pdo, 'posts');
 $crud->addManyToMany('tags', 'posts_tags', 'post_id', 'tag_id', 'tags');
 ```
 
 ### 2. E-commerce: Products with Categories
 
 ```php
-$crud = new DynamicCRUD($pdo, 'products');
+$crud = new Morpheus($pdo, 'products');
 $crud->addManyToMany('categories', 'product_categories', 'product_id', 'category_id', 'categories');
 ```
 
 ### 3. Project Management: Tasks with Users
 
 ```php
-$crud = new DynamicCRUD($pdo, 'tasks');
+$crud = new Morpheus($pdo, 'tasks');
 $crud->addManyToMany('assigned_users', 'task_users', 'task_id', 'user_id', 'users');
 ```
 
 ### 4. Education: Students with Courses
 
 ```php
-$crud = new DynamicCRUD($pdo, 'students');
+$crud = new Morpheus($pdo, 'students');
 $crud->addManyToMany('courses', 'student_courses', 'student_id', 'course_id', 'courses');
 ```
 

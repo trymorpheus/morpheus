@@ -1,10 +1,10 @@
 {
-    "name": "dynamiccrud/dynamiccrud",
+    "name": "trymorpheus/morpheus",
     "description": "PHP library for generating dynamic CRUD forms with automatic validation based on database structure",
     "version": "4.0.0",
     "type": "library",
     "keywords": ["crud", "forms", "mysql", "validation", "pdo", "dynamic", "generator", "ui-components", "workflow", "admin-panel"],
-    "homepage": "https://github.com/mcarbonell/DynamicCRUD",
+    "homepage": "https://github.com/trymorpheus/morpheus",
     "license": "MIT",
     "authors": [
         {
@@ -23,16 +23,16 @@
     },
     "autoload": {
         "psr-4": {
-            "DynamicCRUD\\": "src/"
+            "Morpheus\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "DynamicCRUD\\Tests\\": "tests/"
+            "Morpheus\\Tests\\": "tests/"
         }
     },
     "bin": [
-        "bin/dynamiccrud"
+        "bin/morpheus"
     ],
     "minimum-stability": "stable",
     "prefer-stable": true

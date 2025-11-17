@@ -1,9 +1,9 @@
 <?php
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-use DynamicCRUD\Media\MediaLibrary;
-use DynamicCRUD\Media\MediaBrowser;
-use DynamicCRUD\Media\ImageEditor;
+use Morpheus\Media\MediaLibrary;
+use Morpheus\Media\MediaBrowser;
+use Morpheus\Media\ImageEditor;
 
 // Database connection
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'root', 'rootpassword');

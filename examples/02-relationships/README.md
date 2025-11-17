@@ -10,7 +10,7 @@ Automatic dropdown generation for foreign key relationships.
 **Zero configuration needed!** DynamicCRUD reads your database constraints.
 
 ```php
-$crud = new DynamicCRUD($pdo, 'posts');
+$crud = new Morpheus($pdo, 'posts');
 echo $crud->renderForm(); // category_id becomes a dropdown automatically!
 ```
 
@@ -18,7 +18,7 @@ echo $crud->renderForm(); // category_id becomes a dropdown automatically!
 Handle M:N relationships with multi-select UI.
 
 ```php
-$crud = new DynamicCRUD($pdo, 'posts');
+$crud = new Morpheus($pdo, 'posts');
 
 $crud->addManyToMany(
     'tags',        // Field name

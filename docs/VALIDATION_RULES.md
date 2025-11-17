@@ -7,7 +7,7 @@
 
 ## 📋 Overview
 
-DynamicCRUD v2.2 introduces **advanced validation rules** configured entirely through table metadata. Define complex validation logic without writing PHP code.
+Morpheus v2.2 introduces **advanced validation rules** configured entirely through table metadata. Define complex validation logic without writing PHP code.
 
 ### Key Features
 
@@ -262,9 +262,9 @@ CREATE TABLE vr_products (
 ### Basic Usage
 
 ```php
-use DynamicCRUD\DynamicCRUD;
+use Morpheus\DynamicCRUD;
 
-$crud = new DynamicCRUD($pdo, 'vr_products');
+$crud = new Morpheus($pdo, 'vr_products');
 
 // Validation rules are applied automatically
 $result = $crud->handleSubmission();
@@ -280,7 +280,7 @@ if (!$result['success']) {
 ### With Authentication
 
 ```php
-$crud = new DynamicCRUD($pdo, 'vr_products');
+$crud = new Morpheus($pdo, 'vr_products');
 $crud->enableAuthentication();
 
 // Business rules use current user ID automatically
@@ -290,8 +290,8 @@ $result = $crud->handleSubmission();
 ### Manual Validation
 
 ```php
-use DynamicCRUD\ValidationRulesEngine;
-use DynamicCRUD\Metadata\TableMetadata;
+use Morpheus\ValidationRulesEngine;
+use Morpheus\Metadata\TableMetadata;
 
 $metadata = new TableMetadata($pdo, 'vr_products');
 $rules = $metadata->getAllRules();
@@ -405,7 +405,7 @@ $result3 = $crud->handleSubmission(); // ✅ Success
 Error messages support i18n:
 
 ```php
-$crud = new DynamicCRUD($pdo, 'vr_products', locale: 'es');
+$crud = new Morpheus($pdo, 'vr_products', locale: 'es');
 $result = $crud->handleSubmission();
 
 // Errors in Spanish
@@ -432,7 +432,7 @@ Add custom translations in `src/I18n/locales/`:
 ### With RBAC
 
 ```php
-$crud = new DynamicCRUD($pdo, 'vr_products');
+$crud = new Morpheus($pdo, 'vr_products');
 $crud->enableAuthentication();
 
 // Business rules use current user automatically

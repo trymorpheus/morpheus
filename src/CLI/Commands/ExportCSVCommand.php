@@ -1,9 +1,9 @@
 <?php
 
-namespace DynamicCRUD\CLI\Commands;
+namespace Morpheus\CLI\Commands;
 
 use PDO;
-use DynamicCRUD\DynamicCRUD;
+use Morpheus\DynamicCRUD;
 
 class ExportCSVCommand extends Command
 {
@@ -19,7 +19,7 @@ class ExportCSVCommand extends Command
         $output = $this->getOption($args, '--output');
         $pdo = $this->getPDO();
 
-        $crud = new DynamicCRUD($pdo, $table);
+        $crud = new Morpheus($pdo, $table);
         $csv = $crud->export('csv');
 
         if ($output) {

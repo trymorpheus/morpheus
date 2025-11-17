@@ -7,7 +7,7 @@
 
 ## Overview
 
-DynamicCRUD v2.3 introduces a powerful notification system that allows you to send email notifications and trigger webhooks automatically when records are created, updated, or deleted. Configure everything via JSON in your table's `COMMENT` field.
+Morpheus v2.3 introduces a powerful notification system that allows you to send email notifications and trigger webhooks automatically when records are created, updated, or deleted. Configure everything via JSON in your table's `COMMENT` field.
 
 ---
 
@@ -225,10 +225,10 @@ Notifications are triggered automatically when using DynamicCRUD:
 <?php
 require 'vendor/autoload.php';
 
-use DynamicCRUD\DynamicCRUD;
+use Morpheus\DynamicCRUD;
 
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
-$crud = new DynamicCRUD($pdo, 'orders');
+$crud = new Morpheus($pdo, 'orders');
 
 // Create record - triggers on_create notifications
 $result = $crud->handleSubmission();
@@ -296,7 +296,7 @@ php -i | grep sendmail_path
 For production, integrate with email services (SendGrid, Mailgun, etc.):
 
 ```php
-use DynamicCRUD\NotificationManager;
+use Morpheus\NotificationManager;
 
 class CustomNotificationManager extends NotificationManager
 {
@@ -379,7 +379,7 @@ tail -f /var/log/php_errors.log
 For high-traffic applications, queue notifications:
 
 ```php
-use DynamicCRUD\NotificationManager;
+use Morpheus\NotificationManager;
 
 class QueuedNotificationManager extends NotificationManager
 {
@@ -411,10 +411,10 @@ class QueuedNotificationManager extends NotificationManager
 Cache notification configurations:
 
 ```php
-use DynamicCRUD\Cache\FileCacheStrategy;
+use Morpheus\Cache\FileCacheStrategy;
 
 $cache = new FileCacheStrategy(__DIR__ . '/cache');
-$crud = new DynamicCRUD($pdo, 'orders', cache: $cache);
+$crud = new Morpheus($pdo, 'orders', cache: $cache);
 // Notification config cached with table metadata
 ```
 

@@ -2,14 +2,14 @@
 header('Content-Type: text/html; charset=UTF-8');
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-use DynamicCRUD\DynamicCRUD;
+use Morpheus\DynamicCRUD;
 
 // Database connection
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'root', 'rootpassword');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 // Create CRUD instance
-$crud = new DynamicCRUD($pdo, 'properties');
+$crud = new Morpheus($pdo, 'properties');
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

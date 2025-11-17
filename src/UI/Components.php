@@ -1,6 +1,6 @@
 <?php
 
-namespace DynamicCRUD\UI;
+namespace Morpheus\UI;
 
 class Components
 {

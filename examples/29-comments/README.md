@@ -77,8 +77,8 @@ http://localhost:8000/examples/29-comments/moderation.php
 ### Basic Usage
 
 ```php
-use DynamicCRUD\Comments\CommentManager;
-use DynamicCRUD\Comments\CommentRenderer;
+use Morpheus\Comments\CommentManager;
+use Morpheus\Comments\CommentRenderer;
 
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 

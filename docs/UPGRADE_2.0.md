@@ -1,6 +1,6 @@
 # Upgrading to v2.0
 
-This guide helps you upgrade from DynamicCRUD v1.x to v2.0.
+This guide helps you upgrade from Morpheus v1.x to v2.0.
 
 ## 🎉 Good News: Zero Breaking Changes!
 
@@ -26,7 +26,7 @@ All features are **optional** and **additive** - they don't change existing beha
 ### Step 1: Update Dependencies
 
 ```bash
-composer update dynamiccrud/dynamiccrud
+composer update trymorpheus/morpheus
 ```
 
 ### Step 2: Clear Cache
@@ -46,7 +46,7 @@ rm -rf cache/templates/*
 Run your existing code - everything should work exactly as before:
 
 ```php
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 echo $crud->renderForm();
 $crud->handleSubmission();
 // ✅ Works exactly as in v1.x
@@ -90,7 +90,7 @@ ALTER TABLE users COMMENT = '{
 
 Use the new list renderer:
 ```php
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 echo $crud->renderList(); // NEW in v2.0
 ```
 
@@ -116,7 +116,7 @@ ALTER TABLE posts COMMENT = '{
 
 Now timestamps and slugs are automatic:
 ```php
-$crud = new DynamicCRUD($pdo, 'posts');
+$crud = new Morpheus($pdo, 'posts');
 $result = $crud->handleSubmission();
 // Slug and timestamps set automatically!
 ```
@@ -147,7 +147,7 @@ ALTER TABLE contacts COMMENT = '{
 
 Forms now render with tabs automatically:
 ```php
-$crud = new DynamicCRUD($pdo, 'contacts');
+$crud = new Morpheus($pdo, 'contacts');
 echo $crud->renderForm(); // Tabbed layout!
 ```
 
@@ -178,7 +178,7 @@ ALTER TABLE posts COMMENT = '{
 
 Lists now include search and filters:
 ```php
-$crud = new DynamicCRUD($pdo, 'posts');
+$crud = new Morpheus($pdo, 'posts');
 echo $crud->renderList(); // Search + filters!
 ```
 
@@ -329,7 +329,7 @@ If you encounter issues:
 2. **Review Examples**: [examples/06-table-metadata/](../examples/06-table-metadata/)
 3. **Clear Cache**: `php examples/clear_cache.php`
 4. **Check Logs**: Look for PHP errors
-5. **Open Issue**: [GitHub Issues](https://github.com/mcarbonell/DynamicCRUD/issues)
+5. **Open Issue**: [GitHub Issues](https://github.com/trymorpheus/morpheus/issues)
 
 ---
 

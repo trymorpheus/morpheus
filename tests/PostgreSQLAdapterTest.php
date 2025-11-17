@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use DynamicCRUD\Database\PostgreSQLAdapter;
+use Morpheus\Database\PostgreSQLAdapter;
 
 class PostgreSQLAdapterTest extends TestCase
 {

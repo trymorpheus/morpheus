@@ -9,7 +9,7 @@ This guide covers performance optimization and memory management best practices 
 DynamicCRUD includes `QueryCache` for caching query results within a single request:
 
 ```php
-use DynamicCRUD\Cache\QueryCache;
+use Morpheus\Cache\QueryCache;
 
 $queryCache = new QueryCache();
 
@@ -181,10 +181,10 @@ EXPLAIN SELECT * FROM users WHERE email = 'test@example.com';
 DynamicCRUD caches database schema to avoid repeated introspection:
 
 ```php
-use DynamicCRUD\Cache\FileCacheStrategy;
+use Morpheus\Cache\FileCacheStrategy;
 
 $cache = new FileCacheStrategy(__DIR__ . '/cache');
-$crud = new DynamicCRUD($pdo, 'users', $cache);
+$crud = new Morpheus($pdo, 'users', $cache);
 
 // Schema is cached for 1 hour by default
 ```
@@ -194,7 +194,7 @@ $crud = new DynamicCRUD($pdo, 'users', $cache);
 ```php
 $cache->clear();
 // Or use CLI
-php bin/dynamiccrud clear:cache
+php bin/morpheus clear:cache
 ```
 
 ## Profiling
@@ -246,7 +246,7 @@ echo "Peak memory: " . round(memory_get_peak_usage() / 1024 / 1024, 2) . " MB\n"
 Always paginate large lists:
 
 ```php
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 echo $crud->renderList(['perPage' => 20, 'page' => 1]);
 ```
 

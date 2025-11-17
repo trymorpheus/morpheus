@@ -8,14 +8,14 @@
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-use DynamicCRUD\DynamicCRUD;
+use Morpheus\DynamicCRUD;
 
 // 1. Connect to database
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'root', 'rootpassword');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 // 2. Create CRUD instance
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 
 // 3. Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -128,7 +128,7 @@ $id = $_GET['id'] ?? null;
     <div class="code-box">
         <strong>💡 That's all the code you need:</strong>
         <pre><code>$pdo = new PDO('mysql:host=localhost;dbname=test', 'root', 'pass');
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $result = $crud->handleSubmission();

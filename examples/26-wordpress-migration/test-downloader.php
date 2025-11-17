@@ -2,7 +2,7 @@
 
 require __DIR__ . '/../../vendor/autoload.php';
 
-use DynamicCRUD\Migration\MediaDownloader;
+use Morpheus\Migration\MediaDownloader;
 
 echo "📥 Testing Media Downloader\n\n";
 

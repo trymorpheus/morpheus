@@ -1,6 +1,6 @@
 # RBAC & Authentication Guide
 
-**DynamicCRUD v2.1+**
+**Morpheus v2.1+**
 
 ## Overview
 
@@ -85,10 +85,10 @@ CREATE TABLE users (
 ```php
 <?php
 require 'vendor/autoload.php';
-use DynamicCRUD\DynamicCRUD;
+use Morpheus\DynamicCRUD;
 
 $pdo = new PDO('mysql:host=localhost;dbname=mydb', 'user', 'pass');
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 $crud->enableAuthentication();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -108,10 +108,10 @@ echo $crud->renderLoginForm();
 ```php
 <?php
 require 'vendor/autoload.php';
-use DynamicCRUD\DynamicCRUD;
+use Morpheus\DynamicCRUD;
 
 $pdo = new PDO('mysql:host=localhost;dbname=mydb', 'user', 'pass');
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 $crud->enableAuthentication();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -132,10 +132,10 @@ echo $crud->renderRegistrationForm();
 <?php
 session_start();
 require 'vendor/autoload.php';
-use DynamicCRUD\DynamicCRUD;
+use Morpheus\DynamicCRUD;
 
 $pdo = new PDO('mysql:host=localhost;dbname=mydb', 'user', 'pass');
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 $crud->enableAuthentication();
 
 if (!$crud->isAuthenticated()) {
@@ -175,7 +175,7 @@ CREATE TABLE posts (
 ### 4. Set Current User in Your Application
 
 ```php
-$crud = new DynamicCRUD($pdo, 'posts');
+$crud = new Morpheus($pdo, 'posts');
 
 // Set current user (from session, JWT, etc.)
 $crud->setCurrentUser($userId, $userRole);
@@ -325,7 +325,7 @@ Allow users to only access their own records.
 
 ```php
 // Method 1: Via DynamicCRUD
-$crud = new DynamicCRUD($pdo, 'posts');
+$crud = new Morpheus($pdo, 'posts');
 $crud->setCurrentUser($userId, $role);
 
 // Method 2: Via PermissionManager
@@ -418,7 +418,7 @@ $crud->delete($id);
 ### Authentication Methods
 
 ```php
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 $crud->enableAuthentication();
 
 // Render forms
@@ -494,7 +494,7 @@ $_SESSION['user_email'] // User email
 Complete password reset flow with secure token generation:
 
 ```php
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 $crud->enableAuthentication();
 
 // Request password reset
@@ -541,7 +541,7 @@ if ($result['success']) {
 ```php
 session_start();
 
-$crud = new DynamicCRUD($pdo, 'posts');
+$crud = new Morpheus($pdo, 'posts');
 $crud->enableAuthentication();
 
 // Authentication automatically sets current user
@@ -561,7 +561,7 @@ $_SESSION['user_id'] = $user['id'];
 $_SESSION['user_role'] = $user['role'];
 
 // Set current user manually
-$crud = new DynamicCRUD($pdo, 'posts');
+$crud = new Morpheus($pdo, 'posts');
 $crud->setCurrentUser(
     $_SESSION['user_id'] ?? null,
     $_SESSION['user_role'] ?? 'guest'
@@ -574,7 +574,7 @@ $crud->setCurrentUser(
 $jwt = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
 $payload = JWT::decode($jwt, $secret);
 
-$crud = new DynamicCRUD($pdo, 'posts');
+$crud = new Morpheus($pdo, 'posts');
 $crud->setCurrentUser($payload->user_id, $payload->role);
 ```
 
@@ -589,7 +589,7 @@ class Auth {
 }
 
 $user = Auth::user();
-$crud = new DynamicCRUD($pdo, 'posts');
+$crud = new Morpheus($pdo, 'posts');
 $crud->setCurrentUser($user['id'], $user['role']);
 ```
 
@@ -773,11 +773,11 @@ $filtered = $pm->filterRecordsByPermission($records);
 
 ```php
 // ❌ Bad: Permissions not enforced
-$crud = new DynamicCRUD($pdo, 'posts');
+$crud = new Morpheus($pdo, 'posts');
 echo $crud->renderForm();
 
 // ✅ Good: Permissions enforced
-$crud = new DynamicCRUD($pdo, 'posts');
+$crud = new Morpheus($pdo, 'posts');
 $crud->setCurrentUser($userId, $role);
 echo $crud->renderForm();
 ```
@@ -904,15 +904,15 @@ See `examples/07-rbac/` for working examples:
 
 ## Migration from v1.x
 
-If you're upgrading from DynamicCRUD v1.x:
+If you're upgrading from Morpheus v1.x:
 
 ```php
 // v1.x (no RBAC)
-$crud = new DynamicCRUD($pdo, 'posts');
+$crud = new Morpheus($pdo, 'posts');
 echo $crud->renderForm();
 
 // v2.1+ (with RBAC)
-$crud = new DynamicCRUD($pdo, 'posts');
+$crud = new Morpheus($pdo, 'posts');
 $crud->setCurrentUser($userId, $role);  // Add this line
 echo $crud->renderForm();
 ```

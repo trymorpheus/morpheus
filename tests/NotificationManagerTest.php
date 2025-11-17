@@ -1,8 +1,8 @@
 <?php
 
-namespace DynamicCRUD\Tests;
+namespace Morpheus\Tests;
 
-use DynamicCRUD\NotificationManager;
+use Morpheus\NotificationManager;
 use PHPUnit\Framework\TestCase;
 
 class NotificationManagerTest extends TestCase

@@ -1,10 +1,10 @@
 <?php
 
-namespace DynamicCRUD\Tests;
+namespace Morpheus\Tests;
 
 use PHPUnit\Framework\TestCase;
-use DynamicCRUD\GlobalMetadata;
-use DynamicCRUD\BrandingManager;
+use Morpheus\GlobalMetadata;
+use Morpheus\BrandingManager;
 use PDO;
 
 class BrandingManagerTest extends TestCase

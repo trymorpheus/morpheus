@@ -20,7 +20,7 @@
     <guid>http://localhost/examples/24-blog-cms/blog/getting-started</guid>
     <pubDate>Wed, 05 Nov 2025 11:23:35 +0000</pubDate>
     <description><![CDATA[Learn how to get started with DynamicCRUD in just a few minutes.]]></description>
-    <content:encoded><![CDATA[<p>Getting started with DynamicCRUD is incredibly simple. Here is what you need to know:</p><h2>Installation</h2><p>Just 3 lines of code to get a working blog.</p><h2>Creating Content</h2><p>Use the admin panel to create posts, categories, and tags. Everything is intuitive and fast.</p><h2>Customization</h2><p>Customize your blog with themes, or build your own. The possibilities are endless!</p>]]></content:encoded>
+    <content:encoded><![CDATA[<p>Getting started with Morpheus is incredibly simple. Here is what you need to know:</p><h2>Installation</h2><p>Just 3 lines of code to get a working blog.</p><h2>Creating Content</h2><p>Use the admin panel to create posts, categories, and tags. Everything is intuitive and fast.</p><h2>Customization</h2><p>Customize your blog with themes, or build your own. The possibilities are endless!</p>]]></content:encoded>
   </item>
   <item>
     <title>Welcome to DynamicCRUD Universal CMS</title>

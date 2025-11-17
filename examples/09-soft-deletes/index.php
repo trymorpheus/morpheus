@@ -2,12 +2,12 @@
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-use DynamicCRUD\DynamicCRUD;
+use Morpheus\DynamicCRUD;
 
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'root', 'rootpassword');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-$crud = new DynamicCRUD($pdo, 'soft_posts');
+$crud = new Morpheus($pdo, 'soft_posts');
 
 // Handle restore
 if (isset($_GET['restore'])) {

@@ -1,9 +1,9 @@
 <?php
 
-namespace DynamicCRUD\Tests;
+namespace Morpheus\Tests;
 
 use PHPUnit\Framework\TestCase;
-use DynamicCRUD\Metadata\TableMetadata;
+use Morpheus\Metadata\TableMetadata;
 use PDO;
 
 class TableMetadataTest extends TestCase

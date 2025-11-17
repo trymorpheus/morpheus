@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-use DynamicCRUD\DynamicCRUD;
+use Morpheus\DynamicCRUD;
 
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'root', 'rootpassword');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -12,7 +12,7 @@ $currentUserId = isset($_GET['user']) ? (int)$_GET['user'] : 1;
 $roles = [1 => 'admin', 2 => 'editor', 3 => 'author', 4 => 'user'];
 $currentUserRole = $roles[$currentUserId] ?? 'guest';
 
-$crud = new DynamicCRUD($pdo, 'blog_posts');
+$crud = new Morpheus($pdo, 'blog_posts');
 $crud->setCurrentUser($currentUserId, $currentUserRole);
 
 // Handle delete

@@ -1,9 +1,9 @@
 <?php
 
-namespace DynamicCRUD\Theme;
+namespace Morpheus\Theme;
 
 use PDO;
-use DynamicCRUD\GlobalMetadata;
+use Morpheus\GlobalMetadata;
 
 class ThemeManager
 {

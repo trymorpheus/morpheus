@@ -1,6 +1,6 @@
 <?php
 
-namespace DynamicCRUD\CLI\Commands;
+namespace Morpheus\CLI\Commands;
 
 class InitCommand extends Command
 {

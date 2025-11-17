@@ -1,10 +1,10 @@
 <?php
 
-namespace DynamicCRUD\Tests;
+namespace Morpheus\Tests;
 
 use PHPUnit\Framework\TestCase;
-use DynamicCRUD\ContentTypes\ContentTypeManager;
-use DynamicCRUD\ContentTypes\BlogContentType;
+use Morpheus\ContentTypes\ContentTypeManager;
+use Morpheus\ContentTypes\BlogContentType;
 
 /**
  * @runTestsInSeparateProcesses

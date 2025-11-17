@@ -1,8 +1,8 @@
 <?php
 
-namespace DynamicCRUD\Tests;
+namespace Morpheus\Tests;
 
-use DynamicCRUD\Cache\FileCacheStrategy;
+use Morpheus\Cache\FileCacheStrategy;
 use PHPUnit\Framework\TestCase;
 
 class FileCacheStrategyTest extends TestCase

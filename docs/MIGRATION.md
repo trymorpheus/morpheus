@@ -1,6 +1,6 @@
 # Migration Guide
 
-Guide for upgrading between DynamicCRUD versions.
+Guide for upgrading between Morpheus versions.
 
 ---
 
@@ -14,8 +14,8 @@ Guide for upgrading between DynamicCRUD versions.
 
 **Migration Steps:**
 ```bash
-composer update dynamiccrud/dynamiccrud
-php bin/dynamiccrud clear:cache
+composer update trymorpheus/morpheus
+php bin/morpheus clear:cache
 ```
 
 **New Methods:**
@@ -42,16 +42,16 @@ $template = $crud->generateImportTemplate();
 
 **Migration Steps:**
 ```bash
-composer update dynamiccrud/dynamiccrud
+composer update trymorpheus/morpheus
 ```
 
 **New CLI Commands:**
 ```bash
-php bin/dynamiccrud test:connection
-php bin/dynamiccrud webhook:configure users https://webhook.site/abc
-php bin/dynamiccrud test:webhook users
-php bin/dynamiccrud metadata:export users --output=users.json
-php bin/dynamiccrud metadata:import users.json
+php bin/morpheus test:connection
+php bin/morpheus webhook:configure users https://webhook.site/abc
+php bin/morpheus test:webhook users
+php bin/morpheus metadata:export users --output=users.json
+php bin/morpheus metadata:import users.json
 ```
 
 ---
@@ -67,8 +67,8 @@ php bin/dynamiccrud metadata:import users.json
 
 **Migration Steps:**
 ```bash
-composer update dynamiccrud/dynamiccrud
-php bin/dynamiccrud clear:cache
+composer update trymorpheus/morpheus
+php bin/morpheus clear:cache
 ```
 
 **Configuration:**
@@ -100,8 +100,8 @@ ALTER TABLE orders COMMENT = '{
 
 **Migration Steps:**
 ```bash
-composer update dynamiccrud/dynamiccrud
-php bin/dynamiccrud clear:cache
+composer update trymorpheus/morpheus
+php bin/morpheus clear:cache
 ```
 
 **Configuration:**
@@ -140,7 +140,7 @@ ALTER TABLE products COMMENT = '{
 
 1. Update package:
 ```bash
-composer update dynamiccrud/dynamiccrud
+composer update trymorpheus/morpheus
 ```
 
 2. Add authentication metadata:
@@ -190,12 +190,12 @@ ALTER TABLE posts COMMENT = '{
 
 1. Update package:
 ```bash
-composer update dynamiccrud/dynamiccrud
+composer update trymorpheus/morpheus
 ```
 
 2. Clear cache:
 ```bash
-php bin/dynamiccrud clear:cache
+php bin/morpheus clear:cache
 ```
 
 3. Add table metadata (optional):
@@ -240,20 +240,20 @@ echo $crud->renderList();
 
 1. Update package:
 ```bash
-composer update dynamiccrud/dynamiccrud
+composer update trymorpheus/morpheus
 ```
 
 2. Generate metadata for existing tables:
 ```bash
-php bin/dynamiccrud generate:metadata users
-php bin/dynamiccrud generate:metadata posts
+php bin/morpheus generate:metadata users
+php bin/morpheus generate:metadata posts
 ```
 
 3. Apply generated SQL to database
 
 4. Clear cache:
 ```bash
-php bin/dynamiccrud clear:cache
+php bin/morpheus clear:cache
 ```
 
 5. Test your application
@@ -281,7 +281,7 @@ php bin/dynamiccrud clear:cache
 **Solution:**
 ```bash
 rm -rf cache/*
-php bin/dynamiccrud clear:cache
+php bin/morpheus clear:cache
 ```
 
 ### Issue: Metadata not loading
@@ -293,7 +293,7 @@ SELECT TABLE_COMMENT FROM information_schema.TABLES
 WHERE TABLE_NAME = 'your_table';
 
 -- Validate JSON
-php bin/dynamiccrud validate:metadata your_table
+php bin/morpheus validate:metadata your_table
 ```
 
 ### Issue: Tests failing after upgrade
@@ -301,7 +301,7 @@ php bin/dynamiccrud validate:metadata your_table
 **Solution:**
 ```bash
 # Clear cache
-php bin/dynamiccrud clear:cache
+php bin/morpheus clear:cache
 
 # Run tests
 php vendor/phpunit/phpunit/phpunit
@@ -333,10 +333,10 @@ If you need to rollback to a previous version:
 
 ```bash
 # Rollback to specific version
-composer require dynamiccrud/dynamiccrud:^2.4.0
+composer require trymorpheus/morpheus:^2.4.0
 
 # Clear cache
-php bin/dynamiccrud clear:cache
+php bin/morpheus clear:cache
 
 # Test application
 ```
@@ -347,7 +347,7 @@ php bin/dynamiccrud clear:cache
 
 - [Documentation](../README.md)
 - [Examples](../examples/)
-- [GitHub Issues](https://github.com/mcarbonell/DynamicCRUD/issues)
+- [GitHub Issues](https://github.com/trymorpheus/morpheus/issues)
 
 ---
 

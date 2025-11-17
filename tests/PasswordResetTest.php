@@ -1,9 +1,9 @@
 <?php
 
-namespace DynamicCRUD\Tests;
+namespace Morpheus\Tests;
 
 use PHPUnit\Framework\TestCase;
-use DynamicCRUD\DynamicCRUD;
+use Morpheus\DynamicCRUD;
 use PDO;
 
 /**
@@ -38,7 +38,7 @@ class PasswordResetTest extends TestCase
             }'
         ");
         
-        $this->crud = new DynamicCRUD($this->pdo, 'test_reset_users');
+        $this->crud = new Morpheus($this->pdo, 'test_reset_users');
         $this->crud->enableAuthentication();
         
         $this->cleanupTestData();

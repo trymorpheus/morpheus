@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use DynamicCRUD\VirtualField;
+use Morpheus\VirtualField;
 
 class VirtualFieldTest extends TestCase
 {

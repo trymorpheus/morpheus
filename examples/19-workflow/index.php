@@ -2,7 +2,7 @@
 header('Content-Type: text/html; charset=UTF-8');
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-use DynamicCRUD\DynamicCRUD;
+use Morpheus\DynamicCRUD;
 
 $pdo = new PDO('mysql:host=localhost;dbname=test;charset=utf8mb4', 'root', 'rootpassword');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -14,7 +14,7 @@ if (!isset($_SESSION['user_id'])) {
     $_SESSION['role'] = 'admin'; // admin, manager, warehouse, guest
 }
 
-$crud = new DynamicCRUD($pdo, 'orders');
+$crud = new Morpheus($pdo, 'orders');
 
 // Set current user for permission checks
 $crud->setCurrentUser($_SESSION['user_id'], $_SESSION['role']);

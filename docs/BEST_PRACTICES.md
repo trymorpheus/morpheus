@@ -62,10 +62,10 @@ $crud->enableAudit($userId);
 ### 1. Enable Caching
 
 ```php
-use DynamicCRUD\Cache\FileCacheStrategy;
+use Morpheus\Cache\FileCacheStrategy;
 
 $cache = new FileCacheStrategy(__DIR__ . '/cache');
-$crud = new DynamicCRUD($pdo, 'users', cache: $cache);
+$crud = new Morpheus($pdo, 'users', cache: $cache);
 ```
 
 ### 2. Use Pagination
@@ -140,7 +140,7 @@ class UserService
     
     public function __construct(PDO $pdo)
     {
-        $this->crud = new DynamicCRUD($pdo, 'users');
+        $this->crud = new Morpheus($pdo, 'users');
         $this->crud->enableAuthentication();
         $this->setupHooks();
     }
@@ -315,7 +315,7 @@ class UserCRUDTest extends TestCase
     protected function setUp(): void
     {
         $this->pdo = new PDO('mysql:host=localhost;dbname=test', 'root', 'pass');
-        $this->crud = new DynamicCRUD($this->pdo, 'users');
+        $this->crud = new Morpheus($this->pdo, 'users');
         $this->cleanupTestData();
     }
     
@@ -396,18 +396,18 @@ APP_ENV=production
 
 ```bash
 # After deployment
-php bin/dynamiccrud clear:cache
-php bin/dynamiccrud list:tables  # Warm cache
+php bin/morpheus clear:cache
+php bin/morpheus list:tables  # Warm cache
 ```
 
 ### 3. Database Migrations
 
 ```bash
 # Export metadata from dev
-php bin/dynamiccrud metadata:export users --output=users.json
+php bin/morpheus metadata:export users --output=users.json
 
 # Import to production
-php bin/dynamiccrud metadata:import users.json
+php bin/morpheus metadata:import users.json
 ```
 
 ### 4. Monitoring
@@ -429,7 +429,7 @@ $crud->afterSave(function($id, $data) {
 
 ```php
 // Auto-detect from browser
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 
 // Or force specific locale
 $crud->setLocale('es');
@@ -452,14 +452,14 @@ $translator->addTranslations('es', [
 
 ```bash
 # Cron job
-0 0 * * * cd /path/to/project && php bin/dynamiccrud clear:cache
+0 0 * * * cd /path/to/project && php bin/morpheus clear:cache
 ```
 
 ### 2. Backup Metadata
 
 ```bash
 # Weekly backup
-php bin/dynamiccrud metadata:export users --output=backups/users_$(date +%Y%m%d).json
+php bin/morpheus metadata:export users --output=backups/users_$(date +%Y%m%d).json
 ```
 
 ### 3. Monitor Performance

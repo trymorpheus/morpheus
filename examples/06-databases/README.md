@@ -16,11 +16,11 @@ DynamicCRUD automatically detects your database driver from the PDO connection:
 ```php
 // MySQL
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'root', 'pass');
-$crud = new DynamicCRUD($pdo, 'users'); // Uses MySQLAdapter
+$crud = new Morpheus($pdo, 'users'); // Uses MySQLAdapter
 
 // PostgreSQL
 $pdo = new PDO('pgsql:host=localhost;dbname=test', 'postgres', 'pass');
-$crud = new DynamicCRUD($pdo, 'users'); // Uses PostgreSQLAdapter
+$crud = new Morpheus($pdo, 'users'); // Uses PostgreSQLAdapter
 ```
 
 ## Database-Specific Features

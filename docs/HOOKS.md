@@ -27,7 +27,7 @@ The hooks system allows you to execute custom code at key points in the CRUD lif
 ## Basic Usage
 
 ```php
-$crud = new DynamicCRUD($pdo, 'posts');
+$crud = new Morpheus($pdo, 'posts');
 
 // Register a hook
 $crud->beforeSave(function($data) {

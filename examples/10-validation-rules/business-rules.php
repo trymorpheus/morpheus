@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-use DynamicCRUD\DynamicCRUD;
+use Morpheus\DynamicCRUD;
 
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'root', 'rootpassword');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -9,7 +9,7 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 // Simulate user ID (in real app, get from session)
 $userId = 1;
 
-$crud = new DynamicCRUD($pdo, 'vr_subscriptions');
+$crud = new Morpheus($pdo, 'vr_subscriptions');
 
 // Set simulated user for business rules validation
 if (session_status() === PHP_SESSION_NONE) {

@@ -1,6 +1,6 @@
 <?php
 
-namespace DynamicCRUD\I18n;
+namespace Morpheus\I18n;
 
 class Translator
 {

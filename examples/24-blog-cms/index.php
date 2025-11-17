@@ -7,9 +7,9 @@
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-use DynamicCRUD\Frontend\FrontendRouter;
-use DynamicCRUD\Frontend\FrontendRenderer;
-use DynamicCRUD\Frontend\SEOManager;
+use Morpheus\Frontend\FrontendRouter;
+use Morpheus\Frontend\FrontendRenderer;
+use Morpheus\Frontend\SEOManager;
 
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'root', 'rootpassword');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

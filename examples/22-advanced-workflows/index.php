@@ -1,8 +1,8 @@
 <?php
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-use DynamicCRUD\DynamicCRUD;
-use DynamicCRUD\Workflow\WorkflowTemplate;
+use Morpheus\DynamicCRUD;
+use Morpheus\Workflow\WorkflowTemplate;
 
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'root', 'rootpassword');
 
@@ -18,7 +18,7 @@ $pdo->exec("CREATE TABLE IF NOT EXISTS support_tickets (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )");
 
-$crud = new DynamicCRUD($pdo, 'support_tickets');
+$crud = new Morpheus($pdo, 'support_tickets');
 
 // Use template + add conditional transitions and escalations
 $workflowConfig = WorkflowTemplate::ticketSupport();

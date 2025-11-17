@@ -8,7 +8,7 @@
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-use DynamicCRUD\DynamicCRUD;
+use Morpheus\DynamicCRUD;
 
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'root', 'rootpassword');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -16,7 +16,7 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 // Simulate logged-in user
 $currentUserId = 1;
 
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 
 // Enable audit logging
 $crud->enableAudit($currentUserId);
@@ -212,7 +212,7 @@ $id = $_GET['id'] ?? null;
 
     <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
         <h3>💡 Usage</h3>
-        <pre style="background: white; padding: 15px; border-radius: 4px; overflow-x: auto;"><code>$crud = new DynamicCRUD($pdo, 'users');
+        <pre style="background: white; padding: 15px; border-radius: 4px; overflow-x: auto;"><code>$crud = new Morpheus($pdo, 'users');
 
 // Enable audit logging with user ID
 $crud->enableAudit($currentUserId);

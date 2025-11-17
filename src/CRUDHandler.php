@@ -1,12 +1,12 @@
 <?php
 
-namespace DynamicCRUD;
+namespace Morpheus;
 
 use PDO;
-use DynamicCRUD\Cache\CacheStrategy;
-use DynamicCRUD\I18n\Translator;
-use DynamicCRUD\Security\PermissionManager;
-use DynamicCRUD\Workflow\WorkflowEngine;
+use Morpheus\Cache\CacheStrategy;
+use Morpheus\I18n\Translator;
+use Morpheus\Security\PermissionManager;
+use Morpheus\Workflow\WorkflowEngine;
 
 class CRUDHandler
 {

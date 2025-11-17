@@ -60,7 +60,7 @@ CREATE TABLE users (
 ### Usage
 
 ```php
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 echo $crud->renderList(); // Automatically styled with metadata
 ```
 
@@ -118,7 +118,7 @@ CREATE TABLE contacts (
 ### Usage
 
 ```php
-$crud = new DynamicCRUD($pdo, 'contacts');
+$crud = new Morpheus($pdo, 'contacts');
 echo $crud->renderForm(); // Automatically renders tabs
 ```
 
@@ -200,7 +200,7 @@ CREATE TABLE posts (
 ### Usage
 
 ```php
-$crud = new DynamicCRUD($pdo, 'posts');
+$crud = new Morpheus($pdo, 'posts');
 $result = $crud->handleSubmission();
 // Slug and timestamps are automatically set!
 ```
@@ -285,7 +285,7 @@ CREATE TABLE posts (
 ### Usage
 
 ```php
-$crud = new DynamicCRUD($pdo, 'posts');
+$crud = new Morpheus($pdo, 'posts');
 echo $crud->renderList();
 // Automatically includes search box and filters
 ```
@@ -359,7 +359,7 @@ CREATE TABLE posts (
 **PHP Usage:**
 
 ```php
-$crud = new DynamicCRUD($pdo, 'posts');
+$crud = new Morpheus($pdo, 'posts');
 
 // Render list with search, filters, pagination
 echo $crud->renderList();

@@ -1,9 +1,9 @@
 <?php
 
-namespace DynamicCRUD\Tests;
+namespace Morpheus\Tests;
 
 use PHPUnit\Framework\TestCase;
-use DynamicCRUD\Cache\QueryCache;
+use Morpheus\Cache\QueryCache;
 
 class QueryCacheTest extends TestCase
 {

@@ -2,7 +2,7 @@
 header('Content-Type: text/html; charset=UTF-8');
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-use DynamicCRUD\Admin\AdminPanel;
+use Morpheus\Admin\AdminPanel;
 
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'root', 'rootpassword');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

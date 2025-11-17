@@ -9,14 +9,14 @@
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-use DynamicCRUD\DynamicCRUD;
+use Morpheus\DynamicCRUD;
 
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'root', 'rootpassword');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 // Auto-detect language or force specific locale
 $locale = $_GET['lang'] ?? null;
-$crud = new DynamicCRUD($pdo, 'users', locale: $locale);
+$crud = new Morpheus($pdo, 'users', locale: $locale);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $result = $crud->handleSubmission();
@@ -128,10 +128,10 @@ $currentLang = $_GET['lang'] ?? 'en';
     <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
         <h3>💡 Usage</h3>
         <pre style="background: white; padding: 15px; border-radius: 4px; overflow-x: auto;"><code>// Auto-detect language
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 
 // Force specific language
-$crud = new DynamicCRUD($pdo, 'users', locale: 'es');
+$crud = new Morpheus($pdo, 'users', locale: 'es');
 
 // Or set via URL
 // ?lang=es (Spanish)

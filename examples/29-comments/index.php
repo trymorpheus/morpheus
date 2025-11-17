@@ -1,8 +1,8 @@
 <?php
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-use DynamicCRUD\Comments\CommentManager;
-use DynamicCRUD\Comments\CommentRenderer;
+use Morpheus\Comments\CommentManager;
+use Morpheus\Comments\CommentRenderer;
 
 // Database connection
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'root', 'rootpassword');

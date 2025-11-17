@@ -1,10 +1,10 @@
 <?php
 
-namespace DynamicCRUD\Tests;
+namespace Morpheus\Tests;
 
 use PHPUnit\Framework\TestCase;
-use DynamicCRUD\Theme\ThemeManager;
-use DynamicCRUD\Theme\Theme;
+use Morpheus\Theme\ThemeManager;
+use Morpheus\Theme\Theme;
 
 /**
  * @runTestsInSeparateProcesses

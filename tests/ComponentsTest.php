@@ -1,9 +1,9 @@
 <?php
 
-namespace DynamicCRUD\Tests;
+namespace Morpheus\Tests;
 
 use PHPUnit\Framework\TestCase;
-use DynamicCRUD\UI\Components;
+use Morpheus\UI\Components;
 
 class ComponentsTest extends TestCase
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace DynamicCRUD\Tests;
+namespace Morpheus\Tests;
 
 use PHPUnit\Framework\TestCase;
-use DynamicCRUD\Security\AuthenticationManager;
+use Morpheus\Security\AuthenticationManager;
 use PDO;
 
 /**

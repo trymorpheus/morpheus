@@ -36,9 +36,9 @@ Click on any theme card to activate it. The blog demo will use the active theme.
 ### Programmatic Usage
 
 ```php
-use DynamicCRUD\Theme\ThemeManager;
-use DynamicCRUD\Theme\Themes\ModernTheme;
-use DynamicCRUD\Frontend\FrontendRenderer;
+use Morpheus\Theme\ThemeManager;
+use Morpheus\Theme\Themes\ModernTheme;
+use Morpheus\Frontend\FrontendRenderer;
 
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 

@@ -10,7 +10,7 @@ The Content Types system allows you to install pre-configured database schemas w
 ## Quick Start
 
 ```php
-use DynamicCRUD\ContentTypes\ContentTypeManager;
+use Morpheus\ContentTypes\ContentTypeManager;
 
 $pdo = new PDO('mysql:host=localhost;dbname=mydb', 'user', 'pass');
 $manager = new ContentTypeManager($pdo);
@@ -62,7 +62,7 @@ $manager->install('blog');
 ### 1. Implement ContentType Interface
 
 ```php
-namespace DynamicCRUD\ContentTypes;
+namespace Morpheus\ContentTypes;
 
 class PortfolioContentType implements ContentType
 {
@@ -269,7 +269,7 @@ Content types work seamlessly with DynamicCRUD:
 $manager->install('blog');
 
 // Use with DynamicCRUD
-$crud = new DynamicCRUD($pdo, 'posts');
+$crud = new Morpheus($pdo, 'posts');
 echo $crud->renderForm();
 echo $crud->renderList();
 ```
@@ -279,8 +279,8 @@ echo $crud->renderList();
 Content types can include frontend rendering:
 
 ```php
-use DynamicCRUD\Frontend\FrontendRenderer;
-use DynamicCRUD\Frontend\SEOManager;
+use Morpheus\Frontend\FrontendRenderer;
+use Morpheus\Frontend\SEOManager;
 
 // Install blog
 $manager->install('blog');

@@ -1,8 +1,8 @@
 <?php
 
-namespace DynamicCRUD;
+namespace Morpheus;
 
-use DynamicCRUD\I18n\Translator;
+use Morpheus\I18n\Translator;
 
 class ValidationEngine
 {

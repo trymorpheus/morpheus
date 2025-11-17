@@ -1,6 +1,6 @@
 <?php
 
-namespace DynamicCRUD\Export;
+namespace Morpheus\Export;
 
 use PDO;
 

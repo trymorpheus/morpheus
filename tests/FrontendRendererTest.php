@@ -1,10 +1,10 @@
 <?php
 
-namespace DynamicCRUD\Tests;
+namespace Morpheus\Tests;
 
 use PHPUnit\Framework\TestCase;
-use DynamicCRUD\Frontend\FrontendRenderer;
-use DynamicCRUD\ContentTypes\ContentTypeManager;
+use Morpheus\Frontend\FrontendRenderer;
+use Morpheus\ContentTypes\ContentTypeManager;
 
 /**
  * @runTestsInSeparateProcesses

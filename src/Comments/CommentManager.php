@@ -1,6 +1,6 @@
 <?php
 
-namespace DynamicCRUD\Comments;
+namespace Morpheus\Comments;
 
 use PDO;
 

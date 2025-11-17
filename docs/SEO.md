@@ -10,7 +10,7 @@ SEOManager provides comprehensive SEO functionality out of the box: meta tags, O
 ## Quick Start
 
 ```php
-use DynamicCRUD\Frontend\SEOManager;
+use Morpheus\Frontend\SEOManager;
 
 $pdo = new PDO('mysql:host=localhost;dbname=mydb', 'user', 'pass');
 $seo = new SEOManager($pdo, 'https://example.com', 'My Blog');
@@ -235,8 +235,8 @@ file_put_contents('feed.xml', $xml);
 ## Integration with Frontend
 
 ```php
-use DynamicCRUD\Frontend\FrontendRenderer;
-use DynamicCRUD\Frontend\SEOManager;
+use Morpheus\Frontend\FrontendRenderer;
+use Morpheus\Frontend\SEOManager;
 
 $seo = new SEOManager($pdo, 'https://example.com', 'My Blog');
 $renderer = new FrontendRenderer($pdo, 'blog', null, $seo);

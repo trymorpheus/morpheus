@@ -7,7 +7,7 @@ Get started with DynamicCRUD in 5 minutes!
 ## Installation
 
 ```bash
-composer require dynamiccrud/dynamiccrud
+composer require trymorpheus/morpheus
 ```
 
 **Requirements:** PHP 8.0+, MySQL 5.7+ or PostgreSQL 12+
@@ -20,10 +20,10 @@ composer require dynamiccrud/dynamiccrud
 <?php
 require 'vendor/autoload.php';
 
-use DynamicCRUD\DynamicCRUD;
+use Morpheus\DynamicCRUD;
 
 $pdo = new PDO('mysql:host=localhost;dbname=mydb', 'user', 'pass');
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 
 // Display form
 echo $crud->renderForm($_GET['id'] ?? null);
@@ -56,7 +56,7 @@ CREATE TABLE products (
 ### Step 2: Basic CRUD
 
 ```php
-$crud = new DynamicCRUD($pdo, 'products');
+$crud = new Morpheus($pdo, 'products');
 
 // Create/Edit form
 echo $crud->renderForm($_GET['id'] ?? null);
@@ -95,7 +95,7 @@ $tables = ['users', 'posts', 'categories'];
 
 foreach ($tables as $table) {
     echo "<h2>$table</h2>";
-    $crud = new DynamicCRUD($pdo, $table);
+    $crud = new Morpheus($pdo, $table);
     echo $crud->renderList();
 }
 ```
@@ -103,7 +103,7 @@ foreach ($tables as $table) {
 ### Use Case 2: User Registration
 
 ```php
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 $crud->enableAuthentication();
 
 // Registration form
@@ -118,7 +118,7 @@ if ($_POST['action'] === 'register') {
 ### Use Case 3: Data Export
 
 ```php
-$crud = new DynamicCRUD($pdo, 'orders');
+$crud = new Morpheus($pdo, 'orders');
 
 // Export to CSV
 $crud->downloadExport('orders.csv');
@@ -130,7 +130,7 @@ $csv = $crud->export('csv');
 ### Use Case 4: Bulk Import
 
 ```php
-$crud = new DynamicCRUD($pdo, 'products');
+$crud = new Morpheus($pdo, 'products');
 
 // Preview import
 $result = $crud->import($csvContent, ['preview' => true]);
@@ -147,7 +147,7 @@ $result = $crud->import($csvContent, ['skip_errors' => true]);
 
 ```php
 // Foreign key (automatic)
-$crud = new DynamicCRUD($pdo, 'posts');
+$crud = new Morpheus($pdo, 'posts');
 // If posts.user_id references users.id, dropdown is automatic!
 
 // Many-to-many
@@ -206,22 +206,22 @@ ALTER TABLE orders COMMENT = '{
 
 ```bash
 # Initialize project
-php bin/dynamiccrud init
+php bin/morpheus init
 
 # List tables
-php bin/dynamiccrud list:tables
+php bin/morpheus list:tables
 
 # Generate metadata
-php bin/dynamiccrud generate:metadata products
+php bin/morpheus generate:metadata products
 
 # Export data
-php bin/dynamiccrud export:csv products --output=products.csv
+php bin/morpheus export:csv products --output=products.csv
 
 # Import data
-php bin/dynamiccrud import:csv products data.csv --preview
+php bin/morpheus import:csv products data.csv --preview
 
 # Test webhook
-php bin/dynamiccrud test:webhook orders
+php bin/morpheus test:webhook orders
 ```
 
 ---
@@ -232,14 +232,14 @@ php bin/dynamiccrud test:webhook orders
 
 Check your database connection:
 ```bash
-php bin/dynamiccrud test:connection
+php bin/morpheus test:connection
 ```
 
 ### Validation not working?
 
 Clear cache:
 ```bash
-php bin/dynamiccrud clear:cache
+php bin/morpheus clear:cache
 ```
 
 ### Need help?

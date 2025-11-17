@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use DynamicCRUD\Template\BladeTemplate;
+use Morpheus\Template\BladeTemplate;
 
 class BladeTemplateTest extends TestCase
 {

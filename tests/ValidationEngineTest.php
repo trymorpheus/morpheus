@@ -1,8 +1,8 @@
 <?php
 
-namespace DynamicCRUD\Tests;
+namespace Morpheus\Tests;
 
-use DynamicCRUD\ValidationEngine;
+use Morpheus\ValidationEngine;
 use PHPUnit\Framework\TestCase;
 
 class ValidationEngineTest extends TestCase

@@ -1,8 +1,8 @@
 <?php
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-use DynamicCRUD\GlobalMetadata;
-use DynamicCRUD\BrandingManager;
+use Morpheus\GlobalMetadata;
+use Morpheus\BrandingManager;
 
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'root', 'rootpassword');
 
@@ -100,14 +100,14 @@ if (!$config->has('branding.app_name')) {
             <h3>CLI Commands</h3>
             <pre style="background: #2d3748; color: #e2e8f0; padding: 15px; border-radius: 8px; overflow-x: auto;">
 # Set branding configuration
-php bin/dynamiccrud branding:set app_name "My App"
-php bin/dynamiccrud branding:set logo "/path/to/logo.png"
-php bin/dynamiccrud branding:set primary_color "#667eea"
-php bin/dynamiccrud branding:set font_family "Inter, sans-serif"
-php bin/dynamiccrud branding:set max_width "1400px"
+php bin/morpheus branding:set app_name "My App"
+php bin/morpheus branding:set logo "/path/to/logo.png"
+php bin/morpheus branding:set primary_color "#667eea"
+php bin/morpheus branding:set font_family "Inter, sans-serif"
+php bin/morpheus branding:set max_width "1400px"
 
 # Show current branding
-php bin/dynamiccrud branding:show
+php bin/morpheus branding:show
             </pre>
             
             <h3>PHP Usage</h3>

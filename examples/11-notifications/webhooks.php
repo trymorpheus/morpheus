@@ -1,12 +1,12 @@
 <?php
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-use DynamicCRUD\DynamicCRUD;
+use Morpheus\DynamicCRUD;
 
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'root', 'rootpassword');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-$crud = new DynamicCRUD($pdo, 'notif_contacts');
+$crud = new Morpheus($pdo, 'notif_contacts');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $result = $crud->handleSubmission();

@@ -1,8 +1,8 @@
 <?php
 
-namespace DynamicCRUD\Tests;
+namespace Morpheus\Tests;
 
-use DynamicCRUD\AuditLogger;
+use Morpheus\AuditLogger;
 use PHPUnit\Framework\TestCase;
 use PDO;
 

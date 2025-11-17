@@ -1,8 +1,8 @@
 <?php
 
-namespace DynamicCRUD\CLI\Commands;
+namespace Morpheus\CLI\Commands;
 
-use DynamicCRUD\GlobalMetadata;
+use Morpheus\GlobalMetadata;
 
 class BrandingShowCommand
 {
@@ -60,7 +60,7 @@ class BrandingShowCommand
     {
         $configFile = __DIR__ . '/../../../config.php';
         if (!file_exists($configFile)) {
-            throw new \Exception('config.php not found. Run: php bin/dynamiccrud init');
+            throw new \Exception('config.php not found. Run: php bin/morpheus init');
         }
         
         $config = require $configFile;

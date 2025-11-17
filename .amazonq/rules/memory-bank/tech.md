@@ -80,7 +80,7 @@
 **composer.json:**
 ```json
 {
-    "name": "dynamiccrud/dynamiccrud",
+    "name": "trymorpheus/morpheus",
     "type": "library",
     "require": {
         "php": ">=8.0",
@@ -93,7 +93,7 @@
     },
     "autoload": {
         "psr-4": {
-            "DynamicCRUD\\": "src/"
+            "Morpheus\\": "src/"
         }
     }
 }
@@ -131,7 +131,7 @@
 ## Development Tools
 
 ### CLI Tool
-**Location:** bin/dynamiccrud
+**Location:** bin/morpheus
 
 **20+ Commands:**
 - `init` - Initialize project
@@ -218,7 +218,7 @@ jobs:
 composer install
 
 # Install globally
-composer global require dynamiccrud/dynamiccrud
+composer global require trymorpheus/morpheus
 ```
 
 ### Testing
@@ -239,13 +239,13 @@ run-tests.bat
 ### CLI Commands
 ```bash
 # Initialize project
-php bin/dynamiccrud init
+php bin/morpheus init
 
 # Run installer (interactive)
-php bin/dynamiccrud install
+php bin/morpheus install
 
 # Run installer (non-interactive)
-php bin/dynamiccrud install \
+php bin/morpheus install \
   --db-host=localhost \
   --db-name=mysite \
   --db-user=root \
@@ -257,25 +257,25 @@ php bin/dynamiccrud install \
   --theme=modern
 
 # List tables
-php bin/dynamiccrud list:tables
+php bin/morpheus list:tables
 
 # Generate metadata
-php bin/dynamiccrud generate:metadata users
+php bin/morpheus generate:metadata users
 
 # Clear cache
-php bin/dynamiccrud clear:cache
+php bin/morpheus clear:cache
 
 # Export data
-php bin/dynamiccrud export:csv users --output=users.csv
+php bin/morpheus export:csv users --output=users.csv
 
 # Import data
-php bin/dynamiccrud import:csv users data.csv
+php bin/morpheus import:csv users data.csv
 
 # SQL dump
-php bin/dynamiccrud dump:sql users --output=users.sql
+php bin/morpheus dump:sql users --output=users.sql
 
 # WordPress migration
-php bin/dynamiccrud wordpress:migrate export.xml
+php bin/morpheus wordpress:migrate export.xml
 ```
 
 ### Docker Commands
@@ -299,7 +299,7 @@ docker-compose exec postgres psql -U postgres test
 ### Cache Management
 ```bash
 # Clear all caches
-php bin/dynamiccrud clear:cache
+php bin/morpheus clear:cache
 
 # Clear template cache
 rm -rf cache/templates/*
@@ -474,7 +474,7 @@ $config->set('theme.primary_color', '#667eea');
 ### Local Development
 ```bash
 # Clone repository
-git clone https://github.com/mcarbonell/DynamicCRUD.git
+git clone https://github.com/trymorpheus/morpheus.git
 
 # Install dependencies
 composer install
@@ -508,11 +508,12 @@ php -S localhost:8000 -t examples/
 ## Package Distribution
 
 ### Packagist
-- **Package:** dynamiccrud/dynamiccrud
-- **URL:** https://packagist.org/packages/dynamiccrud/dynamiccrud
+- **Package:** trymorpheus/morpheus
+- **URL:** https://packagist.org/packages/trymorpheus/morpheus
 - **Auto-update:** GitHub webhook
 
 ### GitHub Releases
+- **Repository:** https://github.com/trymorpheus/morpheus
 - **Tags:** Semantic versioning (v4.0.0)
 - **Assets:** Source code archives
 - **Release Notes:** Detailed changelog

@@ -1,9 +1,9 @@
 <?php
 
-namespace DynamicCRUD\Tests\CLI;
+namespace Morpheus\Tests\CLI;
 
 use PHPUnit\Framework\TestCase;
-use DynamicCRUD\CLI\Commands\DumpSQLCommand;
+use Morpheus\CLI\Commands\DumpSQLCommand;
 
 class DumpSQLCommandTest extends TestCase
 {

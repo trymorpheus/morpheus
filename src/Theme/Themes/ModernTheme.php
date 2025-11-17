@@ -1,8 +1,8 @@
 <?php
 
-namespace DynamicCRUD\Theme\Themes;
+namespace Morpheus\Theme\Themes;
 
-use DynamicCRUD\Theme\AbstractTheme;
+use Morpheus\Theme\AbstractTheme;
 
 class ModernTheme extends AbstractTheme
 {

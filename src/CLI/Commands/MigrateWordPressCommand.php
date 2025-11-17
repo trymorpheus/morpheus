@@ -1,8 +1,8 @@
 <?php
 
-namespace DynamicCRUD\CLI\Commands;
+namespace Morpheus\CLI\Commands;
 
-use DynamicCRUD\Migration\WordPressMigrator;
+use Morpheus\Migration\WordPressMigrator;
 
 class MigrateWordPressCommand
 {
@@ -173,7 +173,7 @@ class MigrateWordPressCommand
 WordPress Migration Tool
 
 Usage:
-  php bin/dynamiccrud migrate:wordpress <wxr-file> [options]
+  php bin/morpheus migrate:wordpress <wxr-file> [options]
 
 Arguments:
   wxr-file              Path to WordPress export file (WXR format)
@@ -195,22 +195,22 @@ Options:
 
 Examples:
   # Basic migration
-  php bin/dynamiccrud migrate:wordpress export.xml
+  php bin/morpheus migrate:wordpress export.xml
 
   # With table prefix
-  php bin/dynamiccrud migrate:wordpress export.xml --prefix=wp_
+  php bin/morpheus migrate:wordpress export.xml --prefix=wp_
 
   # Skip media download
-  php bin/dynamiccrud migrate:wordpress export.xml --no-media
+  php bin/morpheus migrate:wordpress export.xml --no-media
 
   # Generate redirects
-  php bin/dynamiccrud migrate:wordpress export.xml --generate-redirects
+  php bin/morpheus migrate:wordpress export.xml --generate-redirects
 
   # Dry run (preview only)
-  php bin/dynamiccrud migrate:wordpress export.xml --dry-run
+  php bin/morpheus migrate:wordpress export.xml --dry-run
 
   # Custom database
-  php bin/dynamiccrud migrate:wordpress export.xml \\
+  php bin/morpheus migrate:wordpress export.xml \\
     --host=localhost \\
     --database=mydb \\
     --username=user \\

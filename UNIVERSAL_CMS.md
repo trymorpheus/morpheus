@@ -663,7 +663,7 @@ This is a **once-in-a-decade opportunity** to disrupt the CMS market. WordPress 
 1. ✅ WordPress is slow, vulnerable, expensive
 2. ✅ AI makes development 100x faster
 3. ✅ No-code market is exploding ($13B)
-4. ✅ DynamicCRUD has all the pieces already
+4. ✅ Morpheus has all the pieces already
 
 **What's Needed:**
 1. Commit to v4.0 as strategic priority

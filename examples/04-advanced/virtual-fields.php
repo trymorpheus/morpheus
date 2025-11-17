@@ -8,13 +8,13 @@
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-use DynamicCRUD\DynamicCRUD;
-use DynamicCRUD\VirtualField;
+use Morpheus\DynamicCRUD;
+use Morpheus\VirtualField;
 
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'root', 'rootpassword');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 
 // Virtual Field 1: Password Confirmation
 $crud->addVirtualField(new VirtualField(

@@ -1,12 +1,12 @@
 <?php
 
-namespace DynamicCRUD;
+namespace Morpheus;
 
 use PDO;
-use DynamicCRUD\Cache\CacheStrategy;
-use DynamicCRUD\Database\DatabaseAdapter;
-use DynamicCRUD\Database\MySQLAdapter;
-use DynamicCRUD\Database\PostgreSQLAdapter;
+use Morpheus\Cache\CacheStrategy;
+use Morpheus\Database\DatabaseAdapter;
+use Morpheus\Database\MySQLAdapter;
+use Morpheus\Database\PostgreSQLAdapter;
 
 class SchemaAnalyzer
 {

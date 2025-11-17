@@ -1,11 +1,11 @@
 # DynamicCRUD
 
-[![Tests](https://github.com/mcarbonell/DynamicCRUD/workflows/Tests/badge.svg)](https://github.com/mcarbonell/DynamicCRUD/actions)
-[![Code Quality](https://github.com/mcarbonell/DynamicCRUD/workflows/Code%20Quality/badge.svg)](https://github.com/mcarbonell/DynamicCRUD/actions)
-[![Packagist Version](https://img.shields.io/packagist/v/dynamiccrud/dynamiccrud)](https://packagist.org/packages/dynamiccrud/dynamiccrud)
-[![PHP Version](https://img.shields.io/packagist/php-v/dynamiccrud/dynamiccrud)](https://packagist.org/packages/dynamiccrud/dynamiccrud)
-[![License](https://img.shields.io/github/license/mcarbonell/DynamicCRUD)](https://github.com/mcarbonell/DynamicCRUD/blob/main/LICENSE)
-[![Downloads](https://img.shields.io/packagist/dt/dynamiccrud/dynamiccrud)](https://packagist.org/packages/dynamiccrud/dynamiccrud)
+[![Tests](https://github.com/trymorpheus/morpheus/workflows/Tests/badge.svg)](https://github.com/trymorpheus/morpheus/actions)
+[![Code Quality](https://github.com/trymorpheus/morpheus/workflows/Code%20Quality/badge.svg)](https://github.com/trymorpheus/morpheus/actions)
+[![Packagist Version](https://img.shields.io/packagist/v/trymorpheus/morpheus)](https://packagist.org/packages/trymorpheus/morpheus)
+[![PHP Version](https://img.shields.io/packagist/php-v/trymorpheus/morpheus)](https://packagist.org/packages/trymorpheus/morpheus)
+[![License](https://img.shields.io/github/license/mcarbonell/DynamicCRUD)](https://github.com/trymorpheus/morpheus/blob/main/LICENSE)
+[![Downloads](https://img.shields.io/packagist/dt/trymorpheus/morpheus)](https://packagist.org/packages/trymorpheus/morpheus)
 
 **Una poderosa librería PHP que genera automáticamente formularios CRUD con validación basándose en la estructura de tu base de datos.**
 
@@ -51,7 +51,7 @@ Deja de escribir código CRUD repetitivo. DynamicCRUD analiza tu esquema MySQL y
 ## 📦 Instalación
 
 ```bash
-composer require dynamiccrud/dynamiccrud
+composer require trymorpheus/morpheus
 ```
 
 **Requisitos:** PHP 8.0+, MySQL 5.7+ o PostgreSQL 12+, extensión PDO
@@ -61,9 +61,9 @@ composer require dynamiccrud/dynamiccrud
 Después de la instalación, inicializa tu proyecto:
 
 ```bash
-php bin/dynamiccrud init
-php bin/dynamiccrud list:tables
-php bin/dynamiccrud generate:metadata users
+php bin/morpheus init
+php bin/morpheus list:tables
+php bin/morpheus generate:metadata users
 ```
 
 ---
@@ -73,7 +73,7 @@ php bin/dynamiccrud generate:metadata users
 **Librería de Componentes UI** - ¡15 componentes reutilizables, accesibles y hermosos para construir UIs modernas!
 
 ```php
-use DynamicCRUD\\UI\\Components;
+use Morpheus\\UI\\Components;
 
 // Establecer tema personalizado
 Components::setTheme(['primary' => '#667eea']);
@@ -106,7 +106,7 @@ echo Components::pagination(3, 10);
 **Motor de Flujo de Trabajo** - ¡Gestión de estados con transiciones, permisos y seguimiento de historial!
 
 ```php
-$crud = new DynamicCRUD($pdo, 'orders');
+$crud = new Morpheus($pdo, 'orders');
 
 $crud->enableWorkflow([
     'field' => 'status',
@@ -139,7 +139,7 @@ echo $crud->renderForm($id); // ¡Botones de transición automáticos!
 **Generador de Panel de Administración** - ¡Panel de administración completo con navegación, dashboard y CRUD integrado!
 
 ```php
-use DynamicCRUD\\Admin\\AdminPanel;
+use Morpheus\\Admin\\AdminPanel;
 
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 
@@ -171,14 +171,14 @@ echo $admin->render(); // ¡Panel admin completo!
 <?php
 require 'vendor/autoload.php';
 
-use DynamicCRUD\\DynamicCRUD;
+use Morpheus\\DynamicCRUD;
 
 // MySQL
 $pdo = new PDO('mysql:host=localhost;dbname=mydb', 'user', 'pass');
 // PostgreSQL
 // $pdo = new PDO('pgsql:host=localhost;dbname=mydb', 'user', 'pass');
 
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 
 // ¡Eso es todo! Maneja tanto visualización como envío
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -212,7 +212,7 @@ COMMENT '{\"hidden\": true}';
 ```php
 // Si la tabla 'posts' tiene una clave foránea a 'users', 
 // DynamicCRUD crea automáticamente un desplegable con nombres de usuario
-$crud = new DynamicCRUD($pdo, 'posts');
+$crud = new Morpheus($pdo, 'posts');
 echo $crud->renderForm();
 // El desplegable muestra: \"John Doe\", \"Jane Smith\", etc.
 ```

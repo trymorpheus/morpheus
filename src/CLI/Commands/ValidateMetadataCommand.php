@@ -1,8 +1,8 @@
 <?php
 
-namespace DynamicCRUD\CLI\Commands;
+namespace Morpheus\CLI\Commands;
 
-use DynamicCRUD\Metadata\TableMetadata;
+use Morpheus\Metadata\TableMetadata;
 
 class ValidateMetadataCommand extends Command
 {

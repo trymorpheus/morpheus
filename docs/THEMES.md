@@ -37,11 +37,11 @@ The Theme System allows you to customize the look and feel of your CMS without t
 ### 1. Basic Usage
 
 ```php
-use DynamicCRUD\Theme\ThemeManager;
-use DynamicCRUD\Theme\Themes\MinimalTheme;
-use DynamicCRUD\Theme\Themes\ModernTheme;
-use DynamicCRUD\Theme\Themes\ClassicTheme;
-use DynamicCRUD\Frontend\FrontendRenderer;
+use Morpheus\Theme\ThemeManager;
+use Morpheus\Theme\Themes\MinimalTheme;
+use Morpheus\Theme\Themes\ModernTheme;
+use Morpheus\Theme\Themes\ClassicTheme;
+use Morpheus\Frontend\FrontendRenderer;
 
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 
@@ -249,9 +249,9 @@ return [
 ### Step 1: Create Theme Class
 
 ```php
-namespace DynamicCRUD\Theme\Themes;
+namespace Morpheus\Theme\Themes;
 
-use DynamicCRUD\Theme\AbstractTheme;
+use Morpheus\Theme\AbstractTheme;
 
 class MyCustomTheme extends AbstractTheme
 {
@@ -419,7 +419,7 @@ article {
 ### Step 7: Register and Activate
 
 ```php
-use DynamicCRUD\Theme\Themes\MyCustomTheme;
+use Morpheus\Theme\Themes\MyCustomTheme;
 
 $themeManager->register('mycustom', new MyCustomTheme($themesDir));
 $themeManager->activate('mycustom');
@@ -529,7 +529,7 @@ echo $renderer->renderHome();
 ```php
 // Themes are primarily for frontend rendering
 // DynamicCRUD forms use their own styling
-$crud = new DynamicCRUD($pdo, 'posts');
+$crud = new Morpheus($pdo, 'posts');
 echo $crud->renderForm();
 
 // For frontend, use FrontendRenderer with ThemeManager

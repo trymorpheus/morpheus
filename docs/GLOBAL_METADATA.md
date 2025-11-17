@@ -30,23 +30,23 @@ Global metadata is automatically available in v2.8+. The configuration table `_d
 
 ```bash
 # Set configuration
-php bin/dynamiccrud config:set application.name "My App"
-php bin/dynamiccrud config:set theme '{"primary_color":"#667eea"}'
+php bin/morpheus config:set application.name "My App"
+php bin/morpheus config:set theme '{"primary_color":"#667eea"}'
 
 # Get configuration
-php bin/dynamiccrud config:get application.name
+php bin/morpheus config:get application.name
 
 # List all configuration
-php bin/dynamiccrud config:list
+php bin/morpheus config:list
 
 # Delete configuration
-php bin/dynamiccrud config:delete application.name
+php bin/morpheus config:delete application.name
 ```
 
 ### PHP Usage
 
 ```php
-use DynamicCRUD\GlobalMetadata;
+use Morpheus\GlobalMetadata;
 
 $config = new GlobalMetadata($pdo);
 
@@ -223,13 +223,13 @@ Set a configuration value.
 
 ```bash
 # String value
-php bin/dynamiccrud config:set app.name "My App"
+php bin/morpheus config:set app.name "My App"
 
 # JSON value
-php bin/dynamiccrud config:set theme '{"color":"#667eea"}'
+php bin/morpheus config:set theme '{"color":"#667eea"}'
 
 # Nested structure
-php bin/dynamiccrud config:set email.smtp.host "smtp.gmail.com"
+php bin/morpheus config:set email.smtp.host "smtp.gmail.com"
 ```
 
 ### config:get
@@ -237,10 +237,10 @@ php bin/dynamiccrud config:set email.smtp.host "smtp.gmail.com"
 Get a configuration value.
 
 ```bash
-php bin/dynamiccrud config:get app.name
+php bin/morpheus config:get app.name
 # Output: "My App"
 
-php bin/dynamiccrud config:get theme
+php bin/morpheus config:get theme
 # Output: {"color":"#667eea"}
 ```
 
@@ -249,7 +249,7 @@ php bin/dynamiccrud config:get theme
 List all configuration.
 
 ```bash
-php bin/dynamiccrud config:list
+php bin/morpheus config:list
 # Output:
 # 📋 Global Configuration:
 #
@@ -267,7 +267,7 @@ php bin/dynamiccrud config:list
 Delete a configuration key.
 
 ```bash
-php bin/dynamiccrud config:delete old.setting
+php bin/morpheus config:delete old.setting
 # Output: ✅ Config deleted: old.setting
 ```
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace DynamicCRUD\Metadata;
+namespace Morpheus\Metadata;
 
 use PDO;
 

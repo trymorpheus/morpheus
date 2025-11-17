@@ -19,8 +19,8 @@ DynamicCRUD includes a Blade-like template engine for customizing form rendering
 
 ```php
 <?php
-use DynamicCRUD\DynamicCRUD;
-use DynamicCRUD\Template\BladeTemplate;
+use Morpheus\DynamicCRUD;
+use Morpheus\Template\BladeTemplate;
 
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'root', 'password');
 
@@ -31,7 +31,7 @@ $engine = new BladeTemplate(
 );
 
 // Use with DynamicCRUD
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 $crud->setTemplateEngine($engine);
 ```
 
@@ -217,7 +217,7 @@ $html = $engine->renderFile('forms/input.blade.php', [
 ### Custom Form Template
 
 ```php
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 $crud->setTemplateEngine($engine);
 
 // FormGenerator will use templates if available

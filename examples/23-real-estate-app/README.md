@@ -147,7 +147,7 @@ Este ejemplo demuestra:
 Para más información sobre DynamicCRUD:
 - [Documentación](../../docs/)
 - [Más Ejemplos](../)
-- [GitHub](https://github.com/mcarbonell/DynamicCRUD)
+- [GitHub](https://github.com/trymorpheus/morpheus)
 
 ---
 

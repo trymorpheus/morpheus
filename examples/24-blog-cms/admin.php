@@ -11,8 +11,8 @@ error_reporting(E_ALL);
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-use DynamicCRUD\DynamicCRUD;
-use DynamicCRUD\Admin\AdminPanel;
+use Morpheus\DynamicCRUD;
+use Morpheus\Admin\AdminPanel;
 
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'root', 'rootpassword');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -58,7 +58,7 @@ $action = $_GET['action'] ?? 'list';
 $id = $_GET['id'] ?? null;
 
 if ($table && in_array($table, ['24_posts', '24_categories', '24_tags', '24_comments'])) {
-    $crud = new DynamicCRUD($pdo, $table);
+    $crud = new Morpheus($pdo, $table);
     
     // Configure many-to-many for posts
     if ($table === '24_posts') {

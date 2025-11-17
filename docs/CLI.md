@@ -1,6 +1,6 @@
 # CLI Tool Guide
 
-**DynamicCRUD v2.1+**
+**Morpheus v2.1+**
 
 ## Overview
 
@@ -8,16 +8,16 @@ The DynamicCRUD CLI Tool provides command-line utilities for project management,
 
 ## Installation
 
-The CLI tool is automatically available after installing DynamicCRUD via Composer:
+The CLI tool is automatically available after installing Morpheus via Composer:
 
 ```bash
-composer require dynamiccrud/dynamiccrud
+composer require trymorpheus/morpheus
 ```
 
 The `dynamiccrud` command will be available in `bin/`:
 
 ```bash
-php vendor/bin/dynamiccrud --help
+php vendor/bin/morpheus --help
 ```
 
 ---
@@ -30,7 +30,7 @@ Initialize DynamicCRUD in your project with interactive database configuration.
 
 **Usage:**
 ```bash
-php vendor/bin/dynamiccrud init
+php vendor/bin/morpheus init
 ```
 
 **What it does:**
@@ -66,12 +66,12 @@ Auto-generate metadata JSON from existing table schema.
 
 **Usage:**
 ```bash
-php vendor/bin/dynamiccrud generate:metadata <table>
+php vendor/bin/morpheus generate:metadata <table>
 ```
 
 **Example:**
 ```bash
-php vendor/bin/dynamiccrud generate:metadata users
+php vendor/bin/morpheus generate:metadata users
 ```
 
 **What it does:**
@@ -131,12 +131,12 @@ Validate and display table metadata configuration.
 
 **Usage:**
 ```bash
-php vendor/bin/dynamiccrud validate:metadata <table>
+php vendor/bin/morpheus validate:metadata <table>
 ```
 
 **Example:**
 ```bash
-php vendor/bin/dynamiccrud validate:metadata posts
+php vendor/bin/morpheus validate:metadata posts
 ```
 
 **What it does:**
@@ -176,7 +176,7 @@ Display all database tables with metadata information.
 
 **Usage:**
 ```bash
-php vendor/bin/dynamiccrud list:tables
+php vendor/bin/morpheus list:tables
 ```
 
 **What it does:**
@@ -216,7 +216,7 @@ Clear schema and template cache files.
 
 **Usage:**
 ```bash
-php vendor/bin/dynamiccrud clear:cache
+php vendor/bin/morpheus clear:cache
 ```
 
 ---
@@ -227,7 +227,7 @@ Test database connectivity and display connection information.
 
 **Usage:**
 ```bash
-php vendor/bin/dynamiccrud test:connection
+php vendor/bin/morpheus test:connection
 ```
 
 **Output Example:**
@@ -247,16 +247,16 @@ Configure webhook for a table.
 
 **Usage:**
 ```bash
-php vendor/bin/dynamiccrud webhook:configure <table> <url> [--event=on_create]
+php vendor/bin/morpheus webhook:configure <table> <url> [--event=on_create]
 ```
 
 **Examples:**
 ```bash
 # Configure webhook for on_create event
-php vendor/bin/dynamiccrud webhook:configure users https://webhook.site/abc123
+php vendor/bin/morpheus webhook:configure users https://webhook.site/abc123
 
 # Configure webhook for on_update event
-php vendor/bin/dynamiccrud webhook:configure users https://api.example.com/hook --event=on_update
+php vendor/bin/morpheus webhook:configure users https://api.example.com/hook --event=on_update
 ```
 
 **Output:**
@@ -274,12 +274,12 @@ Test webhook connectivity for a table.
 
 **Usage:**
 ```bash
-php vendor/bin/dynamiccrud test:webhook <table>
+php vendor/bin/morpheus test:webhook <table>
 ```
 
 **Example:**
 ```bash
-php vendor/bin/dynamiccrud test:webhook users
+php vendor/bin/morpheus test:webhook users
 ```
 
 **Output:**
@@ -302,16 +302,16 @@ Export table and column metadata to JSON file.
 
 **Usage:**
 ```bash
-php vendor/bin/dynamiccrud metadata:export <table> [--output=file.json]
+php vendor/bin/morpheus metadata:export <table> [--output=file.json]
 ```
 
 **Examples:**
 ```bash
 # Export to file
-php vendor/bin/dynamiccrud metadata:export users --output=users.json
+php vendor/bin/morpheus metadata:export users --output=users.json
 
 # Export to stdout
-php vendor/bin/dynamiccrud metadata:export users
+php vendor/bin/morpheus metadata:export users
 ```
 
 **Output Format:**
@@ -338,12 +338,12 @@ Import table and column metadata from JSON file.
 
 **Usage:**
 ```bash
-php vendor/bin/dynamiccrud metadata:import <file.json>
+php vendor/bin/morpheus metadata:import <file.json>
 ```
 
 **Example:**
 ```bash
-php vendor/bin/dynamiccrud metadata:import users.json
+php vendor/bin/morpheus metadata:import users.json
 ```
 
 **Output:**
@@ -403,68 +403,68 @@ The `dynamiccrud.json` file stores database connection settings.
 
 ```bash
 # 1. Install DynamicCRUD
-composer require dynamiccrud/dynamiccrud
+composer require trymorpheus/morpheus
 
 # 2. Initialize configuration
-php vendor/bin/dynamiccrud init
+php vendor/bin/morpheus init
 
 # 3. List existing tables
-php vendor/bin/dynamiccrud list:tables
+php vendor/bin/morpheus list:tables
 
 # 4. Generate metadata for tables
-php vendor/bin/dynamiccrud generate:metadata users
-php vendor/bin/dynamiccrud generate:metadata posts
+php vendor/bin/morpheus generate:metadata users
+php vendor/bin/morpheus generate:metadata posts
 
 # 5. Run generated SQL statements on database
 
 # 6. Validate metadata
-php vendor/bin/dynamiccrud validate:metadata users
+php vendor/bin/morpheus validate:metadata users
 ```
 
 ### Workflow 2: Adding Metadata to Existing Tables
 
 ```bash
 # 1. Generate metadata
-php vendor/bin/dynamiccrud generate:metadata products
+php vendor/bin/morpheus generate:metadata products
 
 # 2. Copy SQL statement and customize if needed
 
 # 3. Run SQL on database
 
 # 4. Validate
-php vendor/bin/dynamiccrud validate:metadata products
+php vendor/bin/morpheus validate:metadata products
 
 # 5. Clear cache
-php vendor/bin/dynamiccrud clear:cache
+php vendor/bin/morpheus clear:cache
 ```
 
 ### Workflow 3: Debugging
 
 ```bash
 # 1. Test connection
-php vendor/bin/dynamiccrud test:connection
+php vendor/bin/morpheus test:connection
 
 # 2. List all tables to see overview
-php vendor/bin/dynamiccrud list:tables
+php vendor/bin/morpheus list:tables
 
 # 3. Validate specific table
-php vendor/bin/dynamiccrud validate:metadata problematic_table
+php vendor/bin/morpheus validate:metadata problematic_table
 
 # 4. Clear cache
-php vendor/bin/dynamiccrud clear:cache
+php vendor/bin/morpheus clear:cache
 
 # 5. Regenerate metadata if needed
-php vendor/bin/dynamiccrud generate:metadata problematic_table
+php vendor/bin/morpheus generate:metadata problematic_table
 ```
 
 ### Workflow 4: Webhook Setup (NEW v2.4)
 
 ```bash
 # 1. Configure webhook
-php vendor/bin/dynamiccrud webhook:configure users https://webhook.site/abc123
+php vendor/bin/morpheus webhook:configure users https://webhook.site/abc123
 
 # 2. Test webhook
-php vendor/bin/dynamiccrud test:webhook users
+php vendor/bin/morpheus test:webhook users
 
 # 3. Check webhook.site for test payload
 ```
@@ -473,17 +473,17 @@ php vendor/bin/dynamiccrud test:webhook users
 
 ```bash
 # 1. Export metadata from source
-php vendor/bin/dynamiccrud metadata:export users --output=users.json
-php vendor/bin/dynamiccrud metadata:export posts --output=posts.json
+php vendor/bin/morpheus metadata:export users --output=users.json
+php vendor/bin/morpheus metadata:export posts --output=posts.json
 
 # 2. Transfer files to target environment
 
 # 3. Import metadata on target
-php vendor/bin/dynamiccrud metadata:import users.json
-php vendor/bin/dynamiccrud metadata:import posts.json
+php vendor/bin/morpheus metadata:import users.json
+php vendor/bin/morpheus metadata:import posts.json
 
 # 4. Validate
-php vendor/bin/dynamiccrud validate:metadata users
+php vendor/bin/morpheus validate:metadata users
 ```
 
 ---
@@ -514,7 +514,7 @@ cp dynamiccrud.json.example dynamiccrud.json
 After generating metadata, customize before applying:
 ```bash
 # 1. Generate
-php vendor/bin/dynamiccrud generate:metadata users
+php vendor/bin/morpheus generate:metadata users
 
 # 2. Copy SQL output
 
@@ -539,7 +539,7 @@ php vendor/bin/dynamiccrud generate:metadata users
 Generate metadata for multiple tables:
 ```bash
 for table in users posts comments; do
-    php vendor/bin/dynamiccrud generate:metadata $table
+    php vendor/bin/morpheus generate:metadata $table
 done
 ```
 
@@ -549,9 +549,9 @@ done
 # .github/workflows/deploy.yml
 - name: Validate Metadata
   run: |
-    php vendor/bin/dynamiccrud list:tables
-    php vendor/bin/dynamiccrud validate:metadata users
-    php vendor/bin/dynamiccrud validate:metadata posts
+    php vendor/bin/morpheus list:tables
+    php vendor/bin/morpheus validate:metadata users
+    php vendor/bin/morpheus validate:metadata posts
 ```
 
 ---
@@ -564,7 +564,7 @@ done
 
 **Solution:**
 ```bash
-php vendor/bin/dynamiccrud init
+php vendor/bin/morpheus init
 ```
 
 ### Error: "Invalid configuration file"
@@ -574,7 +574,7 @@ php vendor/bin/dynamiccrud init
 **Solution:** Validate JSON syntax or regenerate:
 ```bash
 rm dynamiccrud.json
-php vendor/bin/dynamiccrud init
+php vendor/bin/morpheus init
 ```
 
 ### Error: "Table not found"
@@ -583,7 +583,7 @@ php vendor/bin/dynamiccrud init
 
 **Solution:** Check table name and database connection:
 ```bash
-php vendor/bin/dynamiccrud list:tables
+php vendor/bin/morpheus list:tables
 ```
 
 ### Cache Not Clearing
@@ -614,7 +614,7 @@ $pdo = new PDO(
 ### Programmatic Metadata Generation
 
 ```php
-use DynamicCRUD\SchemaAnalyzer;
+use Morpheus\SchemaAnalyzer;
 
 $pdo = new PDO(/* ... */);
 $analyzer = new SchemaAnalyzer($pdo);

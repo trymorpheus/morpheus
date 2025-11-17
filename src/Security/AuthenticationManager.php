@@ -1,6 +1,6 @@
 <?php
 
-namespace DynamicCRUD\Security;
+namespace Morpheus\Security;
 
 use PDO;
 

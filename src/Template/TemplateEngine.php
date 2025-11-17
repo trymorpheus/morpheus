@@ -1,6 +1,6 @@
 <?php
 
-namespace DynamicCRUD\Template;
+namespace Morpheus\Template;
 
 interface TemplateEngine
 {

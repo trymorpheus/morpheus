@@ -1,6 +1,6 @@
 <?php
 
-namespace DynamicCRUD\Frontend;
+namespace Morpheus\Frontend;
 
 /**
  * Route

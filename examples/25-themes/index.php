@@ -2,12 +2,12 @@
 
 require __DIR__ . '/../../vendor/autoload.php';
 
-use DynamicCRUD\Theme\ThemeManager;
-use DynamicCRUD\Theme\Themes\MinimalTheme;
-use DynamicCRUD\Theme\Themes\ModernTheme;
-use DynamicCRUD\Theme\Themes\ClassicTheme;
-use DynamicCRUD\Frontend\FrontendRenderer;
-use DynamicCRUD\Frontend\FrontendRouter;
+use Morpheus\Theme\ThemeManager;
+use Morpheus\Theme\Themes\MinimalTheme;
+use Morpheus\Theme\Themes\ModernTheme;
+use Morpheus\Theme\Themes\ClassicTheme;
+use Morpheus\Frontend\FrontendRenderer;
+use Morpheus\Frontend\FrontendRouter;
 
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'root', 'rootpassword');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

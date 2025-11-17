@@ -13,7 +13,7 @@ The simplest possible CRUD implementation with DynamicCRUD.
 
 ```php
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'root', 'pass');
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $result = $crud->handleSubmission();

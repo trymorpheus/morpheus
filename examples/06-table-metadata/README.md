@@ -73,7 +73,7 @@ CREATE TABLE posts (
 ### 2. Use in PHP (Zero Config!)
 
 ```php
-$crud = new DynamicCRUD($pdo, 'posts');
+$crud = new Morpheus($pdo, 'posts');
 echo $crud->renderForm(); // Behaviors apply automatically!
 ```
 

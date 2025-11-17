@@ -56,12 +56,12 @@ Complete installation wizard for DynamicCRUD - WordPress-style setup in 60 secon
 
 **Interactive Mode:**
 ```bash
-php bin/dynamiccrud install --interactive
+php bin/morpheus install --interactive
 ```
 
 **Non-Interactive Mode:**
 ```bash
-php bin/dynamiccrud install \
+php bin/morpheus install \
   --host=localhost \
   --database=dynamiccrud \
   --username=root \

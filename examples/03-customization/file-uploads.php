@@ -11,15 +11,15 @@
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-use DynamicCRUD\DynamicCRUD;
-use DynamicCRUD\Cache\FileCacheStrategy;
+use Morpheus\DynamicCRUD;
+use Morpheus\Cache\FileCacheStrategy;
 
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'root', 'rootpassword');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 $cache = new FileCacheStrategy();
 $uploadDir = __DIR__ . '/../uploads';
-$crud = new DynamicCRUD($pdo, 'products', $cache, $uploadDir);
+$crud = new Morpheus($pdo, 'products', $cache, $uploadDir);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $result = $crud->handleSubmission();

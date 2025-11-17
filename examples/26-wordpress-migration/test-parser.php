@@ -2,7 +2,7 @@
 
 require __DIR__ . '/../../vendor/autoload.php';
 
-use DynamicCRUD\Migration\WXRParser;
+use Morpheus\Migration\WXRParser;
 
 echo "🔍 Testing WordPress XML Parser\n\n";
 

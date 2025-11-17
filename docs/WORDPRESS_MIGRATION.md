@@ -44,7 +44,7 @@ In your WordPress admin:
 ### 2. Install DynamicCRUD
 
 ```bash
-composer require dynamiccrud/dynamiccrud
+composer require trymorpheus/morpheus
 ```
 
 ### 3. Setup Database
@@ -67,10 +67,10 @@ php examples/26-wordpress-migration/setup.php
 
 ```bash
 # Basic migration
-php bin/dynamiccrud migrate:wordpress export.xml
+php bin/morpheus migrate:wordpress export.xml
 
 # With options
-php bin/dynamiccrud migrate:wordpress export.xml \
+php bin/morpheus migrate:wordpress export.xml \
   --prefix=wp_ \
   --generate-redirects \
   --verbose
@@ -79,7 +79,7 @@ php bin/dynamiccrud migrate:wordpress export.xml \
 ### Using PHP
 
 ```php
-use DynamicCRUD\Migration\WordPressMigrator;
+use Morpheus\Migration\WordPressMigrator;
 
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 $migrator = new WordPressMigrator($pdo, 'wp_', __DIR__ . '/uploads');
@@ -131,7 +131,7 @@ This creates:
 ### Step 3: Run Migration
 
 ```bash
-php bin/dynamiccrud migrate:wordpress wordpress-export.xml \
+php bin/morpheus migrate:wordpress wordpress-export.xml \
   --prefix=wp_ \
   --generate-redirects \
   --verbose
@@ -196,7 +196,7 @@ cp redirects.htaccess /var/www/html/.htaccess
 ### Command
 
 ```bash
-php bin/dynamiccrud migrate:wordpress <wxr-file> [options]
+php bin/morpheus migrate:wordpress <wxr-file> [options]
 ```
 
 ### Options
@@ -221,24 +221,24 @@ php bin/dynamiccrud migrate:wordpress <wxr-file> [options]
 
 ```bash
 # Basic migration
-php bin/dynamiccrud migrate:wordpress export.xml
+php bin/morpheus migrate:wordpress export.xml
 
 # With table prefix
-php bin/dynamiccrud migrate:wordpress export.xml --prefix=blog_
+php bin/morpheus migrate:wordpress export.xml --prefix=blog_
 
 # Skip media download
-php bin/dynamiccrud migrate:wordpress export.xml --no-media
+php bin/morpheus migrate:wordpress export.xml --no-media
 
 # Generate nginx redirects
-php bin/dynamiccrud migrate:wordpress export.xml \
+php bin/morpheus migrate:wordpress export.xml \
   --generate-redirects \
   --redirect-format=nginx
 
 # Dry run (preview)
-php bin/dynamiccrud migrate:wordpress export.xml --dry-run
+php bin/morpheus migrate:wordpress export.xml --dry-run
 
 # Custom database
-php bin/dynamiccrud migrate:wordpress export.xml \
+php bin/morpheus migrate:wordpress export.xml \
   --host=db.example.com \
   --database=production \
   --username=dbuser \
@@ -252,7 +252,7 @@ php bin/dynamiccrud migrate:wordpress export.xml \
 ### Basic Usage
 
 ```php
-use DynamicCRUD\Migration\WordPressMigrator;
+use Morpheus\Migration\WordPressMigrator;
 
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 $migrator = new WordPressMigrator($pdo, 'wp_', __DIR__ . '/uploads');
@@ -291,9 +291,9 @@ file_put_contents('redirects.conf', $nginx);
 ### Individual Components
 
 ```php
-use DynamicCRUD\Migration\WXRParser;
-use DynamicCRUD\Migration\ContentMapper;
-use DynamicCRUD\Migration\MediaDownloader;
+use Morpheus\Migration\WXRParser;
+use Morpheus\Migration\ContentMapper;
+use Morpheus\Migration\MediaDownloader;
 
 // Parse WXR file
 $parser = new WXRParser();
@@ -391,8 +391,8 @@ rewrite ^/2024/01/my-post/$ /blog/my-post permanent;
 Apply a theme to your blog:
 
 ```php
-use DynamicCRUD\Theme\ThemeManager;
-use DynamicCRUD\Theme\Themes\ModernTheme;
+use Morpheus\Theme\ThemeManager;
+use Morpheus\Theme\Themes\ModernTheme;
 
 $themeManager = new ThemeManager($pdo, __DIR__ . '/themes');
 $themeManager->register('modern', new ModernTheme(__DIR__ . '/themes'));
@@ -417,7 +417,7 @@ Visit your new blog:
 
 **Solution:** Split the export or increase PHP memory:
 ```bash
-php -d memory_limit=512M bin/dynamiccrud migrate:wordpress large-export.xml
+php -d memory_limit=512M bin/morpheus migrate:wordpress large-export.xml
 ```
 
 ### Timeout
@@ -426,7 +426,7 @@ php -d memory_limit=512M bin/dynamiccrud migrate:wordpress large-export.xml
 
 **Solution:** Increase PHP timeout:
 ```bash
-php -d max_execution_time=300 bin/dynamiccrud migrate:wordpress export.xml
+php -d max_execution_time=300 bin/morpheus migrate:wordpress export.xml
 ```
 
 ### Media Download Fails
@@ -435,7 +435,7 @@ php -d max_execution_time=300 bin/dynamiccrud migrate:wordpress export.xml
 
 **Solution:** Skip media download and handle separately:
 ```bash
-php bin/dynamiccrud migrate:wordpress export.xml --no-media
+php bin/morpheus migrate:wordpress export.xml --no-media
 ```
 
 ### Duplicate Slugs
@@ -538,8 +538,8 @@ ALTER DATABASE test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 ## Support
 
-**Issues:** https://github.com/mcarbonell/DynamicCRUD/issues  
-**Discussions:** https://github.com/mcarbonell/DynamicCRUD/discussions  
+**Issues:** https://github.com/trymorpheus/morpheus/issues  
+**Discussions:** https://github.com/trymorpheus/morpheus/discussions  
 **Email:** support@dynamiccrud.com
 
 ---

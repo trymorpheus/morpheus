@@ -42,7 +42,7 @@ $config->set('application', [
 ### 2. Enable Global Config
 
 ```php
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 $crud->enableGlobalConfig(); // That's it!
 
 echo $crud->renderForm(); // Theme applied automatically!

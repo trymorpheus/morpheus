@@ -199,7 +199,7 @@ INSERT INTO _routes (path, handler, priority) VALUES
 ### DatabaseRouter Class
 
 ```php
-namespace DynamicCRUD\Routing;
+namespace Morpheus\Routing;
 
 class DatabaseRouter
 {
@@ -262,7 +262,7 @@ class DatabaseRouter
 ### Route Value Object
 
 ```php
-namespace DynamicCRUD\Routing;
+namespace Morpheus\Routing;
 
 class Route
 {
@@ -278,7 +278,7 @@ class Route
 ### Usage Example
 
 ```php
-use DynamicCRUD\Routing\DatabaseRouter;
+use Morpheus\Routing\DatabaseRouter;
 
 $router = new DatabaseRouter($pdo);
 
@@ -300,7 +300,7 @@ if ($route) {
 ### Route Manager UI
 
 ```php
-use DynamicCRUD\Admin\AdminPanel;
+use Morpheus\Admin\AdminPanel;
 
 $admin = new AdminPanel($pdo);
 
@@ -334,19 +334,19 @@ echo "Params: " . json_encode($result->params) . "\n";
 
 ```bash
 # List all routes
-php bin/dynamiccrud route:list
+php bin/morpheus route:list
 
 # Add route
-php bin/dynamiccrud route:add /blog/:slug ContentType:Blog:single
+php bin/morpheus route:add /blog/:slug ContentType:Blog:single
 
 # Test route
-php bin/dynamiccrud route:test /blog/my-post
+php bin/morpheus route:test /blog/my-post
 
 # Clear route cache
-php bin/dynamiccrud route:cache:clear
+php bin/morpheus route:cache:clear
 
 # Generate routes from content types
-php bin/dynamiccrud route:generate blog
+php bin/morpheus route:generate blog
 ```
 
 ---
@@ -394,7 +394,7 @@ class DatabaseRouter
 
 ```bash
 # Compile routes to PHP file for production
-php bin/dynamiccrud route:compile
+php bin/morpheus route:compile
 
 # Generates: cache/routes.php
 # Contains: Pre-compiled route patterns and handlers

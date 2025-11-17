@@ -36,9 +36,9 @@
 ## Architectural Patterns
 
 ### 1. Facade Pattern (Main API)
-**Example: DynamicCRUD class**
+**Example: Morpheus class**
 ```php
-class DynamicCRUD
+class Morpheus
 {
     private PDO $pdo;
     private CRUDHandler $handler;
@@ -136,7 +136,7 @@ private function executeHook(string $event, ...$args)
 ### 6. Builder Pattern (Fluent Interface)
 **Example: Method chaining**
 ```php
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 $crud->addManyToMany('tags', 'user_tags', 'user_id', 'tag_id', 'tags')
      ->addHook('beforeSave', fn($data) => $data)
      ->enableAudit($userId)
@@ -520,7 +520,7 @@ if (password_verify($password, $hash)) {
 
 ### 1. Test Structure
 ```php
-class DynamicCRUDTest extends TestCase
+class MorpheusTest extends TestCase
 {
     private PDO $pdo;
     
@@ -532,7 +532,7 @@ class DynamicCRUDTest extends TestCase
     public function testBasicCRUD(): void
     {
         // Arrange
-        $crud = new DynamicCRUD($this->pdo, 'users');
+        $crud = new Morpheus($this->pdo, 'users');
         
         // Act
         $result = $crud->handleSubmission();

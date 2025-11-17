@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-use DynamicCRUD\UI\Components;
+use Morpheus\UI\Components;
 
 // Set custom theme (optional)
 Components::setTheme([
@@ -222,9 +222,9 @@ Components::setTheme([
             
             <div class="demo">
                 <?= Components::accordion([
-                    ['title' => 'What is DynamicCRUD?', 'content' => '<p>DynamicCRUD is a powerful PHP library that automatically generates CRUD forms with validation based on your database structure.</p>'],
-                    ['title' => 'How do I install it?', 'content' => '<p>Simply run: <code>composer require dynamiccrud/dynamiccrud</code></p>'],
-                    ['title' => 'Is it free?', 'content' => '<p>Yes! DynamicCRUD is open-source and licensed under MIT.</p>']
+                    ['title' => 'What is DynamicCRUD?', 'content' => '<p>Morpheus is a powerful PHP library that automatically generates CRUD forms with validation based on your database structure.</p>'],
+                    ['title' => 'How do I install it?', 'content' => '<p>Simply run: <code>composer require trymorpheus/morpheus</code></p>'],
+                    ['title' => 'Is it free?', 'content' => '<p>Yes! Morpheus is open-source and licensed under MIT.</p>']
                 ]) ?>
                 <div class="code">Components::accordion([['title' => 'Question', 'content' => 'Answer']])</div>
             </div>

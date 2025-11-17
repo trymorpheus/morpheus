@@ -103,7 +103,7 @@ Command-line interface for WordPress migration.
 
 **Usage:**
 ```bash
-php bin/dynamiccrud migrate:wordpress export.xml --prefix=wp_ --generate-redirects
+php bin/morpheus migrate:wordpress export.xml --prefix=wp_ --generate-redirects
 ```
 
 ### Step 6: Documentation ✅

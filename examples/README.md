@@ -243,7 +243,7 @@ example-name.php
 ### Pattern 1: Form with Submission
 
 ```php
-$crud = new DynamicCRUD($pdo, 'table');
+$crud = new Morpheus($pdo, 'table');
 
 if ($_POST) {
     $result = $crud->handleSubmission();
@@ -256,7 +256,7 @@ echo $crud->renderForm($_GET['id'] ?? null);
 ### Pattern 2: List with Actions
 
 ```php
-$crud = new DynamicCRUD($pdo, 'table');
+$crud = new Morpheus($pdo, 'table');
 
 echo $crud->renderList();
 ```
@@ -264,7 +264,7 @@ echo $crud->renderList();
 ### Pattern 3: Export/Import
 
 ```php
-$crud = new DynamicCRUD($pdo, 'table');
+$crud = new Morpheus($pdo, 'table');
 
 // Export
 $crud->downloadExport('file.csv');
@@ -302,7 +302,7 @@ php -S localhost:8001
 
 Clear cache:
 ```bash
-php ../bin/dynamiccrud clear:cache
+php ../bin/morpheus clear:cache
 ```
 
 ---

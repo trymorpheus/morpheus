@@ -42,7 +42,7 @@ The UI Components Library provides 15 reusable, accessible, and beautiful compon
 Components are included with DynamicCRUD. No additional installation required.
 
 ```bash
-composer require dynamiccrud/dynamiccrud
+composer require trymorpheus/morpheus
 ```
 
 ---
@@ -53,7 +53,7 @@ composer require dynamiccrud/dynamiccrud
 <?php
 require 'vendor/autoload.php';
 
-use DynamicCRUD\UI\Components;
+use Morpheus\UI\Components;
 
 // Optional: Set custom theme
 Components::setTheme([
@@ -343,7 +343,7 @@ Collapsible content sections for FAQs and expandable content.
 ```php
 echo Components::accordion([
     ['title' => 'What is DynamicCRUD?', 'content' => '<p>A PHP library for CRUD operations.</p>'],
-    ['title' => 'How do I install it?', 'content' => '<p>Run: composer require dynamiccrud/dynamiccrud</p>'],
+    ['title' => 'How do I install it?', 'content' => '<p>Run: composer require trymorpheus/morpheus</p>'],
     ['title' => 'Is it free?', 'content' => '<p>Yes, it\'s open-source under MIT license.</p>']
 ], 'faq-accordion');
 ```
@@ -491,7 +491,7 @@ Customize component colors to match your brand identity.
 ### Set Theme
 
 ```php
-use DynamicCRUD\UI\Components;
+use Morpheus\UI\Components;
 
 Components::setTheme([
     'primary' => '#667eea',
@@ -620,7 +620,7 @@ Components generate inline styles. For production, consider:
 ### With DynamicCRUD Forms
 
 ```php
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 
 echo Components::card(
     'Create User',
@@ -632,7 +632,7 @@ echo Components::card(
 ### With List Views
 
 ```php
-$crud = new DynamicCRUD($pdo, 'products');
+$crud = new Morpheus($pdo, 'products');
 
 echo Components::card(
     'Products',
@@ -644,7 +644,7 @@ echo Components::card(
 ### With Admin Panel
 
 ```php
-use DynamicCRUD\Admin\AdminPanel;
+use Morpheus\Admin\AdminPanel;
 
 $admin = new AdminPanel($pdo);
 $admin->addTable('users');

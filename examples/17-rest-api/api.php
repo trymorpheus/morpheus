@@ -2,7 +2,7 @@
 header('Content-Type: text/html; charset=UTF-8');
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-use DynamicCRUD\API\RestAPIGenerator;
+use Morpheus\API\RestAPIGenerator;
 
 // Database connection
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'root', 'rootpassword');

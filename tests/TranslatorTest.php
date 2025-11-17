@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use DynamicCRUD\I18n\Translator;
+use Morpheus\I18n\Translator;
 
 class TranslatorTest extends TestCase
 {

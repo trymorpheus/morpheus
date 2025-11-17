@@ -1,6 +1,6 @@
 <?php
 
-namespace DynamicCRUD\CLI;
+namespace Morpheus\CLI;
 
 class Application
 {

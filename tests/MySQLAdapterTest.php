@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use DynamicCRUD\Database\MySQLAdapter;
+use Morpheus\Database\MySQLAdapter;
 
 class MySQLAdapterTest extends TestCase
 {

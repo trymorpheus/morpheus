@@ -1,6 +1,6 @@
 <?php
 
-namespace DynamicCRUD\Workflow;
+namespace Morpheus\Workflow;
 
 use PDO;
 

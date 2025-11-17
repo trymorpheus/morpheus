@@ -1,9 +1,9 @@
 <?php
 
-namespace DynamicCRUD\Tests;
+namespace Morpheus\Tests;
 
 use PHPUnit\Framework\TestCase;
-use DynamicCRUD\Admin\AdminPanel;
+use Morpheus\Admin\AdminPanel;
 use PDO;
 
 /**

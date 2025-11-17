@@ -1,9 +1,9 @@
 <?php
 
-namespace DynamicCRUD\Tests\CLI;
+namespace Morpheus\Tests\CLI;
 
 use PHPUnit\Framework\TestCase;
-use DynamicCRUD\CLI\Commands\ImportSQLCommand;
+use Morpheus\CLI\Commands\ImportSQLCommand;
 
 class ImportSQLCommandTest extends TestCase
 {

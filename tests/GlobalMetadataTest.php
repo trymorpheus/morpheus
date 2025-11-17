@@ -1,9 +1,9 @@
 <?php
 
-namespace DynamicCRUD\Tests;
+namespace Morpheus\Tests;
 
 use PHPUnit\Framework\TestCase;
-use DynamicCRUD\GlobalMetadata;
+use Morpheus\GlobalMetadata;
 
 class GlobalMetadataTest extends TestCase
 {

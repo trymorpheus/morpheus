@@ -1,8 +1,8 @@
 #!/usr/bin/env php
 <?php
 
-// DynamicCRUD CLI Tool
-// Usage: php dynamiccrud <command> [options]
+// Morpheus CLI Tool
+// Usage: php morpheus <command> [options]
 
 if (php_sapi_name() !== 'cli') {
     exit('This script must be run from the command line.' . PHP_EOL);
@@ -27,7 +27,7 @@ if (!$autoloaded) {
     exit('Error: Composer autoloader not found. Run: composer install' . PHP_EOL);
 }
 
-use DynamicCRUD\CLI\Application;
+use Morpheus\CLI\Application;
 
 $app = new Application();
 $app->run($argv);

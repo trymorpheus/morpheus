@@ -1,8 +1,8 @@
 <?php
 
-namespace DynamicCRUD\Tests;
+namespace Morpheus\Tests;
 
-use DynamicCRUD\FormGenerator;
+use Morpheus\FormGenerator;
 use PHPUnit\Framework\TestCase;
 
 class FormGeneratorTest extends TestCase

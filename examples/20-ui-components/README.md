@@ -166,7 +166,7 @@ Components::toast('Saved successfully!', 'success', 3000);
 Customize component colors to match your brand:
 
 ```php
-use DynamicCRUD\UI\Components;
+use Morpheus\UI\Components;
 
 Components::setTheme([
     'primary' => '#667eea',

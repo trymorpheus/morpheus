@@ -1,11 +1,11 @@
 <?php
 
-namespace DynamicCRUD;
+namespace Morpheus;
 
 use PDO;
-use DynamicCRUD\I18n\Translator;
-use DynamicCRUD\Template\TemplateEngine;
-use DynamicCRUD\UI\Components;
+use Morpheus\I18n\Translator;
+use Morpheus\Template\TemplateEngine;
+use Morpheus\UI\Components;
 
 class FormGenerator
 {

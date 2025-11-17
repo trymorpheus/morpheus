@@ -1,6 +1,6 @@
 <?php
 
-namespace DynamicCRUD\Theme;
+namespace Morpheus\Theme;
 
 interface Theme
 {

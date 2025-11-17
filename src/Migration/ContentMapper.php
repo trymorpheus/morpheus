@@ -1,6 +1,6 @@
 <?php
 
-namespace DynamicCRUD\Migration;
+namespace Morpheus\Migration;
 
 class ContentMapper
 {

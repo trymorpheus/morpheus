@@ -1,9 +1,9 @@
 <?php
 
-namespace DynamicCRUD\Tests;
+namespace Morpheus\Tests;
 
 use PHPUnit\Framework\TestCase;
-use DynamicCRUD\Workflow\WorkflowTemplate;
+use Morpheus\Workflow\WorkflowTemplate;
 
 class WorkflowTemplateTest extends TestCase
 {

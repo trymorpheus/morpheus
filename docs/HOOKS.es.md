@@ -27,7 +27,7 @@ El sistema de hooks permite ejecutar código personalizado en puntos clave del c
 ## Uso Básico
 
 ```php
-$crud = new DynamicCRUD($pdo, 'posts');
+$crud = new Morpheus($pdo, 'posts');
 
 // Registrar un hook
 $crud->beforeSave(function($data) {

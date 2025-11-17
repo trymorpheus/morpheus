@@ -45,7 +45,7 @@ COMMENT '{
 ### PHP Code
 
 ```php
-$crud = new DynamicCRUD($pdo, 'properties');
+$crud = new Morpheus($pdo, 'properties');
 echo $crud->renderForm(); // Drag & drop UI automatic!
 ```
 

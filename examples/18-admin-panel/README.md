@@ -14,7 +14,7 @@ Panel de administración completo con navegación, dashboard, y gestión CRUD in
 ## Uso Básico
 
 ```php
-use DynamicCRUD\Admin\AdminPanel;
+use Morpheus\Admin\AdminPanel;
 
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 
@@ -94,7 +94,7 @@ $admin->addTable('logs', ['hidden' => true]);
 ## Integración con Autenticación
 
 ```php
-use DynamicCRUD\Security\AuthenticationManager;
+use Morpheus\Security\AuthenticationManager;
 
 session_start();
 
@@ -113,7 +113,7 @@ echo $admin->render();
 ## Integración con RBAC
 
 ```php
-use DynamicCRUD\Security\PermissionManager;
+use Morpheus\Security\PermissionManager;
 
 $userId = $_SESSION['user_id'];
 $permissionManager = new PermissionManager($pdo, 'users', $userId);

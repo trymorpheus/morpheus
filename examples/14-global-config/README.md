@@ -23,23 +23,23 @@ php -S localhost:8000 -t examples/14-global-config
 
 ```bash
 # Set configuration
-php bin/dynamiccrud config:set application.name "My App"
-php bin/dynamiccrud config:set theme '{"primary_color":"#667eea"}'
+php bin/morpheus config:set application.name "My App"
+php bin/morpheus config:set theme '{"primary_color":"#667eea"}'
 
 # Get configuration
-php bin/dynamiccrud config:get application.name
+php bin/morpheus config:get application.name
 
 # List all configuration
-php bin/dynamiccrud config:list
+php bin/morpheus config:list
 
 # Delete configuration
-php bin/dynamiccrud config:delete old.setting
+php bin/morpheus config:delete old.setting
 ```
 
 ## PHP Usage
 
 ```php
-use DynamicCRUD\GlobalMetadata;
+use Morpheus\GlobalMetadata;
 
 $config = new GlobalMetadata($pdo);
 

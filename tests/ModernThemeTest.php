@@ -1,9 +1,9 @@
 <?php
 
-namespace DynamicCRUD\Tests;
+namespace Morpheus\Tests;
 
 use PHPUnit\Framework\TestCase;
-use DynamicCRUD\Theme\Themes\ModernTheme;
+use Morpheus\Theme\Themes\ModernTheme;
 
 class ModernThemeTest extends TestCase
 {

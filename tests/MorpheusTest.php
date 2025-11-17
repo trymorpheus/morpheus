@@ -1,9 +1,9 @@
 <?php
 
-namespace DynamicCRUD\Tests;
+namespace Morpheus\Tests;
 
-use DynamicCRUD\DynamicCRUD;
-use DynamicCRUD\Cache\FileCacheStrategy;
+use Morpheus\Morpheus;
+use Morpheus\Cache\FileCacheStrategy;
 use PHPUnit\Framework\TestCase;
 use PDO;
 
@@ -11,10 +11,10 @@ use PDO;
  * @runTestsInSeparateProcesses
  * @preserveGlobalState disabled
  */
-class DynamicCRUDTest extends TestCase
+class MorpheusTest extends TestCase
 {
     private PDO $pdo;
-    private DynamicCRUD $crud;
+    private Morpheus $crud;
 
     protected function setUp(): void
     {
@@ -25,7 +25,7 @@ class DynamicCRUDTest extends TestCase
         );
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         
-        $this->crud = new DynamicCRUD($this->pdo, 'users');
+        $this->crud = new Morpheus($this->pdo, 'users');
         $this->cleanupTestData();
     }
 
@@ -41,16 +41,16 @@ class DynamicCRUDTest extends TestCase
 
     public function testConstructor(): void
     {
-        $crud = new DynamicCRUD($this->pdo, 'users');
-        $this->assertInstanceOf(DynamicCRUD::class, $crud);
+        $crud = new Morpheus($this->pdo, 'users');
+        $this->assertInstanceOf(Morpheus::class, $crud);
     }
 
     public function testConstructorWithCache(): void
     {
         $cache = new FileCacheStrategy(__DIR__ . '/temp_cache');
-        $crud = new DynamicCRUD($this->pdo, 'users', $cache);
+        $crud = new Morpheus($this->pdo, 'users', $cache);
         
-        $this->assertInstanceOf(DynamicCRUD::class, $crud);
+        $this->assertInstanceOf(Morpheus::class, $crud);
         
         if (is_dir(__DIR__ . '/temp_cache')) {
             $files = glob(__DIR__ . '/temp_cache/*');
@@ -201,7 +201,7 @@ class DynamicCRUDTest extends TestCase
             ->afterSave(function($id, $data) {})
             ->enableAudit(1);
 
-        $this->assertInstanceOf(DynamicCRUD::class, $result);
+        $this->assertInstanceOf(Morpheus::class, $result);
     }
 
     public function testAuditIntegration(): void
@@ -244,7 +244,7 @@ class DynamicCRUDTest extends TestCase
             'tags'
         );
 
-        $this->assertInstanceOf(DynamicCRUD::class, $result);
+        $this->assertInstanceOf(Morpheus::class, $result);
     }
 
     public function testValidationFailure(): void

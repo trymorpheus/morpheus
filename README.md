@@ -1,15 +1,15 @@
 # DynamicCRUD
 
-[![Tests](https://github.com/mcarbonell/DynamicCRUD/workflows/Tests/badge.svg)](https://github.com/mcarbonell/DynamicCRUD/actions)
-[![Code Quality](https://github.com/mcarbonell/DynamicCRUD/workflows/Code%20Quality/badge.svg)](https://github.com/mcarbonell/DynamicCRUD/actions)
-[![Packagist Version](https://img.shields.io/packagist/v/dynamiccrud/dynamiccrud)](https://packagist.org/packages/dynamiccrud/dynamiccrud)
-[![PHP Version](https://img.shields.io/packagist/php-v/dynamiccrud/dynamiccrud)](https://packagist.org/packages/dynamiccrud/dynamiccrud)
-[![License](https://img.shields.io/github/license/mcarbonell/DynamicCRUD)](https://github.com/mcarbonell/DynamicCRUD/blob/main/LICENSE)
-[![Downloads](https://img.shields.io/packagist/dt/dynamiccrud/dynamiccrud)](https://packagist.org/packages/dynamiccrud/dynamiccrud)
+[![Tests](https://github.com/trymorpheus/morpheus/workflows/Tests/badge.svg)](https://github.com/trymorpheus/morpheus/actions)
+[![Code Quality](https://github.com/trymorpheus/morpheus/workflows/Code%20Quality/badge.svg)](https://github.com/trymorpheus/morpheus/actions)
+[![Packagist Version](https://img.shields.io/packagist/v/trymorpheus/morpheus)](https://packagist.org/packages/trymorpheus/morpheus)
+[![PHP Version](https://img.shields.io/packagist/php-v/trymorpheus/morpheus)](https://packagist.org/packages/trymorpheus/morpheus)
+[![License](https://img.shields.io/github/license/mcarbonell/DynamicCRUD)](https://github.com/trymorpheus/morpheus/blob/main/LICENSE)
+[![Downloads](https://img.shields.io/packagist/dt/trymorpheus/morpheus)](https://packagist.org/packages/trymorpheus/morpheus)
 
 **The Universal CMS - Start as a blog, grow into anything.**
 
-DynamicCRUD is the world's first **Universal CMS** that combines the simplicity of WordPress with the power of a custom application generator. Start with a blog in 60 seconds, then grow into e-commerce, CRM, or any custom application - all without migrations, plugins, or code.
+Morpheus is the world's first **Universal CMS** that combines the simplicity of WordPress with the power of a custom application generator. Start with a blog in 60 seconds, then grow into e-commerce, CRM, or any custom application - all without migrations, plugins, or code.
 
 **🎯 Perfect for:**
 - 📝 Bloggers seeking a faster WordPress alternative
@@ -57,7 +57,7 @@ DynamicCRUD is the world's first **Universal CMS** that combines the simplicity 
 ## 📦 Installation
 
 ```bash
-composer require dynamiccrud/dynamiccrud
+composer require trymorpheus/morpheus
 ```
 
 **Requirements:** PHP 8.0+, MySQL 5.7+ or PostgreSQL 12+, PDO extension
@@ -67,9 +67,9 @@ composer require dynamiccrud/dynamiccrud
 After installation, initialize your project:
 
 ```bash
-php bin/dynamiccrud init
-php bin/dynamiccrud list:tables
-php bin/dynamiccrud generate:metadata users
+php bin/morpheus init
+php bin/morpheus list:tables
+php bin/morpheus generate:metadata users
 ```
 
 ---
@@ -119,7 +119,7 @@ php bin/dynamiccrud generate:metadata users
 - Beautiful responsive UI
 
 ```php
-use DynamicCRUD\ContentTypes\ContentTypeManager;
+use Morpheus\ContentTypes\ContentTypeManager;
 
 $manager = new ContentTypeManager($pdo);
 $manager->install('blog'); // Installs 5 tables with full metadata
@@ -235,7 +235,7 @@ echo $admin->render(); // Full admin panel
 **UI Components Library** - 15 reusable, accessible, and beautiful components for building modern UIs!
 
 ```php
-use DynamicCRUD\UI\Components;
+use Morpheus\UI\Components;
 
 // Set custom theme
 Components::setTheme(['primary' => '#667eea']);
@@ -268,7 +268,7 @@ echo Components::pagination(3, 10);
 **Workflow Engine** - State management with transitions, permissions, and history tracking!
 
 ```php
-$crud = new DynamicCRUD($pdo, 'orders');
+$crud = new Morpheus($pdo, 'orders');
 
 $crud->enableWorkflow([
     'field' => 'status',
@@ -310,7 +310,7 @@ echo $crud->renderForm($id); // Automatic transition buttons!
 **Admin Panel Generator** - Complete admin panel with navigation, dashboard, and integrated CRUD!
 
 ```php
-use DynamicCRUD\Admin\AdminPanel;
+use Morpheus\Admin\AdminPanel;
 
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 
@@ -347,7 +347,7 @@ echo $admin->render(); // Full admin panel!
 **REST API Generator** - Automatic REST API generation with JWT authentication!
 
 ```php
-use DynamicCRUD\API\RestAPIGenerator;
+use Morpheus\API\RestAPIGenerator;
 
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 
@@ -393,7 +393,7 @@ curl -X POST http://localhost/api/v1/users \
 
 ```php
 // Multiple file upload with drag & drop UI
-$crud = new DynamicCRUD($pdo, 'properties');
+$crud = new Morpheus($pdo, 'properties');
 echo $crud->renderForm(); // Automatic drag & drop for multiple_files type
 
 // Enable global theme configuration
@@ -426,17 +426,17 @@ COMMENT '{"type": "multiple_files", "accept": "image/*", "max_files": 10, "max_s
 
 ```bash
 # Set configuration
-php bin/dynamiccrud config:set application.name "My App"
-php bin/dynamiccrud config:set theme '{"primary_color":"#667eea"}'
+php bin/morpheus config:set application.name "My App"
+php bin/morpheus config:set theme '{"primary_color":"#667eea"}'
 
 # Get configuration
-php bin/dynamiccrud config:get application.name
+php bin/morpheus config:get application.name
 
 # List all configuration
-php bin/dynamiccrud config:list
+php bin/morpheus config:list
 
 # Delete configuration
-php bin/dynamiccrud config:delete old.setting
+php bin/morpheus config:delete old.setting
 ```
 
 ```php
@@ -456,17 +456,17 @@ $appName = $config->get('app.name');
 
 ```bash
 # Export SQL dump (structure + data + metadata)
-php bin/dynamiccrud dump:sql users --output=users.sql
+php bin/morpheus dump:sql users --output=users.sql
 
 # Structure only
-php bin/dynamiccrud dump:sql users --output=structure.sql --structure-only
+php bin/morpheus dump:sql users --output=structure.sql --structure-only
 
 # Data only
-php bin/dynamiccrud dump:sql users --output=data.sql --data-only
+php bin/morpheus dump:sql users --output=data.sql --data-only
 
 # Import SQL dump
-php bin/dynamiccrud import:sql backup.sql
-php bin/dynamiccrud import:sql backup.sql --force  # Skip confirmation
+php bin/morpheus import:sql backup.sql
+php bin/morpheus import:sql backup.sql --force  # Skip confirmation
 ```
 
 👉 [See SQL Dump Examples](examples/13-sql-dump/)
@@ -508,9 +508,9 @@ $template = $crud->generateImportTemplate();
 
 ```bash
 # CLI commands
-php bin/dynamiccrud export:csv users --output=users.csv
-php bin/dynamiccrud import:csv users data.csv --preview
-php bin/dynamiccrud generate:template users --output=template.csv
+php bin/morpheus export:csv users --output=users.csv
+php bin/morpheus import:csv users data.csv --preview
+php bin/morpheus generate:template users --output=template.csv
 ```
 
 👉 [See Export/Import Examples](examples/12-export-import/)
@@ -523,15 +523,15 @@ php bin/dynamiccrud generate:template users --output=template.csv
 
 ```bash
 # Test database connection
-php bin/dynamiccrud test:connection
+php bin/morpheus test:connection
 
 # Configure webhooks easily
-php bin/dynamiccrud webhook:configure users https://webhook.site/abc123
-php bin/dynamiccrud test:webhook users
+php bin/morpheus webhook:configure users https://webhook.site/abc123
+php bin/morpheus test:webhook users
 
 # Export/import metadata for backup and migration
-php bin/dynamiccrud metadata:export users --output=users.json
-php bin/dynamiccrud metadata:import users.json
+php bin/morpheus metadata:export users --output=users.json
+php bin/morpheus metadata:import users.json
 ```
 
 👉 [See CLI Guide](docs/CLI.md)
@@ -567,7 +567,7 @@ CREATE TABLE orders (
 ```
 
 ```php
-$crud = new DynamicCRUD($pdo, 'orders');
+$crud = new Morpheus($pdo, 'orders');
 $result = $crud->handleSubmission();
 // Email sent + webhook triggered automatically!
 ```
@@ -606,7 +606,7 @@ CREATE TABLE products (
 ```
 
 ```php
-$crud = new DynamicCRUD($pdo, 'products');
+$crud = new Morpheus($pdo, 'products');
 $result = $crud->handleSubmission();
 // Validates: unique combinations, conditional requirements, business limits
 ```
@@ -641,7 +641,7 @@ CREATE TABLE users (
 ```
 
 ```php
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 $crud->enableAuthentication();
 
 // Login/Register
@@ -687,7 +687,7 @@ CREATE TABLE posts (
 ```
 
 ```php
-$crud = new DynamicCRUD($pdo, 'posts');
+$crud = new Morpheus($pdo, 'posts');
 echo $crud->renderList();  // Search, filters, pagination - all automatic!
 $crud->handleSubmission(); // Slug and timestamps - automatic!
 ```
@@ -704,14 +704,14 @@ $crud->handleSubmission(); // Slug and timestamps - automatic!
 <?php
 require 'vendor/autoload.php';
 
-use DynamicCRUD\DynamicCRUD;
+use Morpheus\DynamicCRUD;
 
 // MySQL
 $pdo = new PDO('mysql:host=localhost;dbname=mydb', 'user', 'pass');
 // PostgreSQL
 // $pdo = new PDO('pgsql:host=localhost;dbname=mydb', 'user', 'pass');
 
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 
 // That's it! Handle both display and submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -745,7 +745,7 @@ COMMENT '{"hidden": true}';
 ```php
 // If 'posts' table has a foreign key to 'users', 
 // DynamicCRUD automatically creates a dropdown with user names
-$crud = new DynamicCRUD($pdo, 'posts');
+$crud = new Morpheus($pdo, 'posts');
 echo $crud->renderForm();
 // Dropdown shows: "John Doe", "Jane Smith", etc.
 ```
@@ -753,7 +753,7 @@ echo $crud->renderForm();
 ### 4. Many-to-Many Relationships
 
 ```php
-$crud = new DynamicCRUD($pdo, 'posts');
+$crud = new Morpheus($pdo, 'posts');
 
 // Configure M:N relationship (posts ↔ tags via post_tags pivot table)
 $crud->addManyToMany(
@@ -771,7 +771,7 @@ echo $crud->renderForm($_GET['id'] ?? null);
 ### 5. Hooks for Custom Logic
 
 ```php
-$crud = new DynamicCRUD($pdo, 'posts');
+$crud = new Morpheus($pdo, 'posts');
 
 // Auto-generate slug before saving
 $crud->addHook('beforeSave', function($data) {
@@ -790,9 +790,9 @@ $crud->handleSubmission();
 ### 6. Virtual Fields
 
 ```php
-use DynamicCRUD\VirtualField;
+use Morpheus\VirtualField;
 
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 
 // Add password confirmation field (not stored in database)
 $crud->addVirtualField(new VirtualField(
@@ -818,10 +818,10 @@ $crud->beforeSave(function($data) {
 
 ```php
 // Auto-detects language from URL (?lang=es), session, or browser
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 
 // Or force a specific language
-$crud = new DynamicCRUD($pdo, 'users', locale: 'es');
+$crud = new Morpheus($pdo, 'users', locale: 'es');
 
 echo $crud->renderForm();
 // Form, validation messages, and UI are now in Spanish!
@@ -837,13 +837,13 @@ echo $crud->renderForm();
 ### 8. Template System
 
 ```php
-use DynamicCRUD\Template\BladeTemplate;
+use Morpheus\Template\BladeTemplate;
 
 // Create template engine
 $engine = new BladeTemplate(__DIR__ . '/templates', __DIR__ . '/cache');
 
 // Use with DynamicCRUD
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 $crud->setTemplateEngine($engine);
 
 // Or render templates directly
@@ -866,7 +866,7 @@ echo $engine->render('Hello, {{ $name }}!', ['name' => 'World']);
 ### 9. Audit Logging
 
 ```php
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 $crud->enableAudit($userId); // Track who changed what
 
 $crud->handleSubmission();
@@ -1015,7 +1015,7 @@ COMMENT '{"type": "email", "label": "Email", "tooltip": "Required field", "minle
 
 ## 🧪 Testing
 
-DynamicCRUD has comprehensive test coverage:
+Morpheus has comprehensive test coverage:
 
 - **300 tests** with **582+ assertions**
 - **100% passing rate** (300 passing, 0 failing)

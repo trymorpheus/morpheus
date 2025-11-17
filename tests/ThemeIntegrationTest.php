@@ -1,13 +1,13 @@
 <?php
 
-namespace DynamicCRUD\Tests;
+namespace Morpheus\Tests;
 
 use PHPUnit\Framework\TestCase;
-use DynamicCRUD\Theme\ThemeManager;
-use DynamicCRUD\Theme\Themes\MinimalTheme;
-use DynamicCRUD\Theme\Themes\ModernTheme;
-use DynamicCRUD\Frontend\FrontendRenderer;
-use DynamicCRUD\ContentTypes\ContentTypeManager;
+use Morpheus\Theme\ThemeManager;
+use Morpheus\Theme\Themes\MinimalTheme;
+use Morpheus\Theme\Themes\ModernTheme;
+use Morpheus\Frontend\FrontendRenderer;
+use Morpheus\ContentTypes\ContentTypeManager;
 
 /**
  * @runTestsInSeparateProcesses

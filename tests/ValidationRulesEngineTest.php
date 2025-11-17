@@ -1,9 +1,9 @@
 <?php
 
-namespace DynamicCRUD\Tests;
+namespace Morpheus\Tests;
 
 use PHPUnit\Framework\TestCase;
-use DynamicCRUD\ValidationRulesEngine;
+use Morpheus\ValidationRulesEngine;
 use PDO;
 
 class ValidationRulesEngineTest extends TestCase

@@ -1,6 +1,6 @@
 <?php
 
-namespace DynamicCRUD\Database;
+namespace Morpheus\Database;
 
 use PDO;
 

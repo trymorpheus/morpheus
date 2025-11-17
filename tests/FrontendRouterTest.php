@@ -1,9 +1,9 @@
 <?php
 
-namespace DynamicCRUD\Tests;
+namespace Morpheus\Tests;
 
 use PHPUnit\Framework\TestCase;
-use DynamicCRUD\Frontend\FrontendRouter;
+use Morpheus\Frontend\FrontendRouter;
 
 class FrontendRouterTest extends TestCase
 {

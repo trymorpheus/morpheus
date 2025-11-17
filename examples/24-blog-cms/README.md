@@ -1,6 +1,6 @@
 # Blog CMS - Universal CMS Example
 
-**The first working example of DynamicCRUD v4.0 Universal CMS!**
+**The first working example of Morpheus v4.0 Universal CMS!**
 
 This is a complete, functional blog powered by DynamicCRUD - demonstrating that we can compete with WordPress.
 
@@ -111,14 +111,14 @@ $manager->install('ecommerce');
 Want a custom feature? Add it to your existing blog:
 
 ```php
-$crud = new DynamicCRUD($pdo, 'custom_table');
+$crud = new Morpheus($pdo, 'custom_table');
 ```
 
 **No migrations. No plugins. Just works.**
 
 ## 💡 What This Proves
 
-This example demonstrates that DynamicCRUD v4.0 can:
+This example demonstrates that Morpheus v4.0 can:
 
 1. ✅ Replace WordPress for blogging
 2. ✅ Deliver better performance (20x faster)
@@ -138,4 +138,4 @@ This example demonstrates that DynamicCRUD v4.0 can:
 
 ---
 
-**Built with ❤️ using DynamicCRUD v4.0**
+**Built with ❤️ using Morpheus v4.0**

@@ -1,8 +1,8 @@
 <?php
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-use DynamicCRUD\DynamicCRUD;
-use DynamicCRUD\GlobalMetadata;
+use Morpheus\DynamicCRUD;
+use Morpheus\GlobalMetadata;
 
 // Database connection
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'root', 'rootpassword');
@@ -30,7 +30,7 @@ if (!$config->has('application')) {
 }
 
 // Create CRUD with global config enabled
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 $crud->enableGlobalConfig(); // Enable theme integration!
 
 // Handle form submission

@@ -48,7 +48,7 @@ http://localhost:8000/examples/19-workflow/
 ### Basic Workflow Setup
 
 ```php
-$crud = new DynamicCRUD($pdo, 'orders');
+$crud = new Morpheus($pdo, 'orders');
 
 $crud->enableWorkflow([
     'field' => 'status',

@@ -71,7 +71,7 @@ Click "New Folder" and enter a folder name.
 ### Basic Upload
 
 ```php
-use DynamicCRUD\Media\MediaLibrary;
+use Morpheus\Media\MediaLibrary;
 
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 $library = new MediaLibrary($pdo, 'uploads', '/uploads');
@@ -136,7 +136,7 @@ echo "Images: " . $stats['images'] . "\n";
 ### Resize Image
 
 ```php
-use DynamicCRUD\Media\ImageEditor;
+use Morpheus\Media\ImageEditor;
 
 $editor = new ImageEditor();
 

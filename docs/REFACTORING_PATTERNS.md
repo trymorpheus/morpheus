@@ -4,7 +4,7 @@ This document describes the refactoring patterns applied in v3.4.0 and recommend
 
 ## Overview
 
-DynamicCRUD v3.4.0 introduced significant code refactoring in FormGenerator and ListGenerator classes, focusing on:
+Morpheus v3.4.0 introduced significant code refactoring in FormGenerator and ListGenerator classes, focusing on:
 - **Components Integration** - Using UI Components library for consistent design
 - **Method Extraction** - Breaking down large methods into smaller, focused ones
 - **Code Reduction** - Eliminating duplication and simplifying logic
@@ -22,7 +22,7 @@ $html .= '<table class="list-table">';
 
 ### After (v3.4)
 ```php
-use DynamicCRUD\UI\Components;
+use Morpheus\UI\Components;
 
 // Use Components library
 $html = Components::button('Guardar', 'primary', ['type' => 'submit']);

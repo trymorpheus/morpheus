@@ -1,11 +1,11 @@
 <?php
 
-namespace DynamicCRUD\API;
+namespace Morpheus\API;
 
 use PDO;
-use DynamicCRUD\SchemaAnalyzer;
-use DynamicCRUD\CRUDHandler;
-use DynamicCRUD\Security\PermissionManager;
+use Morpheus\SchemaAnalyzer;
+use Morpheus\CRUDHandler;
+use Morpheus\Security\PermissionManager;
 
 class RestAPIGenerator
 {

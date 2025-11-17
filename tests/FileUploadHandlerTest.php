@@ -1,8 +1,8 @@
 <?php
 
-namespace DynamicCRUD\Tests;
+namespace Morpheus\Tests;
 
-use DynamicCRUD\FileUploadHandler;
+use Morpheus\FileUploadHandler;
 use PHPUnit\Framework\TestCase;
 
 class FileUploadHandlerTest extends TestCase

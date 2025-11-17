@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-use DynamicCRUD\GlobalMetadata;
+use Morpheus\GlobalMetadata;
 
 // Database connection
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'root', 'rootpassword');
@@ -137,16 +137,16 @@ $config = new GlobalMetadata($pdo);
         <h3>💡 CLI Usage</h3>
         <pre>
 # Set configuration
-php bin/dynamiccrud config:set application.name "My App"
+php bin/morpheus config:set application.name "My App"
 
 # Get configuration
-php bin/dynamiccrud config:get application.name
+php bin/morpheus config:get application.name
 
 # List all
-php bin/dynamiccrud config:list
+php bin/morpheus config:list
 
 # Delete key
-php bin/dynamiccrud config:delete old.key
+php bin/morpheus config:delete old.key
         </pre>
     </div>
 </body>

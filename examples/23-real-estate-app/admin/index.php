@@ -1,8 +1,8 @@
 <?php
 require_once __DIR__ . '/../../../vendor/autoload.php';
 
-use DynamicCRUD\Admin\AdminPanel;
-use DynamicCRUD\GlobalMetadata;
+use Morpheus\Admin\AdminPanel;
+use Morpheus\GlobalMetadata;
 
 session_start();
 

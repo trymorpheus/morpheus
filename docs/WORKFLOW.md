@@ -32,9 +32,9 @@ The Workflow Engine provides:
 ### 1. Enable Workflow
 
 ```php
-use DynamicCRUD\DynamicCRUD;
+use Morpheus\DynamicCRUD;
 
-$crud = new DynamicCRUD($pdo, 'orders');
+$crud = new Morpheus($pdo, 'orders');
 
 $crud->enableWorkflow([
     'field' => 'status',

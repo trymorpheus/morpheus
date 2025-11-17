@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use DynamicCRUD\SchemaAnalyzer;
+use Morpheus\SchemaAnalyzer;
 
 class SchemaAnalyzerPostgreSQLTest extends TestCase
 {

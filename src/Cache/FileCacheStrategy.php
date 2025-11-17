@@ -1,6 +1,6 @@
 <?php
 
-namespace DynamicCRUD\Cache;
+namespace Morpheus\Cache;
 
 class FileCacheStrategy implements CacheStrategy
 {

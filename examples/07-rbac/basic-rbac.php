@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-use DynamicCRUD\DynamicCRUD;
+use Morpheus\DynamicCRUD;
 
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'root', 'rootpassword');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -10,7 +10,7 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $currentUserId = 1;
 $currentUserRole = 'editor';
 
-$crud = new DynamicCRUD($pdo, 'blog_posts');
+$crud = new Morpheus($pdo, 'blog_posts');
 $crud->setCurrentUser($currentUserId, $currentUserRole);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

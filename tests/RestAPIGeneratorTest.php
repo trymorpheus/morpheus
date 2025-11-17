@@ -1,9 +1,9 @@
 <?php
 
-namespace DynamicCRUD\Tests;
+namespace Morpheus\Tests;
 
 use PHPUnit\Framework\TestCase;
-use DynamicCRUD\API\RestAPIGenerator;
+use Morpheus\API\RestAPIGenerator;
 use PDO;
 
 /**

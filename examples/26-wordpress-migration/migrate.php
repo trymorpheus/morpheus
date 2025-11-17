@@ -2,7 +2,7 @@
 
 require __DIR__ . '/../../vendor/autoload.php';
 
-use DynamicCRUD\Migration\WordPressMigrator;
+use Morpheus\Migration\WordPressMigrator;
 
 echo "🔄 WordPress to DynamicCRUD Migration\n";
 echo "=====================================\n\n";

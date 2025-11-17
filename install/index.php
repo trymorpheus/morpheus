@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use DynamicCRUD\Installer\InstallerWizard;
+use Morpheus\Installer\InstallerWizard;
 
 session_start();
 

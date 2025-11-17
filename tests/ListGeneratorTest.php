@@ -1,8 +1,8 @@
 <?php
 
-namespace DynamicCRUD\Tests;
+namespace Morpheus\Tests;
 
-use DynamicCRUD\ListGenerator;
+use Morpheus\ListGenerator;
 use PHPUnit\Framework\TestCase;
 use PDO;
 

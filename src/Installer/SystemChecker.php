@@ -1,6 +1,6 @@
 <?php
 
-namespace DynamicCRUD\Installer;
+namespace Morpheus\Installer;
 
 class SystemChecker
 {

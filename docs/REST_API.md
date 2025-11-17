@@ -34,7 +34,7 @@ The REST API Generator automatically creates RESTful endpoints for all database 
 <?php
 require 'vendor/autoload.php';
 
-use DynamicCRUD\API\RestAPIGenerator;
+use Morpheus\API\RestAPIGenerator;
 
 $pdo = new PDO('mysql:host=localhost;dbname=mydb', 'user', 'pass');
 
@@ -259,8 +259,8 @@ $api = new RestAPIGenerator($pdo, 'secret', [
 Integrate with DynamicCRUD's permission system:
 
 ```php
-use DynamicCRUD\API\RestAPIGenerator;
-use DynamicCRUD\Security\PermissionManager;
+use Morpheus\API\RestAPIGenerator;
+use Morpheus\Security\PermissionManager;
 
 $api = new RestAPIGenerator($pdo, 'secret');
 
@@ -513,7 +513,7 @@ $api = new RestAPIGenerator($pdo, 'secret', [
 The API automatically uses DynamicCRUD's validation engine, but you can add custom validation:
 
 ```php
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 $crud->addHook('beforeValidate', function($data) {
     // Custom validation logic
     return $data;

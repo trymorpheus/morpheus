@@ -833,8 +833,8 @@ We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 Have ideas or suggestions? We'd love to hear from you!
 
-- **GitHub Issues:** [Report bugs or request features](https://github.com/mcarbonell/DynamicCRUD/issues)
-- **GitHub Discussions:** [Ask questions or share ideas](https://github.com/mcarbonell/DynamicCRUD/discussions)
+- **GitHub Issues:** [Report bugs or request features](https://github.com/trymorpheus/morpheus/issues)
+- **GitHub Discussions:** [Ask questions or share ideas](https://github.com/trymorpheus/morpheus/discussions)
 - **Email:** mario@dynamiccrud.com
 
 ---

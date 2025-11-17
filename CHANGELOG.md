@@ -1,9 +1,31 @@
 # Changelog
 
-All notable changes to DynamicCRUD will be documented in this file.
+All notable changes to Morpheus will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [4.0.1] - 2025-11-17
+
+### Changed
+- **Project Rebranding** - DynamicCRUD → Morpheus
+  - Package name: `trymorpheus/morpheus` → `trymorpheus/morpheus`
+  - Namespace: `DynamicCRUD\` → `Morpheus\`
+  - Main class: `DynamicCRUD` → `Morpheus`
+  - CLI tool: `bin/morpheus` → `bin/morpheus`
+  - GitHub: https://github.com/trymorpheus/morpheus
+  - Packagist: https://packagist.org/packages/trymorpheus/morpheus
+  - Website: https://www.trymorpheus.dev
+  - Twitter: https://x.com/TryMorpheus
+- All documentation updated with new branding
+- All examples updated with new namespace
+- All tests updated with new namespace
+
+### Note
+- This is a **branding change only** - no functionality changes
+- 100% backward compatible at the code level
+- Update your code: `use Morpheus\` → `use Morpheus\`
+- Update composer: `composer require trymorpheus/morpheus`
 
 ## [4.0.0] - 2025-10-30
 
@@ -105,7 +127,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Automatic config file generation
   - Success page with next steps
 - Complete example in `examples/27-installer/`
-- CLI command: `php bin/dynamiccrud install`
+- CLI command: `php bin/morpheus install`
 
 ### Added (Media Library)
 - **Media Library** - Complete file management system

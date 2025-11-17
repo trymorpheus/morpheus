@@ -1,9 +1,9 @@
 <?php
 
-namespace DynamicCRUD\Installer;
+namespace Morpheus\Installer;
 
-use DynamicCRUD\ContentTypes\ContentTypeManager;
-use DynamicCRUD\Metadata\GlobalMetadata;
+use Morpheus\ContentTypes\ContentTypeManager;
+use Morpheus\Metadata\GlobalMetadata;
 use PDO;
 
 class InstallerWizard

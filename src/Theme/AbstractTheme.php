@@ -1,6 +1,6 @@
 <?php
 
-namespace DynamicCRUD\Theme;
+namespace Morpheus\Theme;
 
 abstract class AbstractTheme implements Theme
 {

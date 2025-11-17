@@ -1,6 +1,6 @@
 <?php
 
-namespace DynamicCRUD;
+namespace Morpheus;
 
 class ThemeManager
 {

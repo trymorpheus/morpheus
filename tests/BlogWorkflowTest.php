@@ -1,12 +1,12 @@
 <?php
 
-namespace DynamicCRUD\Tests;
+namespace Morpheus\Tests;
 
 use PHPUnit\Framework\TestCase;
-use DynamicCRUD\ContentTypes\ContentTypeManager;
-use DynamicCRUD\DynamicCRUD;
-use DynamicCRUD\Frontend\FrontendRenderer;
-use DynamicCRUD\Frontend\SEOManager;
+use Morpheus\ContentTypes\ContentTypeManager;
+use Morpheus\DynamicCRUD;
+use Morpheus\Frontend\FrontendRenderer;
+use Morpheus\Frontend\SEOManager;
 
 /**
  * @runTestsInSeparateProcesses
@@ -59,7 +59,7 @@ class BlogWorkflowTest extends TestCase
         $this->assertTrue($manager->isInstalled('blog'));
         
         // 2. Create category using CRUD
-        $crud = new DynamicCRUD($this->pdo, 'categories');
+        $crud = new Morpheus($this->pdo, 'categories');
         $_POST = [
             'name' => 'Technology',
             'slug' => 'technology',
@@ -71,7 +71,7 @@ class BlogWorkflowTest extends TestCase
         $categoryId = $result['id'];
         
         // 3. Create tag using CRUD
-        $crud = new DynamicCRUD($this->pdo, 'tags');
+        $crud = new Morpheus($this->pdo, 'tags');
         $_POST = [
             'name' => 'PHP',
             'slug' => 'php',
@@ -82,7 +82,7 @@ class BlogWorkflowTest extends TestCase
         $tagId = $result['id'];
         
         // 4. Create post using CRUD
-        $crud = new DynamicCRUD($this->pdo, 'posts');
+        $crud = new Morpheus($this->pdo, 'posts');
         $_POST = [
             'title' => 'My First Post',
             'slug' => 'my-first-post',

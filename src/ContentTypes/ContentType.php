@@ -1,6 +1,6 @@
 <?php
 
-namespace DynamicCRUD\ContentTypes;
+namespace Morpheus\ContentTypes;
 
 /**
  * ContentType Interface

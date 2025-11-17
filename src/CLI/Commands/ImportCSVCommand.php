@@ -1,9 +1,9 @@
 <?php
 
-namespace DynamicCRUD\CLI\Commands;
+namespace Morpheus\CLI\Commands;
 
 use PDO;
-use DynamicCRUD\DynamicCRUD;
+use Morpheus\DynamicCRUD;
 
 class ImportCSVCommand extends Command
 {
@@ -26,7 +26,7 @@ class ImportCSVCommand extends Command
         }
 
         $pdo = $this->getPDO();
-        $crud = new DynamicCRUD($pdo, $table);
+        $crud = new Morpheus($pdo, $table);
         
         $csv = file_get_contents($file);
         $result = $crud->import($csv, [

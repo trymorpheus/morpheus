@@ -7,8 +7,8 @@
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-use DynamicCRUD\ContentTypes\ContentTypeManager;
-use DynamicCRUD\Frontend\SEOManager;
+use Morpheus\ContentTypes\ContentTypeManager;
+use Morpheus\Frontend\SEOManager;
 
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'root', 'rootpassword');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -31,7 +31,7 @@ try {
 }
 
 // Install blog content type with prefix
-use DynamicCRUD\ContentTypes\BlogContentType;
+use Morpheus\ContentTypes\BlogContentType;
 $blog = new BlogContentType('24_');
 echo "📦 Installing blog content type...\n";
 $blog->install($pdo);
@@ -73,7 +73,7 @@ $pdo->exec("
     (
         'Getting Started with DynamicCRUD',
         'getting-started',
-        '<p>Getting started with DynamicCRUD is incredibly simple. Here is what you need to know:</p><h2>Installation</h2><p>Just 3 lines of code to get a working blog.</p><h2>Creating Content</h2><p>Use the admin panel to create posts, categories, and tags. Everything is intuitive and fast.</p><h2>Customization</h2><p>Customize your blog with themes, or build your own. The possibilities are endless!</p>',
+        '<p>Getting started with Morpheus is incredibly simple. Here is what you need to know:</p><h2>Installation</h2><p>Just 3 lines of code to get a working blog.</p><h2>Creating Content</h2><p>Use the admin panel to create posts, categories, and tags. Everything is intuitive and fast.</p><h2>Customization</h2><p>Customize your blog with themes, or build your own. The possibilities are endless!</p>',
         'Learn how to get started with DynamicCRUD in just a few minutes.',
         'published',
         1,

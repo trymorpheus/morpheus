@@ -1,8 +1,8 @@
 <?php
 
-namespace DynamicCRUD\CLI\Commands;
+namespace Morpheus\CLI\Commands;
 
-use DynamicCRUD\SchemaAnalyzer;
+use Morpheus\SchemaAnalyzer;
 
 class GenerateMetadataCommand extends Command
 {

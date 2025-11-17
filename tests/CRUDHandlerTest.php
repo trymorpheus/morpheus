@@ -1,8 +1,8 @@
 <?php
 
-namespace DynamicCRUD\Tests;
+namespace Morpheus\Tests;
 
-use DynamicCRUD\CRUDHandler;
+use Morpheus\CRUDHandler;
 use PHPUnit\Framework\TestCase;
 use PDO;
 

@@ -255,14 +255,14 @@ document.addEventListener('DOMContentLoaded', () => {
 ### Basic Configuration
 
 ```php
-use DynamicCRUD\DynamicCRUD;
-use DynamicCRUD\Cache\FileCacheStrategy;
+use Morpheus\DynamicCRUD;
+use Morpheus\Cache\FileCacheStrategy;
 
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 $cache = new FileCacheStrategy();
 
 // Specify custom uploads directory
-$crud = new DynamicCRUD($pdo, 'products', $cache, __DIR__ . '/my-uploads');
+$crud = new Morpheus($pdo, 'products', $cache, __DIR__ . '/my-uploads');
 ```
 
 ### File Metadata

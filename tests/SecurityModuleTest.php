@@ -1,8 +1,8 @@
 <?php
 
-namespace DynamicCRUD\Tests;
+namespace Morpheus\Tests;
 
-use DynamicCRUD\SecurityModule;
+use Morpheus\SecurityModule;
 use PHPUnit\Framework\TestCase;
 
 class SecurityModuleTest extends TestCase

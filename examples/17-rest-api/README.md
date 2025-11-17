@@ -26,7 +26,7 @@ Credenciales:
 ## Uso Básico
 
 ```php
-use DynamicCRUD\API\RestAPIGenerator;
+use Morpheus\API\RestAPIGenerator;
 
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'user', 'pass');
 
@@ -109,7 +109,7 @@ $api = new RestAPIGenerator($pdo, 'secret-key', [
 ## Integración con RBAC
 
 ```php
-use DynamicCRUD\Security\PermissionManager;
+use Morpheus\Security\PermissionManager;
 
 $permissionManager = new PermissionManager($pdo, 'users', $userId);
 $api->setPermissionManager($permissionManager);

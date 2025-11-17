@@ -1,9 +1,9 @@
 <?php
 
-namespace DynamicCRUD\Tests\Export;
+namespace Morpheus\Tests\Export;
 
-use DynamicCRUD\DynamicCRUD;
-use DynamicCRUD\Tests\TestHelper;
+use Morpheus\DynamicCRUD;
+use Morpheus\Tests\TestHelper;
 use PHPUnit\Framework\TestCase;
 use PDO;
 
@@ -16,7 +16,7 @@ class ExportImportTest extends TestCase
     {
         $this->pdo = TestHelper::getPDO();
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $this->crud = new DynamicCRUD($this->pdo, 'users');
+        $this->crud = new Morpheus($this->pdo, 'users');
         
         $this->cleanupTestData();
     }

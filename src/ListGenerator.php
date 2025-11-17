@@ -1,11 +1,11 @@
 <?php
 
-namespace DynamicCRUD;
+namespace Morpheus;
 
 use PDO;
-use DynamicCRUD\Metadata\TableMetadata;
-use DynamicCRUD\Security\PermissionManager;
-use DynamicCRUD\UI\Components;
+use Morpheus\Metadata\TableMetadata;
+use Morpheus\Security\PermissionManager;
+use Morpheus\UI\Components;
 
 class ListGenerator
 {

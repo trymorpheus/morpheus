@@ -8,7 +8,7 @@
          backupGlobals="false"
          backupStaticAttributes="false">
     <testsuites>
-        <testsuite name="DynamicCRUD Test Suite">
+        <testsuite name="Morpheus Test Suite">
             <directory>tests</directory>
         </testsuite>
     </testsuites>

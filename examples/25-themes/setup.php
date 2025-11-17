@@ -2,7 +2,7 @@
 
 require __DIR__ . '/../../vendor/autoload.php';
 
-use DynamicCRUD\ContentTypes\ContentTypeManager;
+use Morpheus\ContentTypes\ContentTypeManager;
 
 $pdo = new PDO('mysql:host=localhost;dbname=test', 'root', 'rootpassword');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

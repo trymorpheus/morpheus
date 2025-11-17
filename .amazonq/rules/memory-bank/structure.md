@@ -4,12 +4,12 @@
 
 ### Root Level
 ```
-dynamicCRUD/
+morpheus/
 ├── src/                    # Core library source code (PSR-4)
 ├── tests/                  # PHPUnit test suite
 ├── examples/               # 29 working examples with documentation
 ├── docs/                   # 25+ technical guides
-├── bin/                    # CLI executable (dynamiccrud)
+├── bin/                    # CLI executable (morpheus)
 ├── install/                # One-click installer (web UI)
 ├── themes/                 # Built-in theme templates
 ├── templates/              # Blade-like template files
@@ -22,7 +22,7 @@ dynamicCRUD/
 ## Core Source Structure (src/)
 
 ### Main Classes (Root Level)
-- **DynamicCRUD.php** - Main entry point, orchestrates all components
+- **Morpheus.php** - Main entry point, orchestrates all components
 - **CRUDHandler.php** - Handles form submission and data processing
 - **FormGenerator.php** - Generates HTML forms from schema
 - **ListGenerator.php** - Generates data tables with search/filter
@@ -272,7 +272,7 @@ Used for hooks/events:
 
 ### 6. Facade Pattern
 Used for main API:
-- DynamicCRUD class provides simple interface
+- Morpheus class provides simple interface
 - Orchestrates complex interactions between components
 
 ### 7. Repository Pattern
@@ -284,7 +284,7 @@ Used for data access:
 
 ### Core Flow
 ```
-DynamicCRUD (Facade)
+Morpheus (Facade)
     ├── SchemaAnalyzer (reads database schema)
     ├── FormGenerator (creates HTML forms)
     ├── ListGenerator (creates data tables)
@@ -310,7 +310,7 @@ FrontendRouter (routes URLs)
 ### Admin Panel Flow
 ```
 AdminPanel (main interface)
-    ├── DynamicCRUD (CRUD operations)
+    ├── Morpheus (CRUD operations)
     ├── ListGenerator (data tables)
     ├── FormGenerator (forms)
     └── Components (UI elements)
@@ -357,7 +357,7 @@ AdminPanel (main interface)
 - Lowercase with hyphens for non-class files (e.g., docker-compose.yml)
 
 ### Namespaces
-- PSR-4: DynamicCRUD\SubNamespace
+- PSR-4: Morpheus\SubNamespace
 - Matches directory structure
 
 ### Database

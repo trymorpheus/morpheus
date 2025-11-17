@@ -1,19 +1,19 @@
 <?php
 
-namespace DynamicCRUD;
+namespace Morpheus;
 
-use DynamicCRUD\Cache\CacheStrategy;
-use DynamicCRUD\I18n\Translator;
-use DynamicCRUD\Template\TemplateEngine;
-use DynamicCRUD\Metadata\TableMetadata;
-use DynamicCRUD\Security\PermissionManager;
-use DynamicCRUD\Security\AuthenticationManager;
-use DynamicCRUD\Export\ExportManager;
-use DynamicCRUD\Export\ImportManager;
-use DynamicCRUD\Workflow\WorkflowEngine;
+use Morpheus\Cache\CacheStrategy;
+use Morpheus\I18n\Translator;
+use Morpheus\Template\TemplateEngine;
+use Morpheus\Metadata\TableMetadata;
+use Morpheus\Security\PermissionManager;
+use Morpheus\Security\AuthenticationManager;
+use Morpheus\Export\ExportManager;
+use Morpheus\Export\ImportManager;
+use Morpheus\Workflow\WorkflowEngine;
 use PDO;
 
-class DynamicCRUD
+class Morpheus
 {
     private PDO $pdo;
     private string $table;

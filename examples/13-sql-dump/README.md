@@ -16,26 +16,26 @@ Export and import table structure and data with metadata preserved.
 
 ```bash
 # Full dump (structure + data)
-php bin/dynamiccrud dump:sql users --output=users.sql
+php bin/morpheus dump:sql users --output=users.sql
 
 # Structure only
-php bin/dynamiccrud dump:sql users --output=structure.sql --structure-only
+php bin/morpheus dump:sql users --output=structure.sql --structure-only
 
 # Data only
-php bin/dynamiccrud dump:sql users --output=data.sql --data-only
+php bin/morpheus dump:sql users --output=data.sql --data-only
 
 # Output to console
-php bin/dynamiccrud dump:sql users
+php bin/morpheus dump:sql users
 ```
 
 ### Import SQL Dump
 
 ```bash
 # Import with confirmation
-php bin/dynamiccrud import:sql backup.sql
+php bin/morpheus import:sql backup.sql
 
 # Import without confirmation (force)
-php bin/dynamiccrud import:sql backup.sql --force
+php bin/morpheus import:sql backup.sql --force
 ```
 
 ## What's Included

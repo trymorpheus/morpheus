@@ -1,9 +1,9 @@
 <?php
 
-namespace DynamicCRUD\Frontend;
+namespace Morpheus\Frontend;
 
-use DynamicCRUD\Template\TemplateEngine;
-use DynamicCRUD\Theme\ThemeManager;
+use Morpheus\Template\TemplateEngine;
+use Morpheus\Theme\ThemeManager;
 
 /**
  * FrontendRenderer

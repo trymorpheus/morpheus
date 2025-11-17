@@ -2,15 +2,15 @@
 
 ## Project Identity
 
-**Name:** DynamicCRUD  
+**Name:** Morpheus  
 **Version:** 4.0.0  
 **Tagline:** The Universal CMS - Start as a blog, grow into anything  
 **Creator:** Mario Raúl Carbonell Martínez  
 **License:** MIT
 
-## What is DynamicCRUD?
+## What is Morpheus?
 
-DynamicCRUD is the world's first **Universal CMS** that combines the simplicity of WordPress with the power of a custom application generator. It's a PHP library that automatically generates dynamic CRUD (Create, Read, Update, Delete) forms with validation based on database structure.
+Morpheus is the world's first **Universal CMS** that combines the simplicity of WordPress with the power of a custom application generator. It's a PHP library that automatically generates dynamic CRUD (Create, Read, Update, Delete) forms with validation based on database structure.
 
 **Core Philosophy:** Start with a blog in 60 seconds, then grow into e-commerce, CRM, or any custom application - all without migrations, plugins, or code.
 
@@ -184,13 +184,13 @@ Any database-driven application - inventory management, booking systems, project
 
 ### Installation
 ```bash
-composer require dynamiccrud/dynamiccrud
+composer require trymorpheus/morpheus
 ```
 
 ### Basic Usage (3 lines!)
 ```php
 $pdo = new PDO('mysql:host=localhost;dbname=mydb', 'user', 'pass');
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 echo $crud->renderForm($_GET['id'] ?? null);
 ```
 
@@ -200,13 +200,15 @@ echo $crud->renderForm($_GET['id'] ?? null);
 http://localhost/install/
 
 # Or use CLI
-php bin/dynamiccrud install
+php bin/morpheus install
 ```
 
 ## Support & Resources
 
-- **GitHub:** https://github.com/mcarbonell/DynamicCRUD
-- **Packagist:** https://packagist.org/packages/dynamiccrud/dynamiccrud
+- **Website:** https://www.trymorpheus.dev
+- **GitHub:** https://github.com/trymorpheus/morpheus
+- **Packagist:** https://packagist.org/packages/trymorpheus/morpheus
+- **Twitter:** https://x.com/TryMorpheus
 - **Documentation:** 25+ comprehensive guides
 - **Examples:** 29 working examples with code
 - **Tests:** 478 automated tests for reliability

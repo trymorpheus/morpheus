@@ -1,9 +1,9 @@
 <?php
 
-namespace DynamicCRUD\Tests;
+namespace Morpheus\Tests;
 
 use PHPUnit\Framework\TestCase;
-use DynamicCRUD\DynamicCRUD;
+use Morpheus\DynamicCRUD;
 use PDO;
 
 class SoftDeletesTest extends TestCase
@@ -33,7 +33,7 @@ class SoftDeletesTest extends TestCase
             }'
         ");
         
-        $this->crud = new DynamicCRUD($this->pdo, 'test_soft_posts');
+        $this->crud = new Morpheus($this->pdo, 'test_soft_posts');
         $this->cleanupTestData();
     }
 
@@ -131,7 +131,7 @@ class SoftDeletesTest extends TestCase
         $stmt->execute();
         $id = (int) $this->pdo->lastInsertId();
         
-        $crud = new DynamicCRUD($this->pdo, 'test_no_soft');
+        $crud = new Morpheus($this->pdo, 'test_no_soft');
         
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Soft deletes not enabled');
@@ -197,7 +197,7 @@ class SoftDeletesTest extends TestCase
             }'
         ");
         
-        $crud = new DynamicCRUD($this->pdo, 'test_custom_soft');
+        $crud = new Morpheus($this->pdo, 'test_custom_soft');
         $metadata = $crud->getTableMetadata();
         
         $this->assertTrue($metadata->hasSoftDeletes());

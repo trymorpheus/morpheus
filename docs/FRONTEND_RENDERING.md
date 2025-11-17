@@ -10,8 +10,8 @@ The Frontend Rendering system transforms DynamicCRUD from a backend-only tool in
 ## Quick Start
 
 ```php
-use DynamicCRUD\Frontend\FrontendRenderer;
-use DynamicCRUD\Frontend\FrontendRouter;
+use Morpheus\Frontend\FrontendRenderer;
+use Morpheus\Frontend\FrontendRouter;
 
 $pdo = new PDO('mysql:host=localhost;dbname=mydb', 'user', 'pass');
 
@@ -162,7 +162,7 @@ $html = $renderer->render404();
 Use custom templates instead of default HTML:
 
 ```php
-use DynamicCRUD\Template\BladeTemplate;
+use Morpheus\Template\BladeTemplate;
 
 $engine = new BladeTemplate(__DIR__ . '/templates', __DIR__ . '/cache');
 $renderer = new FrontendRenderer($pdo, 'blog', $engine);
@@ -254,9 +254,9 @@ php -S localhost:8000 router.php
 // index.php
 require 'vendor/autoload.php';
 
-use DynamicCRUD\Frontend\FrontendRouter;
-use DynamicCRUD\Frontend\FrontendRenderer;
-use DynamicCRUD\Frontend\SEOManager;
+use Morpheus\Frontend\FrontendRouter;
+use Morpheus\Frontend\FrontendRenderer;
+use Morpheus\Frontend\SEOManager;
 
 $pdo = new PDO('mysql:host=localhost;dbname=mydb', 'user', 'pass');
 

@@ -15,10 +15,10 @@ Multi-language support with auto-detection.
 
 ```php
 // Auto-detect
-$crud = new DynamicCRUD($pdo, 'users');
+$crud = new Morpheus($pdo, 'users');
 
 // Force language
-$crud = new DynamicCRUD($pdo, 'users', locale: 'es');
+$crud = new Morpheus($pdo, 'users', locale: 'es');
 ```
 
 ### Template System (`templates.php`)
