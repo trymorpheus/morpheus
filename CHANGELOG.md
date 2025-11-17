@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - **Project Rebranding** - DynamicCRUD → Morpheus
-  - Package name: `trymorpheus/morpheus` → `trymorpheus/morpheus`
+  - Package name: `dynamiccrud/dynamiccrud` → `trymorpheus/morpheus`
   - Namespace: `DynamicCRUD\` → `Morpheus\`
   - Main class: `DynamicCRUD` → `Morpheus`
   - CLI tool: `bin/morpheus` → `bin/morpheus`
@@ -24,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Note
 - This is a **branding change only** - no functionality changes
 - 100% backward compatible at the code level
-- Update your code: `use Morpheus\` → `use Morpheus\`
+- Update your code: `use DynamicCRUD\` → `use Morpheus\`
 - Update composer: `composer require trymorpheus/morpheus`
 
 ## [4.0.0] - 2025-10-30
