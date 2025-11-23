@@ -1,4 +1,4 @@
-# DynamicCRUD
+# Morpeus
 
 [![Tests](https://github.com/trymorpheus/morpheus/workflows/Tests/badge.svg)](https://github.com/trymorpheus/morpheus/actions)
 [![Code Quality](https://github.com/trymorpheus/morpheus/workflows/Code%20Quality/badge.svg)](https://github.com/trymorpheus/morpheus/actions)
@@ -336,7 +336,7 @@ echo $admin->render(); // Full admin panel!
 - 🍞 **Breadcrumbs** - Contextual navigation
 - 👤 **User Menu** - Avatar and user info
 - 📱 **Responsive** - Mobile-first design
-- 🔗 **Full Integration** - Uses DynamicCRUD, ListGenerator, FormGenerator
+- 🔗 **Full Integration** - Uses Morpeus, ListGenerator, FormGenerator
 
 👉 [See Admin Panel Example](examples/18-admin-panel/)
 
@@ -486,7 +486,7 @@ php bin/morpheus import:sql backup.sql --force  # Skip confirmation
 - New users getting started
 - Teams upgrading versions
 - Production deployments
-- Learning DynamicCRUD
+- Learning Morpeus
 
 ---
 
@@ -704,7 +704,7 @@ $crud->handleSubmission(); // Slug and timestamps - automatic!
 <?php
 require 'vendor/autoload.php';
 
-use Morpheus\DynamicCRUD;
+use Morpheus\Morpeus;
 
 // MySQL
 $pdo = new PDO('mysql:host=localhost;dbname=mydb', 'user', 'pass');
@@ -744,7 +744,7 @@ COMMENT '{"hidden": true}';
 
 ```php
 // If 'posts' table has a foreign key to 'users', 
-// DynamicCRUD automatically creates a dropdown with user names
+// Morpeus automatically creates a dropdown with user names
 $crud = new Morpheus($pdo, 'posts');
 echo $crud->renderForm();
 // Dropdown shows: "John Doe", "Jane Smith", etc.
@@ -842,7 +842,7 @@ use Morpheus\Template\BladeTemplate;
 // Create template engine
 $engine = new BladeTemplate(__DIR__ . '/templates', __DIR__ . '/cache');
 
-// Use with DynamicCRUD
+// Use with Morpeus
 $crud = new Morpheus($pdo, 'users');
 $crud->setTemplateEngine($engine);
 
@@ -1043,7 +1043,7 @@ php vendor/phpunit/phpunit/phpunit tests/SoftDeletesTest.php
 
 ### 🌟 Coming in v4.0 - Universal CMS Foundation (Q3 2025)
 
-**The Game-Changing Release** - Transform DynamicCRUD into a WordPress alternative!
+**The Game-Changing Release** - Transform Morpeus into a WordPress alternative!
 
 **Core Features:**
 - ✨ **One-Click Installer** - Working site in 60 seconds
@@ -1186,7 +1186,7 @@ php vendor/phpunit/phpunit/phpunit tests/SoftDeletesTest.php
   - Breadcrumbs for contextual navigation
   - User menu with avatar
   - Responsive mobile-first design
-  - Full integration with DynamicCRUD components
+  - Full integration with Morpeus components
 - AdminPanel class
 - 1 new example (complete admin panel)
 - 12 new tests (100% passing)
