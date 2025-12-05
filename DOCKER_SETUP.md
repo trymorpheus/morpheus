@@ -1,4 +1,4 @@
-# Docker Setup - DynamicCRUD
+# Docker Setup - Morpheus
 
 ## 🐳 Iniciar Bases de Datos
 
@@ -76,12 +76,12 @@ docker-compose restart
 
 ### Conectar a MySQL CLI
 ```bash
-docker exec -it dynamiccrud-mysql mysql -uroot -prootpassword test
+docker exec -it morpheus-mysql mysql -uroot -prootpassword test
 ```
 
 ### Conectar a PostgreSQL CLI
 ```bash
-docker exec -it dynamiccrud-postgres psql -U postgres -d test
+docker exec -it morpheus-postgres psql -U postgres -d test
 ```
 
 ## 📦 Requisitos PHP
@@ -141,22 +141,22 @@ try {
 
 ### Exportar desde MySQL
 ```bash
-docker exec dynamiccrud-mysql mysqldump -uroot -prootpassword test > backup.sql
+docker exec morpheus-mysql mysqldump -uroot -prootpassword test > backup.sql
 ```
 
 ### Importar a MySQL
 ```bash
-docker exec -i dynamiccrud-mysql mysql -uroot -prootpassword test < backup.sql
+docker exec -i morpheus-mysql mysql -uroot -prootpassword test < backup.sql
 ```
 
 ### Exportar desde PostgreSQL
 ```bash
-docker exec dynamiccrud-postgres pg_dump -U postgres test > backup.sql
+docker exec morpheus-postgres pg_dump -U postgres test > backup.sql
 ```
 
 ### Importar a PostgreSQL
 ```bash
-docker exec -i dynamiccrud-postgres psql -U postgres test < backup.sql
+docker exec -i morpheus-postgres psql -U postgres test < backup.sql
 ```
 
 ## 🚀 Quick Start
@@ -174,10 +174,10 @@ docker exec -i dynamiccrud-postgres psql -U postgres test < backup.sql
 3. **Ejecutar setup scripts**:
    ```bash
    # MySQL
-   docker exec -i dynamiccrud-mysql mysql -uroot -prootpassword test < examples/setup.sql
+   docker exec -i morpheus-mysql mysql -uroot -prootpassword test < examples/setup.sql
    
    # PostgreSQL
-   docker exec -i dynamiccrud-postgres psql -U postgres test < examples/setup_postgres.sql
+   docker exec -i morpheus-postgres psql -U postgres test < examples/setup_postgres.sql
    ```
 
 4. **Ejecutar tests**:

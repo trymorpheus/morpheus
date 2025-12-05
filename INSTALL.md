@@ -1,4 +1,4 @@
-# Installation Guide - DynamicCRUD
+# Installation Guide - Morpheus
 
 ## Requirements
 

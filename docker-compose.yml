@@ -3,7 +3,7 @@ version: '3.8'
 services:
   mysql:
     image: mysql:8.0
-    container_name: dynamiccrud-mysql
+    container_name: morpheus-mysql
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: test
@@ -15,7 +15,7 @@ services:
 
   postgres:
     image: postgres:15
-    container_name: dynamiccrud-postgres
+    container_name: morpheus-postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres

@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Package name: `dynamiccrud/dynamiccrud` → `trymorpheus/morpheus`
   - Namespace: `DynamicCRUD\` → `Morpheus\`
   - Main class: `DynamicCRUD` → `Morpheus`
-  - CLI tool: `bin/morpheus` → `bin/morpheus`
+  - CLI tool: `bin/dynamiccrud` → `bin/morpheus`
   - GitHub: https://github.com/trymorpheus/morpheus
   - Packagist: https://packagist.org/packages/trymorpheus/morpheus
   - Website: https://www.trymorpheus.dev

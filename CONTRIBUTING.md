@@ -1,6 +1,6 @@
-# Contributing to DynamicCRUD
+# Contributing to Morpheus
 
-Thank you for your interest in contributing to DynamicCRUD! 🎉
+Thank you for your interest in contributing to Morpheus! 🎉
 
 ## How to Contribute
 
